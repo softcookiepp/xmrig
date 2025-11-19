@@ -426,6 +426,11 @@ xmrig::Miner::Miner(Controller *controller)
     d_ptr->backends.push_back(new OclBackend(controller));
 #   endif
 
+#   ifdef XMRIG_FEATURE_VULKAN
+	// TODO: change the names of all the vulkan stuff
+    d_ptr->backends.push_back(new OclBackend(controller));
+#   endif
+
 #   ifdef XMRIG_FEATURE_CUDA
     d_ptr->backends.push_back(new CudaBackend(controller));
 #   endif

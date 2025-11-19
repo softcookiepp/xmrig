@@ -146,6 +146,13 @@ static const option options[] = {
     { "opencl-loader",         1, nullptr, IConfig::OclLoaderKey          },
     { "opencl-no-cache",       0, nullptr, IConfig::OclCacheKey           },
 #   endif
+#   ifdef XMRIG_FEATURE_VULKAN
+    { "vulkan",                0, nullptr, IConfig::VkKey                },
+    { "vulkan-devices",        1, nullptr, IConfig::VkDevicesKey         },
+    { "vulkan-platform",       1, nullptr, IConfig::VkPlatformKey        },
+    { "vulkan-loader",         1, nullptr, IConfig::VkLoaderKey          },
+    { "vulkan-no-cache",       0, nullptr, IConfig::VkCacheKey           },
+#   endif
 #   ifdef XMRIG_FEATURE_CUDA
     { "cuda",                  0, nullptr, IConfig::CudaKey               },
     { "cuda-loader",           1, nullptr, IConfig::CudaLoaderKey         },

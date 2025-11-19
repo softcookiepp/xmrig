@@ -114,6 +114,12 @@ void xmrig::ConfigTransform::finalize(rapidjson::Document &doc)
         set(doc, Config::kOcl, kEnabled, true);
     }
 #   endif
+
+#   ifdef XMRIG_FEATURE_VULKAN
+    if (m_vulkan) {
+        set(doc, Config::kVulkan, kEnabled, true);
+    }
+#   endif
 }
 
 
@@ -216,6 +222,29 @@ void xmrig::ConfigTransform::transform(rapidjson::Document &doc, int key, const 
         }
 
         return set(doc, Config::kOcl, "platform", arg);
+#   endif
+
+#   ifdef XMRIG_FEATURE_VULKAN
+    case IConfig::VkKey: /* --vulkan */
+        m_vulkan = true;
+        break;
+
+    case IConfig::VkCacheKey: /* --vulkan-no-cache */
+        return set(doc, Config::kVulkan, "cache", false);
+
+    case IConfig::VkLoaderKey: /* --opencl-loader */
+        return set(doc, Config::kVulkan, "loader", arg);
+
+    case IConfig::VkDevicesKey: /* --opencl-devices */
+        m_opencl = true;
+        return set(doc, Config::kVulkan, "devices-hint", arg);
+
+    case IConfig::VkPlatformKey: /* --opencl-platform */
+        if (strlen(arg) < 3) {
+            return set(doc, Config::kVulkan, "platform", static_cast<uint64_t>(strtol(arg, nullptr, 10)));
+        }
+
+        return set(doc, Config::kVulkan, "platform", arg);
 #   endif
 
 #   ifdef XMRIG_FEATURE_CUDA

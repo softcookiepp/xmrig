@@ -31,6 +31,9 @@
 #   include "backend/opencl/OclLaunchData.h"
 #endif
 
+#ifdef XMRIG_FEATURE_VULKAN
+#   include "backend/vulkan/OclLaunchData.h"
+#endif
 
 #ifdef XMRIG_FEATURE_CUDA
 #   include "backend/cuda/CudaLaunchData.h"

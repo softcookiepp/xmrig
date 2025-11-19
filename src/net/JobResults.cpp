@@ -45,8 +45,8 @@
 #   include "crypto/kawpow/KPHash.h"
 #endif
 
-
-#if defined(XMRIG_FEATURE_OPENCL) || defined(XMRIG_FEATURE_CUDA)
+// me assume this mean all GPU backends
+#if defined(XMRIG_FEATURE_OPENCL) || defined(XMRIG_FEATURE_CUDA) || defined(XMRIG_FEATURE_VULKAN)
 #   include "base/tools/Baton.h"
 #   include "crypto/cn/CnCtx.h"
 #   include "crypto/cn/CnHash.h"
@@ -65,7 +65,7 @@
 namespace xmrig {
 
 
-#if defined(XMRIG_FEATURE_OPENCL) || defined(XMRIG_FEATURE_CUDA)
+#if defined(XMRIG_FEATURE_OPENCL) || defined(XMRIG_FEATURE_CUDA) || defined(XMRIG_FEATURE_VULKAN)
 class JobBundle
 {
 public:
@@ -220,7 +220,7 @@ public:
     }
 
 
-#   if defined(XMRIG_FEATURE_OPENCL) || defined(XMRIG_FEATURE_CUDA)
+#   if defined(XMRIG_FEATURE_OPENCL) || defined(XMRIG_FEATURE_CUDA) || defined(XMRIG_FEATURE_VULKAN)
     inline void submit(const Job &job, uint32_t *results, size_t count, uint32_t device_index)
     {
         std::lock_guard<std::mutex> lock(m_mutex);
@@ -236,7 +236,7 @@ protected:
 
 
 private:
-#   if defined(XMRIG_FEATURE_OPENCL) || defined(XMRIG_FEATURE_CUDA)
+#   if defined(XMRIG_FEATURE_OPENCL) || defined(XMRIG_FEATURE_CUDA) || defined(XMRIG_FEATURE_VULKAN)
     inline void submit()
     {
         std::list<JobBundle> bundles;
@@ -297,7 +297,7 @@ private:
     std::mutex m_mutex;
     std::shared_ptr<Async> m_async;
 
-#   if defined(XMRIG_FEATURE_OPENCL) || defined(XMRIG_FEATURE_CUDA)
+#   if defined(XMRIG_FEATURE_OPENCL) || defined(XMRIG_FEATURE_CUDA) || defined(XMRIG_FEATURE_VULKAN)
     std::list<JobBundle> m_bundles;
 #   endif
 };
@@ -355,7 +355,7 @@ void xmrig::JobResults::submit(const JobResult &result)
 }
 
 
-#if defined(XMRIG_FEATURE_OPENCL) || defined(XMRIG_FEATURE_CUDA)
+#if defined(XMRIG_FEATURE_OPENCL) || defined(XMRIG_FEATURE_CUDA) || defined(XMRIG_FEATURE_VULKAN)
 void xmrig::JobResults::submit(const Job &job, uint32_t *results, size_t count, uint32_t device_index)
 {
     if (handler) {

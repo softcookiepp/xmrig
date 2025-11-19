@@ -49,7 +49,7 @@ public:
     static void submit(const Job& job, uint32_t nonce, const uint8_t* result, const uint8_t* miner_signature);
     static void submit(const JobResult &result);
 
-#   if defined(XMRIG_FEATURE_OPENCL) || defined(XMRIG_FEATURE_CUDA)
+#   if defined(XMRIG_FEATURE_OPENCL) || defined(XMRIG_FEATURE_CUDA) || defined(XMRIG_FEATURE_VULKAN)
     static void submit(const Job &job, uint32_t *results, size_t count, uint32_t device_index);
 #   endif
 };

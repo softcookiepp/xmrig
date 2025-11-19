@@ -127,6 +127,20 @@ public:
         OclUnrollKey         = 1409,
         OclCompModeKey       = 1410,
         OclKey               = 1411,
+        
+        // xmrig vulkan
+        VkPlatformKey       = 1900,
+        VkAffinityKey       = 1901,
+        VkDevicesKey        = 1902,
+        VkLaunchKey         = 1903,
+        VkCacheKey          = 1904,
+        VkPrintKey          = 1905,
+        VkLoaderKey         = 1906,
+        VkSridedIndexKey    = 1907,
+        VkMemChunkKey       = 1908,
+        VkUnrollKey         = 1909,
+        VkCompModeKey       = 1910,
+        VkKey               = 1911,
 
         // xmrig-proxy
         AccessLogFileKey     = 'A',

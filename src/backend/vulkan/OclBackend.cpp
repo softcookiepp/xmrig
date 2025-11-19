@@ -283,7 +283,7 @@ const char *xmrig::vulkan_tag()
 
 
 xmrig::OclBackend::OclBackend(Controller *controller) :
-    d_ptr(new OclBackendPrivate(controller))
+    d_ptr(std::make_shared<OclBackendPrivate>(controller))
 {
     d_ptr->workers.setBackend(this);
 }
@@ -291,8 +291,6 @@ xmrig::OclBackend::OclBackend(Controller *controller) :
 
 xmrig::OclBackend::~OclBackend()
 {
-    delete d_ptr;
-
     OclLib::close();
 
 #   ifdef XMRIG_FEATURE_ADL

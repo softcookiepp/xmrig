@@ -32,6 +32,7 @@ public:
     enum Backend : uint32_t {
         CPU,
         OPENCL,
+        VULKAN,
         CUDA,
         MAX
     };

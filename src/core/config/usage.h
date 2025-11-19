@@ -118,6 +118,16 @@ static inline const std::string &usage()
     u += "      --print-platforms         print available OpenCL platforms and exit\n";
 #   endif
 
+#   ifdef XMRIG_FEATURE_VULKAN
+    u += "\nVulkan backend:\n";
+    u += "      --vulkan                  enable OpenCL mining backend\n";
+    u += "      --vulkan-devices=N        comma separated list of OpenCL devices to use\n";
+    u += "      --vulkan-platform=N       OpenCL platform index or name\n";
+    u += "      --vulkan-loader=PATH      path to OpenCL-ICD-Loader (OpenCL.dll or libOpenCL.so)\n";
+    u += "      --vulkan-no-cache         disable OpenCL cache\n";
+    u += "      --print-platforms         print available OpenCL platforms and exit\n";
+#   endif
+
 #   ifdef XMRIG_FEATURE_CUDA
     u += "\nCUDA backend:\n";
     u += "      --cuda                    enable CUDA mining backend\n";

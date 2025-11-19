@@ -29,6 +29,10 @@
 #   include "backend/opencl/OclWorker.h"
 #endif
 
+#ifdef XMRIG_FEATURE_VULKAN
+#   include "backend/vulkan/OclWorker.h"
+#endif
+
 
 #ifdef XMRIG_FEATURE_CUDA
 #   include "backend/cuda/CudaWorker.h"
@@ -257,6 +261,17 @@ template class Workers<CpuLaunchData>;
 
 
 #ifdef XMRIG_FEATURE_OPENCL
+template<>
+xmrig::IWorker *xmrig::Workers<OclLaunchData>::create(Thread<OclLaunchData> *handle)
+{
+    return new OclWorker(handle->id(), handle->config());
+}
+
+
+template class Workers<OclLaunchData>;
+#endif
+
+#ifdef XMRIG_FEATURE_VULKAN
 template<>
 xmrig::IWorker *xmrig::Workers<OclLaunchData>::create(Thread<OclLaunchData> *handle)
 {

@@ -38,6 +38,11 @@
 #   include "backend/opencl/wrappers/OclPlatform.h"
 #endif
 
+#ifdef XMRIG_FEATURE_VULKAN
+#   include "backend/vulkan/wrappers/OclLib.h"
+#   include "backend/vulkan/wrappers/OclPlatform.h"
+#endif
+
 #include "base/kernel/Entry.h"
 #include "base/kernel/Process.h"
 #include "core/config/usage.h"

@@ -63,6 +63,10 @@ const char *Config::kPauseOnActive      = "pause-on-active";
 const char *Config::kOcl                = "opencl";
 #endif
 
+#ifdef XMRIG_FEATURE_VULKAN
+const char *Config::kVulkan                = "vulkan";
+#endif
+
 #ifdef XMRIG_FEATURE_CUDA
 const char *Config::kCuda               = "cuda";
 #endif
@@ -210,6 +214,12 @@ bool xmrig::Config::isShouldSave() const
     }
 #   endif
 
+#   ifdef XMRIG_FEATURE_OPENCL
+    if (vulkan().isShouldSave()) {
+        return true;
+    }
+#   endif
+
 #   ifdef XMRIG_FEATURE_CUDA
     if (cuda().isShouldSave()) {
         return true;
@@ -240,6 +250,12 @@ bool xmrig::Config::read(const IJsonReader &reader, const char *fileName)
 #   ifdef XMRIG_FEATURE_OPENCL
     if (!pools().isBenchmark()) {
         d_ptr->cl.read(reader.getValue(kOcl));
+    }
+#   endif
+
+#   ifdef XMRIG_FEATURE_VULKAN
+    if (!pools().isBenchmark()) {
+        d_ptr->vk.read(reader.getValue(kVulkan));
     }
 #   endif
 
@@ -288,6 +304,10 @@ void xmrig::Config::getJSON(rapidjson::Document &doc) const
 
 #   ifdef XMRIG_FEATURE_OPENCL
     doc.AddMember(StringRef(kOcl),                      cl().toJSON(doc), allocator);
+#   endif
+
+#   ifdef XMRIG_FEATURE_VULKAN
+    doc.AddMember(StringRef(kVulkan),                      vulkan().toJSON(doc), allocator);
 #   endif
 
 #   ifdef XMRIG_FEATURE_CUDA

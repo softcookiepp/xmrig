@@ -16,12 +16,12 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLBACKEND_H
-#define XMRIG_OCLBACKEND_H
+#ifndef XMRIG_VKBACKEND_H
+#define XMRIG_VKBACKEND_H
 
 
 #include <utility>
-
+#include <memory>
 
 #include "backend/common/interfaces/IBackend.h"
 #include "base/tools/Object.h"
@@ -70,7 +70,7 @@ protected:
 #   endif
 
 private:
-    OclBackendPrivate *d_ptr;
+    std::shared_ptr<OclBackendPrivate> d_ptr = nullptr;
 };
 
 

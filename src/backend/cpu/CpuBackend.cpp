@@ -225,6 +225,12 @@ const char *xmrig::backend_tag(uint32_t backend)
     }
 #   endif
 
+#   ifdef XMRIG_FEATURE_VULKAN
+    if (backend == Nonce::VULKAN) {
+        return vulkan_tag();
+    }
+#   endif
+
 #   ifdef XMRIG_FEATURE_CUDA
     if (backend == Nonce::CUDA) {
         return cuda_tag();

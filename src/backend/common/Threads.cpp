@@ -26,6 +26,9 @@
 #   include "backend/opencl/OclThreads.h"
 #endif
 
+#ifdef XMRIG_FEATURE_VULKAN
+#   include "backend/vulkan/OclThreads.h"
+#endif
 
 #ifdef XMRIG_FEATURE_CUDA
 #   include "backend/cuda/CudaThreads.h"
@@ -161,6 +164,10 @@ namespace xmrig {
 template class Threads<CpuThreads>;
 
 #ifdef XMRIG_FEATURE_OPENCL
+template class Threads<OclThreads>;
+#endif
+
+#ifdef XMRIG_FEATURE_VULKAN
 template class Threads<OclThreads>;
 #endif
 

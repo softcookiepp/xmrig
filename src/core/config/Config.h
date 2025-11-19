@@ -51,6 +51,10 @@ public:
     static const char *kOcl;
 #   endif
 
+#   ifdef XMRIG_FEATURE_VULKAN
+    static const char *kVulkan;
+#   endif
+
 #   ifdef XMRIG_FEATURE_CUDA
     static const char *kCuda;
 #   endif

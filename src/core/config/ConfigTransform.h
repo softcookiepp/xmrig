@@ -41,6 +41,7 @@ private:
 #   endif
 
     bool m_opencl           = false;
+    bool m_vulkan           = false;
     int64_t m_affinity      = -1;
     uint64_t m_intensity    = 1;
     uint64_t m_threads      = 0;
