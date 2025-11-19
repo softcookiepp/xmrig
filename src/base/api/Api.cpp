@@ -208,6 +208,9 @@ void xmrig::Api::exec(IApiRequest &request)
 #       ifdef XMRIG_FEATURE_OPENCL
         features.PushBack("opencl", allocator);
 #       endif
+#       ifdef XMRIG_FEATURE_VULKAN
+        features.PushBack("vulkan", allocator);
+#       endif
 #       ifdef XMRIG_FEATURE_CUDA
         features.PushBack("cuda", allocator);
 #       endif

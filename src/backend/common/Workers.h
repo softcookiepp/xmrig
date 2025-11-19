@@ -99,6 +99,11 @@ IWorker *Workers<OclLaunchData>::create(Thread<OclLaunchData> *handle);
 extern template class Workers<OclLaunchData>;
 #endif
 
+#ifdef XMRIG_FEATURE_VULKAN
+template<>
+IWorker *Workers<OclLaunchData>::create(Thread<OclLaunchData> *handle);
+extern template class Workers<OclLaunchData>;
+#endif
 
 #ifdef XMRIG_FEATURE_CUDA
 template<>
