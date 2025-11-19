@@ -23,8 +23,8 @@
  */
 
 
-#include "backend/opencl/kernels/rx/FillAesKernel.h"
-#include "backend/opencl/wrappers/OclLib.h"
+#include "backend/vulkan/kernels/rx/FillAesKernel.h"
+#include "backend/vulkan/wrappers/VkLib.h"
 
 
 void xmrig::FillAesKernel::enqueue(cl_command_queue queue, size_t threads)

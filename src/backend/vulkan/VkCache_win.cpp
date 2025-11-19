@@ -28,10 +28,10 @@
 #include <windows.h>
 
 
-#include "backend/opencl/OclCache.h"
+#include "backend/vulkan/VkCache.h"
 
 
-void xmrig::OclCache::createDirectory()
+void xmrig::VkCache::createDirectory()
 {
     std::string path = prefix() + "/xmrig";
     _mkdir(path.c_str());
@@ -41,7 +41,7 @@ void xmrig::OclCache::createDirectory()
 }
 
 
-std::string xmrig::OclCache::prefix()
+std::string xmrig::VkCache::prefix()
 {
     char path[MAX_PATH + 1];
     if (SHGetSpecialFolderPathA(HWND_DESKTOP, path, CSIDL_LOCAL_APPDATA, FALSE)) {

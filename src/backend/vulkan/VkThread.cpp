@@ -16,7 +16,7 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "backend/opencl/OclThread.h"
+#include "backend/vulkan/VkThread.h"
 #include "3rdparty/rapidjson/document.h"
 #include "base/io/json/Json.h"
 
@@ -42,7 +42,7 @@ static const char* kDatasetHost  = "dataset_host";
 } // namespace xmrig
 
 
-xmrig::OclThread::OclThread(const rapidjson::Value &value)
+xmrig::VkThread::VkThread(const rapidjson::Value &value)
 {
     if (!value.IsObject()) {
         return;
@@ -91,7 +91,7 @@ xmrig::OclThread::OclThread(const rapidjson::Value &value)
 }
 
 
-bool xmrig::OclThread::isEqual(const OclThread &other) const
+bool xmrig::VkThread::isEqual(const VkThread &other) const
 {
     return other.m_threads.size() == m_threads.size() &&
            std::equal(m_threads.begin(), m_threads.end(), other.m_threads.begin()) &&
@@ -107,7 +107,7 @@ bool xmrig::OclThread::isEqual(const OclThread &other) const
 }
 
 
-rapidjson::Value xmrig::OclThread::toJSON(rapidjson::Document &doc) const
+rapidjson::Value xmrig::VkThread::toJSON(rapidjson::Document &doc) const
 {
     using namespace rapidjson;
     auto &allocator = doc.GetAllocator();

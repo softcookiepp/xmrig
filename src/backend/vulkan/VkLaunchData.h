@@ -27,10 +27,10 @@
 #define XMRIG_OCLLAUNCHDATA_H
 
 
-#include "backend/opencl/OclThread.h"
-#include "backend/opencl/runners/tools/OclSharedData.h"
-#include "backend/opencl/wrappers/OclDevice.h"
-#include "backend/opencl/wrappers/OclPlatform.h"
+#include "backend/vulkan/VkThread.h"
+#include "backend/vulkan/runners/tools/VkSharedData.h"
+#include "backend/vulkan/wrappers/VkDevice.h"
+#include "backend/vulkan/wrappers/VkPlatform.h"
 #include "base/crypto/Algorithm.h"
 #include "crypto/common/Nonce.h"
 
@@ -41,21 +41,21 @@ using cl_context = struct _cl_context *;
 namespace xmrig {
 
 
-class OclConfig;
+class VkConfig;
 class Miner;
 
 
-class OclLaunchData
+class VkLaunchData
 {
 public:
-    OclLaunchData(const Miner *miner, const Algorithm &algorithm, const OclConfig &config, const OclPlatform &platform, const OclThread &thread, const OclDevice &device, int64_t affinity);
+    VkLaunchData(const Miner *miner, const Algorithm &algorithm, const VkConfig &config, const VkPlatform &platform, const VkThread &thread, const VkDevice &device, int64_t affinity);
 
-    bool isEqual(const OclLaunchData &other) const;
+    bool isEqual(const VkLaunchData &other) const;
 
     inline constexpr static Nonce::Backend backend() { return Nonce::OPENCL; }
 
-    inline bool operator!=(const OclLaunchData &other) const    { return !isEqual(other); }
-    inline bool operator==(const OclLaunchData &other) const    { return isEqual(other); }
+    inline bool operator!=(const VkLaunchData &other) const    { return !isEqual(other); }
+    inline bool operator==(const VkLaunchData &other) const    { return isEqual(other); }
 
     static const char *tag();
 
@@ -64,9 +64,9 @@ public:
     const bool cache;
     const int64_t affinity;
     const Miner *miner;
-    const OclDevice device;
-    const OclPlatform platform;
-    const OclThread thread;
+    const VkDevice device;
+    const VkPlatform platform;
+    const VkThread thread;
     const uint32_t benchSize = 0;
 };
 

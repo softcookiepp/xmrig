@@ -17,7 +17,7 @@
  */
 
 #include "KawPow_CalculateDAGKernel.h"
-#include "backend/opencl/wrappers/OclLib.h"
+#include "backend/vulkan/wrappers/VkLib.h"
 #include "crypto/kawpow/KPCache.h"
 
 

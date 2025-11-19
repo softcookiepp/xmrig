@@ -21,10 +21,10 @@
 #include <uv.h>
 
 
-#include "backend/opencl/wrappers/AdlLib.h"
+#include "backend/vulkan/wrappers/AdlLib.h"
 #include "3rdparty/adl/adl_sdk.h"
 #include "3rdparty/adl/adl_structures.h"
-#include "backend/opencl/wrappers/OclDevice.h"
+#include "backend/vulkan/wrappers/VkDevice.h"
 
 
 namespace xmrig {
@@ -184,7 +184,7 @@ void xmrig::AdlLib::close()
 }
 
 
-AdlHealth xmrig::AdlLib::health(const OclDevice &device)
+AdlHealth xmrig::AdlLib::health(const VkDevice &device)
 {
     if (!isReady() || device.vendorId() != OCL_VENDOR_AMD) {
         return {};

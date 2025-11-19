@@ -36,6 +36,7 @@ class ConfigPrivate;
 class CudaConfig;
 class IThread;
 class OclConfig;
+class VkConfig;
 class RxConfig;
 
 
@@ -81,7 +82,7 @@ public:
 #   endif
 
 #   ifdef XMRIG_FEATURE_VULKAN
-    const OclConfig &vulkan() const;
+    const VkConfig &vulkan() const;
 #   endif
 
 #   ifdef XMRIG_FEATURE_CUDA

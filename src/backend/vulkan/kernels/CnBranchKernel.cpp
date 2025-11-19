@@ -23,8 +23,8 @@
  */
 
 
-#include "backend/opencl/kernels/CnBranchKernel.h"
-#include "backend/opencl/wrappers/OclLib.h"
+#include "backend/vulkan/kernels/CnBranchKernel.h"
+#include "backend/vulkan/wrappers/VkLib.h"
 
 
 namespace xmrig {
@@ -36,7 +36,7 @@ static const char *names[4] = { "Blake", "Groestl", "JH", "Skein" };
 } // namespace xmrig
 
 
-xmrig::CnBranchKernel::CnBranchKernel(size_t index, cl_program program) : OclKernel(program, names[index])
+xmrig::CnBranchKernel::CnBranchKernel(size_t index, cl_program program) : VkKernel(program, names[index])
 {
 }
 

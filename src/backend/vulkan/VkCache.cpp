@@ -22,12 +22,12 @@
 #include <sstream>
 
 
-#include "backend/opencl/OclCache.h"
+#include "backend/vulkan/VkCache.h"
 #include "3rdparty/base32/base32.h"
 #include "backend/common/Tags.h"
-#include "backend/opencl/interfaces/IOclRunner.h"
-#include "backend/opencl/OclLaunchData.h"
-#include "backend/opencl/wrappers/OclLib.h"
+#include "backend/vulkan/interfaces/IVkRunner.h"
+#include "backend/vulkan/VkLaunchData.h"
+#include "backend/vulkan/wrappers/VkLib.h"
 #include "base/crypto/keccak.h"
 #include "base/io/log/Log.h"
 #include "base/tools/Chrono.h"
@@ -39,7 +39,7 @@ namespace xmrig {
 static std::mutex mutex;
 
 
-static cl_program createFromSource(const IOclRunner *runner)
+static cl_program createFromSource(const IVkRunner *runner)
 {
     LOG_INFO("%s GPU " WHITE_BOLD("#%zu") " " YELLOW_BOLD("compiling..."), vulkan_tag(), runner->data().device.index());
 
@@ -48,15 +48,15 @@ static cl_program createFromSource(const IOclRunner *runner)
     const char *source  = runner->source();
     const uint64_t ts   = Chrono::steadyMSecs();
 
-    cl_program program = OclLib::createProgramWithSource(runner->ctx(), 1, &source, nullptr, &ret);
+    cl_program program = VkLib::createProgramWithSource(runner->ctx(), 1, &source, nullptr, &ret);
     if (ret != CL_SUCCESS) {
         return nullptr;
     }
 
-    if (OclLib::buildProgram(program, 1, &device, runner->buildOptions()) != CL_SUCCESS) {
-        printf("BUILD LOG:\n%s\n", OclLib::getProgramBuildLog(program, device).data());
+    if (VkLib::buildProgram(program, 1, &device, runner->buildOptions()) != CL_SUCCESS) {
+        printf("BUILD LOG:\n%s\n", VkLib::getProgramBuildLog(program, device).data());
 
-        OclLib::release(program);
+        VkLib::release(program);
         return nullptr;
     }
 
@@ -67,7 +67,7 @@ static cl_program createFromSource(const IOclRunner *runner)
 }
 
 
-static cl_program createFromBinary(const IOclRunner *runner, const std::string &fileName)
+static cl_program createFromBinary(const IVkRunner *runner, const std::string &fileName)
 {
     std::ifstream file(fileName, std::ofstream::in | std::ofstream::binary);
     if (!file.good()) {
@@ -84,13 +84,13 @@ static cl_program createFromBinary(const IOclRunner *runner, const std::string &
 
     cl_int clStatus = 0;
     cl_int ret      = 0;
-    cl_program program = OclLib::createProgramWithBinary(runner->ctx(), 1, &device, &bin_size, reinterpret_cast<const unsigned char **>(&data_ptr), &clStatus, &ret);
+    cl_program program = VkLib::createProgramWithBinary(runner->ctx(), 1, &device, &bin_size, reinterpret_cast<const unsigned char **>(&data_ptr), &clStatus, &ret);
     if (ret != CL_SUCCESS) {
         return nullptr;
     }
 
-    if (OclLib::buildProgram(program, 1, &device) != CL_SUCCESS) {
-        OclLib::release(program);
+    if (VkLib::buildProgram(program, 1, &device) != CL_SUCCESS) {
+        VkLib::release(program);
         return nullptr;
     }
 
@@ -101,7 +101,7 @@ static cl_program createFromBinary(const IOclRunner *runner, const std::string &
 } // namespace xmrig
 
 
-cl_program xmrig::OclCache::build(const IOclRunner *runner)
+cl_program xmrig::VkCache::build(const IVkRunner *runner)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
@@ -132,7 +132,7 @@ cl_program xmrig::OclCache::build(const IOclRunner *runner)
 }
 
 
-std::string xmrig::OclCache::cacheKey(const char *deviceKey, const char *options, const char *source)
+std::string xmrig::VkCache::cacheKey(const char *deviceKey, const char *options, const char *source)
 {
     std::string in(source);
     in += options;
@@ -148,23 +148,23 @@ std::string xmrig::OclCache::cacheKey(const char *deviceKey, const char *options
 }
 
 
-std::string xmrig::OclCache::cacheKey(const IOclRunner *runner)
+std::string xmrig::VkCache::cacheKey(const IVkRunner *runner)
 {
     return cacheKey(runner->deviceKey(), runner->buildOptions(), runner->source());
 }
 
 
-void xmrig::OclCache::save(cl_program program, const std::string &fileName)
+void xmrig::VkCache::save(cl_program program, const std::string &fileName)
 {
     size_t size = 0;
-    if (OclLib::getProgramInfo(program, CL_PROGRAM_BINARY_SIZES, sizeof(size), &size) != CL_SUCCESS) {
+    if (VkLib::getProgramInfo(program, CL_PROGRAM_BINARY_SIZES, sizeof(size), &size) != CL_SUCCESS) {
         return;
     }
 
     std::vector<char> binary(size);
 
     char *data = binary.data();
-    if (OclLib::getProgramInfo(program, CL_PROGRAM_BINARIES, sizeof(char *), &data) != CL_SUCCESS) {
+    if (VkLib::getProgramInfo(program, CL_PROGRAM_BINARIES, sizeof(char *), &data) != CL_SUCCESS) {
         return;
     }
 

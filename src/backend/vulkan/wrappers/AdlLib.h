@@ -21,13 +21,13 @@
 #define XMRIG_ADLLIB_H
 
 
-#include "backend/opencl/wrappers/AdlHealth.h"
+#include "backend/vulkan/wrappers/AdlHealth.h"
 
 
 namespace xmrig {
 
 
-class OclDevice;
+class VkDevice;
 
 
 class AdlLib
@@ -37,7 +37,7 @@ public:
     static const char *lastError() noexcept;
     static void close();
 
-    static AdlHealth health(const OclDevice &device);
+    static AdlHealth health(const VkDevice &device);
 
     static inline bool isInitialized() noexcept         { return m_initialized; }
     static inline bool isReady() noexcept               { return m_ready; }

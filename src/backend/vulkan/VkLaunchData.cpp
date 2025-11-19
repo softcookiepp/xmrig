@@ -24,12 +24,12 @@
  */
 
 
-#include "backend/opencl/OclLaunchData.h"
+#include "backend/vulkan/VkLaunchData.h"
 #include "backend/common/Tags.h"
-#include "backend/opencl/OclConfig.h"
+#include "backend/vulkan/VkConfig.h"
 
 
-xmrig::OclLaunchData::OclLaunchData(const Miner *miner, const Algorithm &algorithm, const OclConfig &config, const OclPlatform &platform, const OclThread &thread, const OclDevice &device, int64_t affinity) :
+xmrig::VkLaunchData::VkLaunchData(const Miner *miner, const Algorithm &algorithm, const VkConfig &config, const VkPlatform &platform, const VkThread &thread, const VkDevice &device, int64_t affinity) :
     algorithm(algorithm),
     cache(config.isCacheEnabled()),
     affinity(affinity),
@@ -41,14 +41,14 @@ xmrig::OclLaunchData::OclLaunchData(const Miner *miner, const Algorithm &algorit
 }
 
 
-bool xmrig::OclLaunchData::isEqual(const OclLaunchData &other) const
+bool xmrig::VkLaunchData::isEqual(const VkLaunchData &other) const
 {
     return (other.algorithm == algorithm &&
             other.thread    == thread);
 }
 
 
-const char *xmrig::OclLaunchData::tag()
+const char *xmrig::VkLaunchData::tag()
 {
     return vulkan_tag();
 }

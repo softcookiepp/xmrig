@@ -40,23 +40,23 @@ namespace xmrig {
 
 class Algorithm;
 class Job;
-class OclLaunchData;
+class VkLaunchData;
 
 
-class IOclRunner
+class IVkRunner
 {
 public:
-    XMRIG_DISABLE_COPY_MOVE(IOclRunner)
+    XMRIG_DISABLE_COPY_MOVE(IVkRunner)
 
-    IOclRunner()          = default;
-    virtual ~IOclRunner() = default;
+    IVkRunner()          = default;
+    virtual ~IVkRunner() = default;
 
     virtual cl_context ctx() const                          = 0;
     virtual const Algorithm &algorithm() const              = 0;
     virtual const char *buildOptions() const                = 0;
     virtual const char *deviceKey() const                   = 0;
     virtual const char *source() const                      = 0;
-    virtual const OclLaunchData &data() const               = 0;
+    virtual const VkLaunchData &data() const               = 0;
     virtual size_t intensity() const                        = 0;
     virtual size_t threadId() const                         = 0;
     virtual uint32_t roundSize() const                      = 0;

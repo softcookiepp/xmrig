@@ -23,8 +23,8 @@
  */
 
 
-#include "backend/opencl/kernels/rx/RxRunKernel.h"
-#include "backend/opencl/wrappers/OclLib.h"
+#include "backend/vulkan/kernels/rx/RxRunKernel.h"
+#include "backend/vulkan/wrappers/VkLib.h"
 #include "base/crypto/Algorithm.h"
 #include "crypto/randomx/randomx.h"
 #include "crypto/rx/RxAlgo.h"

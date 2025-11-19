@@ -24,8 +24,8 @@
  */
 
 
-#include "backend/opencl/OclThreads.h"
-#include "backend/opencl/wrappers/OclDevice.h"
+#include "backend/vulkan/VkThreads.h"
+#include "backend/vulkan/wrappers/VkDevice.h"
 #include "base/crypto/Algorithm.h"
 #include "crypto/randomx/randomx.h"
 #include "crypto/rx/RxAlgo.h"
@@ -34,15 +34,15 @@
 namespace xmrig {
 
 
-bool ocl_generic_rx_generator(const OclDevice &device, const Algorithm &algorithm, OclThreads &threads)
+bool ocl_generic_rx_generator(const VkDevice &device, const Algorithm &algorithm, VkThreads &threads)
 {
     if (algorithm.family() != Algorithm::RANDOM_X) {
         return false;
     }
 
     // Mobile Ryzen APUs
-    if (device.type() == OclDevice::Raven) {
-        threads.add(OclThread(device.index(), (device.computeUnits() > 4) ? 256 : 128, 8, 1, true, true, 6));
+    if (device.type() == VkDevice::Raven) {
+        threads.add(VkThread(device.index(), (device.computeUnits() > 4) ? 256 : 128, 8, 1, true, true, 6));
         return true;
     }
 
@@ -52,23 +52,23 @@ bool ocl_generic_rx_generator(const OclDevice &device, const Algorithm &algorith
     bool isNavi      = false;
 
     switch (device.type()) {
-    case OclDevice::Baffin:
-    case OclDevice::Ellesmere:
-    case OclDevice::Polaris:
-    case OclDevice::Lexa:
-    case OclDevice::Vega_10:
-    case OclDevice::Vega_20:
+    case VkDevice::Baffin:
+    case VkDevice::Ellesmere:
+    case VkDevice::Polaris:
+    case VkDevice::Lexa:
+    case VkDevice::Vega_10:
+    case VkDevice::Vega_20:
         gcnAsm = true;
         break;
 
-    case OclDevice::Navi_10:
-    case OclDevice::Navi_12:
-    case OclDevice::Navi_14:
+    case VkDevice::Navi_10:
+    case VkDevice::Navi_12:
+    case VkDevice::Navi_14:
         gcnAsm = true;
         isNavi = true;
         break;
 
-    case OclDevice::Navi_21:
+    case VkDevice::Navi_21:
         isNavi = true;
         break;
 
@@ -106,7 +106,7 @@ bool ocl_generic_rx_generator(const OclDevice &device, const Algorithm &algorith
         return false;
     }
 
-    threads.add(OclThread(device.index(), intensity, 8, device.vendorId() == OCL_VENDOR_AMD ? 2 : 1, gcnAsm, datasetHost, 6));
+    threads.add(VkThread(device.index(), intensity, 8, device.vendorId() == OCL_VENDOR_AMD ? 2 : 1, gcnAsm, datasetHost, 6));
 
     return true;
 }

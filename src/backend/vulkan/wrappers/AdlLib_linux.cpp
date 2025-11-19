@@ -19,9 +19,9 @@
  */
 
 
-#include "backend/opencl/wrappers/AdlLib.h"
+#include "backend/vulkan/wrappers/AdlLib.h"
 #include "3rdparty/fmt/core.h"
-#include "backend/opencl/wrappers/OclDevice.h"
+#include "backend/vulkan/wrappers/VkDevice.h"
 
 
 #include <limits.h>
@@ -159,7 +159,7 @@ void xmrig::AdlLib::close()
 
 
 // https://dri.freedesktop.org/docs/drm/gpu/amdgpu.html#gpu-power-thermal-controls-and-monitoring
-AdlHealth xmrig::AdlLib::health(const OclDevice &device)
+AdlHealth xmrig::AdlLib::health(const VkDevice &device)
 {
     if (!isReady() || device.vendorId() != OCL_VENDOR_AMD) {
         return {};

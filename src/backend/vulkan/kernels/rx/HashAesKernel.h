@@ -26,16 +26,16 @@
 #define XMRIG_HASHAESKERNEL_H
 
 
-#include "backend/opencl/wrappers/OclKernel.h"
+#include "backend/vulkan/wrappers/VkKernel.h"
 
 
 namespace xmrig {
 
 
-class HashAesKernel : public OclKernel
+class HashAesKernel : public VkKernel
 {
 public:
-    inline HashAesKernel(cl_program program) : OclKernel(program, "hashAes1Rx4") {}
+    inline HashAesKernel(cl_program program) : VkKernel(program, "hashAes1Rx4") {}
 
     void enqueue(cl_command_queue queue, size_t threads);
     void setArgs(cl_mem input, cl_mem hash, uint32_t hashStrideBytes, uint32_t batch_size);

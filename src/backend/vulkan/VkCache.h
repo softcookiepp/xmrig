@@ -29,15 +29,15 @@ using cl_program = struct _cl_program *;
 namespace xmrig {
 
 
-class IOclRunner;
+class IVkRunner;
 
 
-class OclCache
+class VkCache
 {
 public:
-    static cl_program build(const IOclRunner *runner);
+    static cl_program build(const IVkRunner *runner);
     static std::string cacheKey(const char *deviceKey, const char *options, const char *source);
-    static std::string cacheKey(const IOclRunner *runner);
+    static std::string cacheKey(const IVkRunner *runner);
 
 private:
     static std::string prefix();

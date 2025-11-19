@@ -23,8 +23,8 @@
  */
 
 
-#include "backend/opencl/kernels/rx/Blake2bHashRegistersKernel.h"
-#include "backend/opencl/wrappers/OclLib.h"
+#include "backend/vulkan/kernels/rx/Blake2bHashRegistersKernel.h"
+#include "backend/vulkan/wrappers/VkLib.h"
 
 
 void xmrig::Blake2bHashRegistersKernel::enqueue(cl_command_queue queue, size_t threads)

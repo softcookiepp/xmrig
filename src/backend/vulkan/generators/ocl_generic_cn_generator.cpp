@@ -18,8 +18,8 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "backend/opencl/OclThreads.h"
-#include "backend/opencl/wrappers/OclDevice.h"
+#include "backend/vulkan/VkThreads.h"
+#include "backend/vulkan/wrappers/VkDevice.h"
 #include "base/crypto/Algorithm.h"
 #include "crypto/cn/CnAlgo.h"
 
@@ -33,7 +33,7 @@ namespace xmrig {
 constexpr const size_t oneMiB = 1024U * 1024U;
 
 
-static inline uint32_t getMaxThreads(const OclDevice &device, const Algorithm &algorithm)
+static inline uint32_t getMaxThreads(const VkDevice &device, const Algorithm &algorithm)
 {
     if (device.vendorId() == OCL_VENDOR_NVIDIA && (device.name().contains("P100") || device.name().contains("V100"))) {
         return 40000U;
@@ -53,7 +53,7 @@ static inline uint32_t getMaxThreads(const OclDevice &device, const Algorithm &a
 }
 
 
-static inline uint32_t getPossibleIntensity(const OclDevice &device, const Algorithm &algorithm)
+static inline uint32_t getPossibleIntensity(const VkDevice &device, const Algorithm &algorithm)
 {
     const uint32_t maxThreads   = getMaxThreads(device, algorithm);
     const size_t minFreeMem     = (maxThreads == 40000U ? 512U : 128U) * oneMiB;
@@ -65,9 +65,9 @@ static inline uint32_t getPossibleIntensity(const OclDevice &device, const Algor
 }
 
 
-static uint32_t getIntensity(const OclDevice &device, const Algorithm &algorithm)
+static uint32_t getIntensity(const VkDevice &device, const Algorithm &algorithm)
 {
-    if (device.type() == OclDevice::Raven) {
+    if (device.type() == VkDevice::Raven) {
         return 0;
     }
 
@@ -78,7 +78,7 @@ static uint32_t getIntensity(const OclDevice &device, const Algorithm &algorithm
         return 0;
     }
 
-    if (device.vendorId() == OCL_VENDOR_AMD && (device.type() == OclDevice::Lexa || device.type() == OclDevice::Baffin || device.computeUnits() <= 16)) {
+    if (device.vendorId() == OCL_VENDOR_AMD && (device.type() == VkDevice::Lexa || device.type() == VkDevice::Baffin || device.computeUnits() <= 16)) {
         intensity /= 2;
 
         if (algorithm.family() == Algorithm::CN_HEAVY) {
@@ -90,7 +90,7 @@ static uint32_t getIntensity(const OclDevice &device, const Algorithm &algorithm
 }
 
 
-static uint32_t getStridedIndex(const OclDevice &device, const Algorithm &algorithm)
+static uint32_t getStridedIndex(const VkDevice &device, const Algorithm &algorithm)
 {
     if (device.vendorId() != OCL_VENDOR_AMD) {
         return 0;
@@ -100,7 +100,7 @@ static uint32_t getStridedIndex(const OclDevice &device, const Algorithm &algori
 }
 
 
-bool ocl_generic_cn_generator(const OclDevice &device, const Algorithm &algorithm, OclThreads &threads)
+bool ocl_generic_cn_generator(const VkDevice &device, const Algorithm &algorithm, VkThreads &threads)
 {
     if (!algorithm.isCN()) {
         return false;
@@ -113,7 +113,7 @@ bool ocl_generic_cn_generator(const OclDevice &device, const Algorithm &algorith
 
     const uint32_t threadCount = (device.vendorId() == OCL_VENDOR_AMD && (device.globalMemSize() - intensity * 2 * algorithm.l3()) > 128 * oneMiB) ? 2 : 1;
 
-    threads.add(OclThread(device.index(), intensity, 8, getStridedIndex(device, algorithm), 2, threadCount, 8));
+    threads.add(VkThread(device.index(), intensity, 8, getStridedIndex(device, algorithm), 2, threadCount, 8));
 
     return true;
 }

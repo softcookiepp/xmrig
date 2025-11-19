@@ -16,11 +16,11 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "backend/opencl/OclConfig.h"
+#include "backend/vulkan/VkConfig.h"
 #include "3rdparty/rapidjson/document.h"
 #include "backend/common/Tags.h"
-#include "backend/opencl/OclConfig_gen.h"
-#include "backend/opencl/wrappers/OclLib.h"
+#include "backend/vulkan/VkConfig_gen.h"
+#include "backend/vulkan/wrappers/VkLib.h"
 #include "base/io/json/Json.h"
 #include "base/io/log/Log.h"
 
@@ -45,22 +45,22 @@ static const char *kAdl         = "adl";
 #endif
 
 
-extern template class Threads<OclThreads>;
+extern template class Threads<VkThreads>;
 
 
 } // namespace xmrig
 
 
 #ifndef XMRIG_OS_APPLE
-xmrig::OclConfig::OclConfig() : m_platformVendor(kAMD) {}
+xmrig::VkConfig::VkConfig() : m_platformVendor(kAMD) {}
 #else
-xmrig::OclConfig::OclConfig() = default;
+xmrig::VkConfig::VkConfig() = default;
 #endif
 
 
-xmrig::OclPlatform xmrig::OclConfig::platform() const
+xmrig::VkPlatform xmrig::VkConfig::platform() const
 {
-    const auto platforms = OclPlatform::get();
+    const auto platforms = VkPlatform::get();
     if (platforms.empty()) {
         return {};
     }
@@ -101,7 +101,7 @@ xmrig::OclPlatform xmrig::OclConfig::platform() const
 }
 
 
-rapidjson::Value xmrig::OclConfig::toJSON(rapidjson::Document &doc) const
+rapidjson::Value xmrig::VkConfig::toJSON(rapidjson::Document &doc) const
 {
     using namespace rapidjson;
     auto &allocator = doc.GetAllocator();
@@ -126,9 +126,9 @@ rapidjson::Value xmrig::OclConfig::toJSON(rapidjson::Document &doc) const
 }
 
 
-std::vector<xmrig::OclLaunchData> xmrig::OclConfig::get(const Miner *miner, const Algorithm &algorithm, const OclPlatform &platform, const std::vector<OclDevice> &devices) const
+std::vector<xmrig::VkLaunchData> xmrig::VkConfig::get(const Miner *miner, const Algorithm &algorithm, const VkPlatform &platform, const std::vector<VkDevice> &devices) const
 {
-    std::vector<OclLaunchData> out;
+    std::vector<VkLaunchData> out;
     const auto &threads = m_threads.get(algorithm);
 
     if (threads.isEmpty()) {
@@ -157,7 +157,7 @@ std::vector<xmrig::OclLaunchData> xmrig::OclConfig::get(const Miner *miner, cons
 }
 
 
-void xmrig::OclConfig::read(const rapidjson::Value &value)
+void xmrig::VkConfig::read(const rapidjson::Value &value)
 {
     if (value.IsObject()) {
         m_enabled   = Json::getBool(value, kEnabled, m_enabled);
@@ -191,13 +191,13 @@ void xmrig::OclConfig::read(const rapidjson::Value &value)
 }
 
 
-void xmrig::OclConfig::generate()
+void xmrig::VkConfig::generate()
 {
     if (!isEnabled() || m_threads.has("*")) {
         return;
     }
 
-    if (!OclLib::init(loader())) {
+    if (!VkLib::init(loader())) {
         return;
     }
 
@@ -220,7 +220,7 @@ void xmrig::OclConfig::generate()
 }
 
 
-void xmrig::OclConfig::setDevicesHint(const char *devicesHint)
+void xmrig::VkConfig::setDevicesHint(const char *devicesHint)
 {
     if (devicesHint == nullptr) {
         return;
@@ -236,7 +236,7 @@ void xmrig::OclConfig::setDevicesHint(const char *devicesHint)
 
 
 #ifndef XMRIG_OS_APPLE
-void xmrig::OclConfig::setPlatform(const rapidjson::Value &platform)
+void xmrig::VkConfig::setPlatform(const rapidjson::Value &platform)
 {
     if (platform.IsString()) {
         m_platformVendor = platform.GetString();

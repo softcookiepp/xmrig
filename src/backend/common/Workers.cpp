@@ -30,7 +30,7 @@
 #endif
 
 #ifdef XMRIG_FEATURE_VULKAN
-#   include "backend/vulkan/OclWorker.h"
+#   include "backend/vulkan/VkWorker.h"
 #endif
 
 
@@ -273,13 +273,13 @@ template class Workers<OclLaunchData>;
 
 #ifdef XMRIG_FEATURE_VULKAN
 template<>
-xmrig::IWorker *xmrig::Workers<OclLaunchData>::create(Thread<OclLaunchData> *handle)
+xmrig::IWorker *xmrig::Workers<VkLaunchData>::create(Thread<VkLaunchData> *handle)
 {
-    return new OclWorker(handle->id(), handle->config());
+    return new VkWorker(handle->id(), handle->config());
 }
 
 
-template class Workers<OclLaunchData>;
+template class Workers<VkLaunchData>;
 #endif
 
 

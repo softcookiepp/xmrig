@@ -26,16 +26,16 @@
 #define XMRIG_BLAKE2BINITIALHASHDOUBLEKERNEL_H
 
 
-#include "backend/opencl/wrappers/OclKernel.h"
+#include "backend/vulkan/wrappers/VkKernel.h"
 
 
 namespace xmrig {
 
 
-class Blake2bInitialHashDoubleKernel : public OclKernel
+class Blake2bInitialHashDoubleKernel : public VkKernel
 {
 public:
-    inline Blake2bInitialHashDoubleKernel(cl_program program) : OclKernel(program, "blake2b_initial_hash_double") {}
+    inline Blake2bInitialHashDoubleKernel(cl_program program) : VkKernel(program, "blake2b_initial_hash_double") {}
 
     void enqueue(cl_command_queue queue, size_t threads);
     void setArgs(cl_mem out, cl_mem blockTemplate);

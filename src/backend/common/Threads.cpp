@@ -27,7 +27,7 @@
 #endif
 
 #ifdef XMRIG_FEATURE_VULKAN
-#   include "backend/vulkan/OclThreads.h"
+#   include "backend/vulkan/VkThreads.h"
 #endif
 
 #ifdef XMRIG_FEATURE_CUDA
@@ -168,7 +168,7 @@ template class Threads<OclThreads>;
 #endif
 
 #ifdef XMRIG_FEATURE_VULKAN
-template class Threads<OclThreads>;
+template class Threads<VkThreads>;
 #endif
 
 #ifdef XMRIG_FEATURE_CUDA

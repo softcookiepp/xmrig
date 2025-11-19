@@ -26,13 +26,13 @@
 #define XMRIG_CN1KERNEL_H
 
 
-#include "backend/opencl/wrappers/OclKernel.h"
+#include "backend/vulkan/wrappers/VkKernel.h"
 
 
 namespace xmrig {
 
 
-class Cn1Kernel : public OclKernel
+class Cn1Kernel : public VkKernel
 {
 public:
     Cn1Kernel(cl_program program);

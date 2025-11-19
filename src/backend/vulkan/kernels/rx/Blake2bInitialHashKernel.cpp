@@ -23,8 +23,8 @@
  */
 
 
-#include "backend/opencl/kernels/rx/Blake2bInitialHashKernel.h"
-#include "backend/opencl/wrappers/OclLib.h"
+#include "backend/vulkan/kernels/rx/Blake2bInitialHashKernel.h"
+#include "backend/vulkan/wrappers/VkLib.h"
 
 
 void xmrig::Blake2bInitialHashKernel::enqueue(cl_command_queue queue, size_t threads)

@@ -23,8 +23,8 @@
  */
 
 
-#include "backend/opencl/kernels/rx/HashAesKernel.h"
-#include "backend/opencl/wrappers/OclLib.h"
+#include "backend/vulkan/kernels/rx/HashAesKernel.h"
+#include "backend/vulkan/wrappers/VkLib.h"
 
 
 void xmrig::HashAesKernel::enqueue(cl_command_queue queue, size_t threads)

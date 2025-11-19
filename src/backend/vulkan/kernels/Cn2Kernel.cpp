@@ -23,8 +23,8 @@
  */
 
 
-#include "backend/opencl/kernels/Cn2Kernel.h"
-#include "backend/opencl/wrappers/OclLib.h"
+#include "backend/vulkan/kernels/Cn2Kernel.h"
+#include "backend/vulkan/wrappers/VkLib.h"
 
 
 void xmrig::Cn2Kernel::enqueue(cl_command_queue queue, uint32_t nonce, size_t threads)

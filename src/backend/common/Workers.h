@@ -32,7 +32,7 @@
 #endif
 
 #ifdef XMRIG_FEATURE_VULKAN
-#   include "backend/vulkan/OclLaunchData.h"
+#   include "backend/vulkan/VkLaunchData.h"
 #endif
 
 #ifdef XMRIG_FEATURE_CUDA
@@ -104,8 +104,8 @@ extern template class Workers<OclLaunchData>;
 
 #ifdef XMRIG_FEATURE_VULKAN
 template<>
-IWorker *Workers<OclLaunchData>::create(Thread<OclLaunchData> *handle);
-extern template class Workers<OclLaunchData>;
+IWorker *Workers<VkLaunchData>::create(Thread<VkLaunchData> *handle);
+extern template class Workers<VkLaunchData>;
 #endif
 
 #ifdef XMRIG_FEATURE_CUDA

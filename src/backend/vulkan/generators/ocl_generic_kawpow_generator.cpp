@@ -24,8 +24,8 @@
  */
 
 
-#include "backend/opencl/OclThreads.h"
-#include "backend/opencl/wrappers/OclDevice.h"
+#include "backend/vulkan/VkThreads.h"
+#include "backend/vulkan/wrappers/VkDevice.h"
 #include "base/crypto/Algorithm.h"
 #include "crypto/randomx/randomx.h"
 #include "crypto/rx/RxAlgo.h"
@@ -34,7 +34,7 @@
 namespace xmrig {
 
 
-bool ocl_generic_kawpow_generator(const OclDevice &device, const Algorithm &algorithm, OclThreads &threads)
+bool ocl_generic_kawpow_generator(const VkDevice &device, const Algorithm &algorithm, VkThreads &threads)
 {
     if (algorithm.family() != Algorithm::KAWPOW) {
         return false;
@@ -43,10 +43,10 @@ bool ocl_generic_kawpow_generator(const OclDevice &device, const Algorithm &algo
     bool isNavi = false;
 
     switch (device.type()) {
-    case OclDevice::Navi_10:
-    case OclDevice::Navi_12:
-    case OclDevice::Navi_14:
-    case OclDevice::Navi_21:
+    case VkDevice::Navi_10:
+    case VkDevice::Navi_12:
+    case VkDevice::Navi_14:
+    case VkDevice::Navi_21:
         isNavi = true;
         break;
 
@@ -56,7 +56,7 @@ bool ocl_generic_kawpow_generator(const OclDevice &device, const Algorithm &algo
 
     const uint32_t cu_intensity = isNavi ? 524288 : 262144;
     const uint32_t worksize = isNavi ? 128 : 256;
-    threads.add(OclThread(device.index(), device.computeUnits() * cu_intensity, worksize, 1));
+    threads.add(VkThread(device.index(), device.computeUnits() * cu_intensity, worksize, 1));
 
     return true;
 }

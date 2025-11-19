@@ -8,7 +8,7 @@ if (WITH_VULKAN)
     add_definitions(/DXMRIG_FEATURE_VULKAN /DCL_USE_DEPRECATED_OPENCL_1_2_APIS_CLSPV)
 
     set(HEADERS_BACKEND_VULKAN
-        src/backend/vulkan/cl/OclSource.h
+        src/backend/vulkan/cl/VkSource.h
         src/backend/vulkan/interfaces/IVkRunner.h
         src/backend/vulkan/kernels/Cn0Kernel.h
         src/backend/vulkan/kernels/Cn1Kernel.h

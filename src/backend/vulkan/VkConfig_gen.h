@@ -21,7 +21,7 @@
 
 
 #include "backend/common/Threads.h"
-#include "backend/opencl/OclThreads.h"
+#include "backend/vulkan/VkThreads.h"
 
 
 #include <algorithm>
@@ -30,22 +30,22 @@
 namespace xmrig {
 
 
-static inline size_t generate(const char *key, Threads<OclThreads> &threads, const Algorithm &algorithm, const std::vector<OclDevice> &devices)
+static inline size_t generate(const char *key, Threads<VkThreads> &threads, const Algorithm &algorithm, const std::vector<VkDevice> &devices)
 {
     if (threads.isExist(algorithm) || threads.has(key)) {
         return 0;
     }
 
-    return threads.move(key, OclThreads(devices, algorithm));
+    return threads.move(key, VkThreads(devices, algorithm));
 }
 
 
 template<Algorithm::Family FAMILY>
-static inline size_t generate(Threads<OclThreads> &, const std::vector<OclDevice> &) { return 0; }
+static inline size_t generate(Threads<VkThreads> &, const std::vector<VkDevice> &) { return 0; }
 
 
 template<>
-size_t inline generate<Algorithm::CN>(Threads<OclThreads> &threads, const std::vector<OclDevice> &devices)
+size_t inline generate<Algorithm::CN>(Threads<VkThreads> &threads, const std::vector<VkDevice> &devices)
 {
     size_t count = 0;
 
@@ -63,7 +63,7 @@ size_t inline generate<Algorithm::CN>(Threads<OclThreads> &threads, const std::v
 
 #ifdef XMRIG_ALGO_CN_LITE
 template<>
-size_t inline generate<Algorithm::CN_LITE>(Threads<OclThreads> &threads, const std::vector<OclDevice> &devices)
+size_t inline generate<Algorithm::CN_LITE>(Threads<VkThreads> &threads, const std::vector<VkDevice> &devices)
 {
     size_t count = generate(Algorithm::kCN_LITE, threads, Algorithm::CN_LITE_1, devices);
 
@@ -79,7 +79,7 @@ size_t inline generate<Algorithm::CN_LITE>(Threads<OclThreads> &threads, const s
 
 #ifdef XMRIG_ALGO_CN_HEAVY
 template<>
-size_t inline generate<Algorithm::CN_HEAVY>(Threads<OclThreads> &threads, const std::vector<OclDevice> &devices)
+size_t inline generate<Algorithm::CN_HEAVY>(Threads<VkThreads> &threads, const std::vector<VkDevice> &devices)
 {
     return generate(Algorithm::kCN_HEAVY, threads, Algorithm::CN_HEAVY_0, devices);
 }
@@ -88,7 +88,7 @@ size_t inline generate<Algorithm::CN_HEAVY>(Threads<OclThreads> &threads, const 
 
 #ifdef XMRIG_ALGO_CN_PICO
 template<>
-size_t inline generate<Algorithm::CN_PICO>(Threads<OclThreads> &threads, const std::vector<OclDevice> &devices)
+size_t inline generate<Algorithm::CN_PICO>(Threads<VkThreads> &threads, const std::vector<VkDevice> &devices)
 {
     return generate(Algorithm::kCN_PICO, threads, Algorithm::CN_PICO_0, devices);
 }
@@ -97,7 +97,7 @@ size_t inline generate<Algorithm::CN_PICO>(Threads<OclThreads> &threads, const s
 
 #ifdef XMRIG_ALGO_CN_FEMTO
 template<>
-size_t inline generate<Algorithm::CN_FEMTO>(Threads<OclThreads>& threads, const std::vector<OclDevice>& devices)
+size_t inline generate<Algorithm::CN_FEMTO>(Threads<VkThreads>& threads, const std::vector<VkDevice>& devices)
 {
     return generate(Algorithm::kCN_UPX2, threads, Algorithm::CN_UPX2, devices);
 }
@@ -106,13 +106,13 @@ size_t inline generate<Algorithm::CN_FEMTO>(Threads<OclThreads>& threads, const 
 
 #ifdef XMRIG_ALGO_RANDOMX
 template<>
-size_t inline generate<Algorithm::RANDOM_X>(Threads<OclThreads> &threads, const std::vector<OclDevice> &devices)
+size_t inline generate<Algorithm::RANDOM_X>(Threads<VkThreads> &threads, const std::vector<VkDevice> &devices)
 {
     size_t count = 0;
 
-    auto rx  = OclThreads(devices, Algorithm::RX_0);
-    auto wow = OclThreads(devices, Algorithm::RX_WOW);
-    auto arq = OclThreads(devices, Algorithm::RX_ARQ);
+    auto rx  = VkThreads(devices, Algorithm::RX_0);
+    auto wow = VkThreads(devices, Algorithm::RX_WOW);
+    auto arq = VkThreads(devices, Algorithm::RX_ARQ);
 
     if (!threads.isExist(Algorithm::RX_WOW) && wow != rx) {
         count += threads.move(Algorithm::kRX_WOW, std::move(wow));
@@ -131,16 +131,16 @@ size_t inline generate<Algorithm::RANDOM_X>(Threads<OclThreads> &threads, const 
 
 #ifdef XMRIG_ALGO_KAWPOW
 template<>
-size_t inline generate<Algorithm::KAWPOW>(Threads<OclThreads>& threads, const std::vector<OclDevice>& devices)
+size_t inline generate<Algorithm::KAWPOW>(Threads<VkThreads>& threads, const std::vector<VkDevice>& devices)
 {
     return generate(Algorithm::kKAWPOW, threads, Algorithm::KAWPOW_RVN, devices);
 }
 #endif
 
 
-static inline std::vector<OclDevice> filterDevices(const std::vector<OclDevice> &devices, const std::vector<uint32_t> &hints)
+static inline std::vector<VkDevice> filterDevices(const std::vector<VkDevice> &devices, const std::vector<uint32_t> &hints)
 {
-    std::vector<OclDevice> out;
+    std::vector<VkDevice> out;
     out.reserve(std::min(devices.size(), hints.size()));
 
     for (const auto &device  : devices) {

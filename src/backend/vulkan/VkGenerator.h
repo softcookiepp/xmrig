@@ -30,11 +30,11 @@ namespace xmrig {
 
 
 class Algorithm;
-class OclDevice;
-class OclThreads;
+class VkDevice;
+class VkThreads;
 
 
-using ocl_gen_config_fun = bool (*)(const OclDevice &device, const Algorithm &algorithm, OclThreads &threads);
+using ocl_gen_config_fun = bool (*)(const VkDevice &device, const Algorithm &algorithm, VkThreads &threads);
 
 
 } // namespace xmrig

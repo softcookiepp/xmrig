@@ -26,16 +26,16 @@
 #define XMRIG_FINDSHARESKERNEL_H
 
 
-#include "backend/opencl/wrappers/OclKernel.h"
+#include "backend/vulkan/wrappers/VkKernel.h"
 
 
 namespace xmrig {
 
 
-class FindSharesKernel : public OclKernel
+class FindSharesKernel : public VkKernel
 {
 public:
-    inline FindSharesKernel(cl_program program) : OclKernel(program, "find_shares") {}
+    inline FindSharesKernel(cl_program program) : VkKernel(program, "find_shares") {}
 
     void enqueue(cl_command_queue queue, size_t threads);
     void setArgs(cl_mem hashes, cl_mem shares);

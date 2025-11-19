@@ -26,17 +26,17 @@
 #include <unistd.h>
 
 
-#include "backend/opencl/OclCache.h"
+#include "backend/vulkan/VkCache.h"
 
 
-void xmrig::OclCache::createDirectory()
+void xmrig::VkCache::createDirectory()
 {
     std::string path = prefix() + "/.cache";
     mkdir(path.c_str(), 0744);
 }
 
 
-std::string xmrig::OclCache::prefix()
+std::string xmrig::VkCache::prefix()
 {
     return ".";
 }

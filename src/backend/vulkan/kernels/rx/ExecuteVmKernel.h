@@ -26,16 +26,16 @@
 #define XMRIG_EXECUTEVMKERNEL_H
 
 
-#include "backend/opencl/wrappers/OclKernel.h"
+#include "backend/vulkan/wrappers/VkKernel.h"
 
 
 namespace xmrig {
 
 
-class ExecuteVmKernel : public OclKernel
+class ExecuteVmKernel : public VkKernel
 {
 public:
-    inline ExecuteVmKernel(cl_program program) : OclKernel(program, "execute_vm") {}
+    inline ExecuteVmKernel(cl_program program) : VkKernel(program, "execute_vm") {}
 
     void enqueue(cl_command_queue queue, size_t threads, size_t worksize);
     void setArgs(cl_mem vm_states, cl_mem rounding, cl_mem scratchpads, cl_mem dataset_ptr, uint32_t batch_size);

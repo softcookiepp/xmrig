@@ -26,16 +26,16 @@
 #define XMRIG_BLAKE2BHASHREGISTERSKERNEL_H
 
 
-#include "backend/opencl/wrappers/OclKernel.h"
+#include "backend/vulkan/wrappers/VkKernel.h"
 
 
 namespace xmrig {
 
 
-class Blake2bHashRegistersKernel : public OclKernel
+class Blake2bHashRegistersKernel : public VkKernel
 {
 public:
-    inline Blake2bHashRegistersKernel(cl_program program, const char *name) : OclKernel(program, name) {}
+    inline Blake2bHashRegistersKernel(cl_program program, const char *name) : VkKernel(program, name) {}
 
     void enqueue(cl_command_queue queue, size_t threads);
     void setArgs(cl_mem out, cl_mem in, uint32_t inStrideBytes);
