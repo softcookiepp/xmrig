@@ -41,6 +41,9 @@ const char *cpu_tag();
 const char *ocl_tag();
 #endif
 
+#ifdef XMRIG_FEATURE_VULKAN
+const char* vulkan_tag();
+#endif
 
 #ifdef XMRIG_FEATURE_CUDA
 const char *cuda_tag();

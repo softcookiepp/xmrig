@@ -49,6 +49,10 @@
 #   include "backend/opencl/OclBackend.h"
 #endif
 
+#ifdef XMRIG_FEATURE_VULKAN
+#   include "backend/vulkan/OclBackend.h"
+#endif
+
 
 #ifdef XMRIG_FEATURE_CUDA
 #   include "backend/cuda/CudaBackend.h"

@@ -607,7 +607,7 @@ cl_kernel xmrig::OclLib::createKernel(cl_program program, const char *kernel_nam
     auto result = pCreateKernel(program, kernel_name, errcode_ret);
     if (*errcode_ret != CL_SUCCESS) {
         LOG_ERR("%s" RED(" error ") RED_BOLD("%s") RED(" when calling ") RED_BOLD("clCreateKernel") RED(" for kernel ") RED_BOLD("%s"),
-                ocl_tag(), OclError::toString(*errcode_ret), kernel_name);
+                vulkan_tag(), OclError::toString(*errcode_ret), kernel_name);
 
         return nullptr;
     }
@@ -647,7 +647,7 @@ cl_mem xmrig::OclLib::createBuffer(cl_context context, cl_mem_flags flags, size_
     auto result = pCreateBuffer(context, flags, size, host_ptr, errcode_ret);
     if (*errcode_ret != CL_SUCCESS) {
         LOG_ERR("%s" RED(" error ") RED_BOLD("%s") RED(" when calling ") RED_BOLD("%s") RED(" with buffer size ") RED_BOLD("%zu"),
-                ocl_tag(), OclError::toString(*errcode_ret), kCreateBuffer, size);
+                vulkan_tag(), OclError::toString(*errcode_ret), kCreateBuffer, size);
 
         return nullptr;
     }
@@ -663,7 +663,7 @@ cl_mem xmrig::OclLib::createSubBuffer(cl_mem buffer, cl_mem_flags flags, size_t 
     auto result = pCreateSubBuffer(buffer, flags, CL_BUFFER_CREATE_TYPE_REGION, &region, errcode_ret);
     if (*errcode_ret != CL_SUCCESS) {
         LOG_ERR("%s" RED(" error ") RED_BOLD("%s") RED(" when calling ") RED_BOLD("%s") RED(" with offset ") RED_BOLD("%zu") RED(" and size ") RED_BOLD("%zu"),
-                ocl_tag(), OclError::toString(*errcode_ret), kCreateSubBuffer, offset, size);
+                vulkan_tag(), OclError::toString(*errcode_ret), kCreateSubBuffer, offset, size);
 
         return nullptr;
     }

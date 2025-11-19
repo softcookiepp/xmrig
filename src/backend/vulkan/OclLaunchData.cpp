@@ -50,5 +50,5 @@ bool xmrig::OclLaunchData::isEqual(const OclLaunchData &other) const
 
 const char *xmrig::OclLaunchData::tag()
 {
-    return ocl_tag();
+    return vulkan_tag();
 }

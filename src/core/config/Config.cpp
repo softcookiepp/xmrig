@@ -40,6 +40,9 @@
 #   include "backend/opencl/OclConfig.h"
 #endif
 
+#ifdef XMRIG_FEATURE_VULKAN
+#   include "backend/opencl/OclConfig.h"
+#endif
 
 #ifdef XMRIG_FEATURE_CUDA
 #   include "backend/cuda/CudaConfig.h"
@@ -86,6 +89,11 @@ public:
 
 #   ifdef XMRIG_FEATURE_OPENCL
     OclConfig cl;
+#   endif
+
+#   ifdef XMRIG_FEATURE_VULKAN
+    // lol
+    OclConfig vk;
 #   endif
 
 #   ifdef XMRIG_FEATURE_CUDA
@@ -151,6 +159,12 @@ const xmrig::OclConfig &xmrig::Config::cl() const
 }
 #endif
 
+#ifdef XMRIG_FEATURE_VULKAN
+const xmrig::OclConfig &xmrig::Config::vulkan() const
+{
+    return d_ptr->vk;
+}
+#endif
 
 #ifdef XMRIG_FEATURE_CUDA
 const xmrig::CudaConfig &xmrig::Config::cuda() const

@@ -92,7 +92,7 @@ void OclKawPowRunner::run(uint32_t nonce, uint32_t /*nonce_offset*/, uint32_t *h
     const cl_int ret = OclLib::enqueueNDRangeKernel(m_queue, m_searchKernel, 1, &global_work_offset, &global_work_size, &local_work_size, 0, nullptr, nullptr);
     if (ret != CL_SUCCESS) {
         LOG_ERR("%s" RED(" error ") RED_BOLD("%s") RED(" when calling ") RED_BOLD("clEnqueueNDRangeKernel") RED(" for kernel ") RED_BOLD("progpow_search"),
-            ocl_tag(), OclError::toString(ret));
+            vulkan_tag(), OclError::toString(ret));
 
         throw std::runtime_error(OclError::toString(ret));
     }
@@ -162,7 +162,7 @@ void OclKawPowRunner::set(const Job &job, uint8_t *blob)
 
         OclLib::finish(m_queue);
 
-        LOG_INFO("%s " YELLOW("KawPow") " DAG for epoch " WHITE_BOLD("%u") " calculated " BLACK_BOLD("(%" PRIu64 "ms)"), Tags::opencl(), epoch, Chrono::steadyMSecs() - start_ms);
+        LOG_INFO("%s " YELLOW("KawPow") " DAG for epoch " WHITE_BOLD("%u") " calculated " BLACK_BOLD("(%" PRIu64 "ms)"), Tags::vulkan(), epoch, Chrono::steadyMSecs() - start_ms);
     }
 
     const uint64_t target = job.target();

@@ -228,7 +228,7 @@ public:
             return nullptr;
         }
 
-        LOG_INFO("%s " YELLOW("KawPow") " program for period " WHITE_BOLD("%" PRIu64) " compiled " BLACK_BOLD("(%" PRIu64 "ms)"), Tags::opencl(), period, Chrono::steadyMSecs() - ts);
+        LOG_INFO("%s " YELLOW("KawPow") " program for period " WHITE_BOLD("%" PRIu64) " compiled " BLACK_BOLD("(%" PRIu64 "ms)"), Tags::vulkan(), period, Chrono::steadyMSecs() - ts);
 
         cache.add(runner.algorithm(), period, worksize, runner.deviceIndex(), program, kernel);
 

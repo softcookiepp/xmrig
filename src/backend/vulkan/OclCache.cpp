@@ -41,7 +41,7 @@ static std::mutex mutex;
 
 static cl_program createFromSource(const IOclRunner *runner)
 {
-    LOG_INFO("%s GPU " WHITE_BOLD("#%zu") " " YELLOW_BOLD("compiling..."), ocl_tag(), runner->data().device.index());
+    LOG_INFO("%s GPU " WHITE_BOLD("#%zu") " " YELLOW_BOLD("compiling..."), vulkan_tag(), runner->data().device.index());
 
     cl_int ret = 0;
     cl_device_id device = runner->data().device.id();
@@ -61,7 +61,7 @@ static cl_program createFromSource(const IOclRunner *runner)
     }
 
     LOG_INFO("%s GPU " WHITE_BOLD("#%zu") " " GREEN_BOLD("compilation completed") BLACK_BOLD(" (%" PRIu64 " ms)"),
-             ocl_tag(), runner->data().device.index(), Chrono::steadyMSecs() - ts);
+             vulkan_tag(), runner->data().device.index(), Chrono::steadyMSecs() - ts);
 
     return program;
 }

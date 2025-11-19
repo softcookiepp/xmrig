@@ -139,7 +139,7 @@ std::vector<xmrig::OclLaunchData> xmrig::OclConfig::get(const Miner *miner, cons
 
     for (const auto &thread : threads.data()) {
         if (thread.index() >= devices.size()) {
-            LOG_INFO("%s" YELLOW(" skip non-existing device with index ") YELLOW_BOLD("%u"), ocl_tag(), thread.index());
+            LOG_INFO("%s" YELLOW(" skip non-existing device with index ") YELLOW_BOLD("%u"), vulkan_tag(), thread.index());
             continue;
         }
 

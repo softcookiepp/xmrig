@@ -54,7 +54,7 @@ static inline bool isReady()    { return !Nonce::isPaused() && OclWorker::ready;
 
 static inline void printError(size_t id, const char *error)
 {
-    LOG_ERR("%s" RED_S " thread " RED_BOLD("#%zu") RED_S " failed with error " RED_BOLD("%s"), ocl_tag(), id, error);
+    LOG_ERR("%s" RED_S " thread " RED_BOLD("#%zu") RED_S " failed with error " RED_BOLD("%s"), vulkan_tag(), id, error);
 }
 
 

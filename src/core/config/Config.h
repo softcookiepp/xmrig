@@ -76,6 +76,10 @@ public:
     const OclConfig &cl() const;
 #   endif
 
+#   ifdef XMRIG_FEATURE_VULKAN
+    const OclConfig &vulkan() const;
+#   endif
+
 #   ifdef XMRIG_FEATURE_CUDA
     const CudaConfig &cuda() const;
 #   endif

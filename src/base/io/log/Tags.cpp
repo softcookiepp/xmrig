@@ -120,6 +120,15 @@ const char *xmrig::Tags::opencl()
 }
 #endif
 
+#ifdef XMRIG_FEATURE_VULKAN
+const char *xmrig::Tags::vulkan()
+{
+    static const char *tag = MAGENTA_BG_BOLD(WHITE_BOLD_S " vulkan  ");
+
+    return tag;
+}
+#endif
+
 
 #ifdef XMRIG_FEATURE_PROFILING
 const char* xmrig::Tags::profiler()
