@@ -27,7 +27,7 @@
 #include "backend/vulkan/wrappers/VkLib.h"
 
 
-void xmrig::Blake2bInitialHashKernel::enqueue(cl_command_queue queue, size_t threads)
+void xmrig::Blake2bInitialHashKernel::enqueue(tart::device_ptr queue, size_t threads)
 {
     const size_t gthreads        = threads;
     static const size_t lthreads = 64;
@@ -37,10 +37,10 @@ void xmrig::Blake2bInitialHashKernel::enqueue(cl_command_queue queue, size_t thr
 
 
 // __kernel void blake2b_initial_hash(__global void *out, __global const void* blockTemplate, uint blockTemplateSize, uint start_nonce)
-void xmrig::Blake2bInitialHashKernel::setArgs(cl_mem out, cl_mem blockTemplate)
+void xmrig::Blake2bInitialHashKernel::setArgs(tart::buffer_ptr out, tart::buffer_ptr blockTemplate)
 {
-    setArg(0, sizeof(cl_mem), &out);
-    setArg(1, sizeof(cl_mem), &blockTemplate);
+    setArg(0, sizeof(tart::buffer_ptr), &out);
+    setArg(1, sizeof(tart::buffer_ptr), &blockTemplate);
 }
 
 

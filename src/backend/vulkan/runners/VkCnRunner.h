@@ -16,8 +16,8 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLCNRUNNER_H
-#define XMRIG_OCLCNRUNNER_H
+#ifndef XMRIG_VKCNRUNNER_H
+#define XMRIG_VKCNRUNNER_H
 
 
 #include "backend/vulkan/runners/VkBaseRunner.h"
@@ -57,15 +57,15 @@ private:
     };
 
 
-    cl_mem m_scratchpads    = nullptr;
-    cl_mem m_states         = nullptr;
-    cl_program m_cnr        = nullptr;
+    tart::buffer_ptr m_scratchpads    = nullptr;
+    tart::buffer_ptr m_states         = nullptr;
+    tart::cl_program_ptr m_cnr        = nullptr;
     Cn0Kernel *m_cn0        = nullptr;
     Cn1Kernel *m_cn1        = nullptr;
     Cn2Kernel *m_cn2        = nullptr;
     uint64_t m_height       = 0;
 
-    std::vector<cl_mem> m_branches                = { nullptr, nullptr, nullptr, nullptr };
+    std::vector<tart::buffer_ptr> m_branches                = { nullptr, nullptr, nullptr, nullptr };
     std::vector<CnBranchKernel *> m_branchKernels = { nullptr, nullptr, nullptr, nullptr };
 };
 
@@ -73,4 +73,4 @@ private:
 } /* namespace xmrig */
 
 
-#endif // XMRIG_OCLCNRUNNER_H
+#endif // XMRIG_VKCNRUNNER_H

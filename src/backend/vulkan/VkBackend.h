@@ -77,4 +77,4 @@ private:
 } /* namespace xmrig */
 
 
-#endif /* XMRIG_OCLBACKEND_H */
+#endif /* XMRIG_VKBACKEND_H */

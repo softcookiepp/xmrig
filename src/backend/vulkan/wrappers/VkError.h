@@ -22,11 +22,11 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLERROR_H
-#define XMRIG_OCLERROR_H
+#ifndef XMRIG_VKERROR_H
+#define XMRIG_VKERROR_H
 
 
-#include "3rdparty/cl.h"
+#include "tart.hpp"
 
 
 #define OCL_ERR_SUCCESS    (0)
@@ -40,11 +40,11 @@ namespace xmrig {
 class VkError
 {
 public:
-    static const char *toString(cl_int ret);
+    static const char *toString(int32_t ret);
 };
 
 
 } // namespace xmrig
 
 
-#endif /* XMRIG_OCLERROR_H */
+#endif /* XMRIG_VKERROR_H */

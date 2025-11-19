@@ -45,7 +45,7 @@ namespace xmrig {
 class CnrCacheEntry
 {
 public:
-    inline CnrCacheEntry(const Algorithm &algo, uint64_t offset, uint32_t index, cl_program program) :
+    inline CnrCacheEntry(const Algorithm &algo, uint64_t offset, uint32_t index, tart::cl_program_ptr program) :
         program(program),
         m_algo(algo),
         m_index(index),
@@ -57,7 +57,7 @@ public:
     inline bool match(const IVkRunner &runner, uint64_t offset) const              { return match(runner.algorithm(), offset, runner.deviceIndex()); }
     inline void release() const                                                     { VkLib::release(program); }
 
-    cl_program program;
+    tart::cl_program_ptr program;
 
 private:
     Algorithm m_algo;
@@ -71,10 +71,10 @@ class CnrCache
 public:
     CnrCache() = default;
 
-    inline cl_program search(const IVkRunner &runner, uint64_t offset) { return search(runner.algorithm(), offset, runner.deviceIndex()); }
+    inline tart::cl_program_ptr search(const IVkRunner &runner, uint64_t offset) { return search(runner.algorithm(), offset, runner.deviceIndex()); }
 
 
-    inline cl_program search(const Algorithm &algo, uint64_t offset, uint32_t index)
+    inline tart::cl_program_ptr search(const Algorithm &algo, uint64_t offset, uint32_t index)
     {
         std::lock_guard<std::mutex> lock(m_mutex);
 
@@ -88,7 +88,7 @@ public:
     }
 
 
-    void add(const Algorithm &algo, uint64_t offset, uint32_t index, cl_program program)
+    void add(const Algorithm &algo, uint64_t offset, uint32_t index, tart::cl_program_ptr program)
     {
         if (search(algo, offset, index)) {
             VkLib::release(program);
@@ -146,21 +146,21 @@ class CnrBuilder
 public:
     CnrBuilder() = default;
 
-    cl_program build(const IVkRunner &runner, uint64_t offset)
+    tart::cl_program_ptr build(const IVkRunner &runner, uint64_t offset)
     {
     #   ifdef APP_DEBUG
         const uint64_t ts = Chrono::steadyMSecs();
     #   endif
 
         std::lock_guard<std::mutex> lock(m_mutex);
-        cl_program program = cache.search(runner, offset);
+        tart::cl_program_ptr program = cache.search(runner, offset);
         if (program) {
             return program;
         }
 
-        cl_int ret = 0;
+        int32_t ret = 0;
         const std::string source = getSource(offset);
-        cl_device_id device      = runner.data().device.id();
+        tart::device_ptr device      = runner.data().device.id();
         const char *s            = source.c_str();
 
         program = VkLib::createProgramWithSource(runner.ctx(), 1, &s, nullptr, &ret);
@@ -265,7 +265,7 @@ static std::mutex bg_mutex;
 
 
 
-cl_program xmrig::VkCnR::get(const IVkRunner &runner, uint64_t height)
+tart::cl_program_ptr xmrig::VkCnR::get(const IVkRunner &runner, uint64_t height)
 {
     const uint64_t offset = (height / kHeightChunkSize) * kHeightChunkSize;
 
@@ -284,7 +284,7 @@ cl_program xmrig::VkCnR::get(const IVkRunner &runner, uint64_t height)
         );
     }
 
-    cl_program program = cache.search(runner, offset);
+    tart::cl_program_ptr program = cache.search(runner, offset);
     if (program) {
         return program;
     }

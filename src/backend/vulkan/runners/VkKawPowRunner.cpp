@@ -89,7 +89,7 @@ void VkKawPowRunner::run(uint32_t nonce, uint32_t /*nonce_offset*/, uint32_t *ha
 
     m_skippedHashes = 0;
 
-    const cl_int ret = VkLib::enqueueNDRangeKernel(m_queue, m_searchKernel, 1, &global_work_offset, &global_work_size, &local_work_size, 0, nullptr, nullptr);
+    const int32_t ret = VkLib::enqueueNDRangeKernel(m_queue, m_searchKernel, 1, &global_work_offset, &global_work_size, &local_work_size, 0, nullptr, nullptr);
     if (ret != CL_SUCCESS) {
         LOG_ERR("%s" RED(" error ") RED_BOLD("%s") RED(" when calling ") RED_BOLD("clEnqueueNDRangeKernel") RED(" for kernel ") RED_BOLD("progpow_search"),
             vulkan_tag(), VkError::toString(ret));
@@ -168,12 +168,12 @@ void VkKawPowRunner::set(const Job &job, uint8_t *blob)
     const uint64_t target = job.target();
     const uint32_t hack_false = 0;
 
-    VkLib::setKernelArg(m_searchKernel, 0, sizeof(cl_mem), &m_dag);
-    VkLib::setKernelArg(m_searchKernel, 1, sizeof(cl_mem), &m_input);
+    VkLib::setKernelArg(m_searchKernel, 0, sizeof(tart::buffer_ptr), &m_dag);
+    VkLib::setKernelArg(m_searchKernel, 1, sizeof(tart::buffer_ptr), &m_input);
     VkLib::setKernelArg(m_searchKernel, 2, sizeof(target), &target);
     VkLib::setKernelArg(m_searchKernel, 3, sizeof(hack_false), &hack_false);
-    VkLib::setKernelArg(m_searchKernel, 4, sizeof(cl_mem), &m_output);
-    VkLib::setKernelArg(m_searchKernel, 5, sizeof(cl_mem), &m_stop);
+    VkLib::setKernelArg(m_searchKernel, 4, sizeof(tart::buffer_ptr), &m_output);
+    VkLib::setKernelArg(m_searchKernel, 5, sizeof(tart::buffer_ptr), &m_stop);
 
     m_blob = blob;
     enqueueWriteBuffer(m_input, CL_TRUE, 0, BLOB_SIZE, m_blob);
@@ -183,7 +183,7 @@ void VkKawPowRunner::set(const Job &job, uint8_t *blob)
 void VkKawPowRunner::jobEarlyNotification(const Job&)
 {
     const uint32_t one = 1;
-    const cl_int ret = VkLib::enqueueWriteBuffer(m_controlQueue, m_stop, CL_TRUE, 0, sizeof(one), &one, 0, nullptr, nullptr);
+    const int32_t ret = VkLib::enqueueWriteBuffer(m_controlQueue, m_stop, CL_TRUE, 0, sizeof(one), &one, 0, nullptr, nullptr);
     if (ret != CL_SUCCESS) {
         throw std::runtime_error(VkError::toString(ret));
     }
@@ -201,8 +201,11 @@ void xmrig::VkKawPowRunner::build()
 void xmrig::VkKawPowRunner::init()
 {
     VkBaseRunner::init();
-
+#if 1
+    m_device = data().device.id();
+#else
     m_controlQueue = VkLib::createCommandQueue(m_ctx, data().device.id());
+#endif
     m_stop = VkLib::createBuffer(m_ctx, CL_MEM_READ_ONLY, sizeof(uint32_t) * 2);
 }
 

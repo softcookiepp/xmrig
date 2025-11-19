@@ -83,13 +83,13 @@ size_t xmrig::VkCnRunner::bufferSize() const
     return VkBaseRunner::bufferSize() +
            align(m_algorithm.l3() * m_intensity) +
            align(200 * m_intensity) +
-           (align(sizeof(cl_uint) * (m_intensity + 2)) * BRANCH_MAX);
+           (align(sizeof(uint32_t) * (m_intensity + 2)) * BRANCH_MAX);
 }
 
 
 void xmrig::VkCnRunner::run(uint32_t nonce, uint32_t /*nonce_offset*/, uint32_t *hashOutput)
 {
-    static const cl_uint zero = 0;
+    static const uint32_t zero = 0;
 
     const size_t w_size = data().thread.worksize();
     const size_t g_thd  = ((m_intensity + w_size - 1U) / w_size) * w_size;
@@ -97,10 +97,10 @@ void xmrig::VkCnRunner::run(uint32_t nonce, uint32_t /*nonce_offset*/, uint32_t 
     assert(g_thd % w_size == 0);
 
     for (size_t i = 0; i < BRANCH_MAX; ++i) {
-        enqueueWriteBuffer(m_branches[i], CL_FALSE, sizeof(cl_uint) * m_intensity, sizeof(cl_uint), &zero);
+        enqueueWriteBuffer(m_branches[i], CL_FALSE, sizeof(uint32_t) * m_intensity, sizeof(uint32_t), &zero);
     }
 
-    enqueueWriteBuffer(m_output, CL_FALSE, sizeof(cl_uint) * 0xFF, sizeof(cl_uint), &zero);
+    enqueueWriteBuffer(m_output, CL_FALSE, sizeof(uint32_t) * 0xFF, sizeof(uint32_t), &zero);
 
     m_cn0->enqueue(m_queue, nonce, g_thd);
     m_cn1->enqueue(m_queue, nonce, g_thd, w_size);
@@ -183,6 +183,6 @@ void xmrig::VkCnRunner::init()
     m_states      = createSubBuffer(CL_MEM_READ_WRITE, 200 * m_intensity);
 
     for (size_t i = 0; i < BRANCH_MAX; ++i) {
-        m_branches[i] = createSubBuffer(CL_MEM_READ_WRITE, sizeof(cl_uint) * (m_intensity + 2));
+        m_branches[i] = createSubBuffer(CL_MEM_READ_WRITE, sizeof(uint32_t) * (m_intensity + 2));
     }
 }

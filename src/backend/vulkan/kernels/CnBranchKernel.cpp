@@ -36,12 +36,12 @@ static const char *names[4] = { "Blake", "Groestl", "JH", "Skein" };
 } // namespace xmrig
 
 
-xmrig::CnBranchKernel::CnBranchKernel(size_t index, cl_program program) : VkKernel(program, names[index])
+xmrig::CnBranchKernel::CnBranchKernel(size_t index, tart::cl_program_ptr program) : VkKernel(program, names[index])
 {
 }
 
 
-void xmrig::CnBranchKernel::enqueue(cl_command_queue queue, uint32_t nonce, size_t threads, size_t worksize)
+void xmrig::CnBranchKernel::enqueue(tart::device_ptr queue, uint32_t nonce, size_t threads, size_t worksize)
 {
     const size_t offset   = nonce;
     const size_t gthreads = threads;
@@ -52,16 +52,16 @@ void xmrig::CnBranchKernel::enqueue(cl_command_queue queue, uint32_t nonce, size
 
 
 // __kernel void Skein(__global ulong *states, __global uint *BranchBuf, __global uint *output, ulong Target, uint Threads)
-void xmrig::CnBranchKernel::setArgs(cl_mem states, cl_mem branch, cl_mem output, uint32_t threads)
+void xmrig::CnBranchKernel::setArgs(tart::buffer_ptr states, tart::buffer_ptr branch, tart::buffer_ptr output, uint32_t threads)
 {
-    setArg(0, sizeof(cl_mem), &states);
-    setArg(1, sizeof(cl_mem), &branch);
-    setArg(2, sizeof(cl_mem), &output);
-    setArg(4, sizeof(cl_uint), &threads);
+    setArg(0, sizeof(tart::buffer_ptr), &states);
+    setArg(1, sizeof(tart::buffer_ptr), &branch);
+    setArg(2, sizeof(tart::buffer_ptr), &output);
+    setArg(4, sizeof(uint32_t), &threads);
 }
 
 
 void xmrig::CnBranchKernel::setTarget(uint64_t target)
 {
-    setArg(3, sizeof(cl_ulong), &target);
+    setArg(3, sizeof(uint64_t), &target);
 }

@@ -35,10 +35,10 @@ namespace xmrig {
 class Cn0Kernel : public VkKernel
 {
 public:
-    inline Cn0Kernel(cl_program program) : VkKernel(program, "cn0") {}
+    inline Cn0Kernel(tart::cl_program_ptr program) : VkKernel(program, "cn0") {}
 
-    void enqueue(cl_command_queue queue, uint32_t nonce, size_t threads);
-    void setArgs(cl_mem input, int inlen, cl_mem scratchpads, cl_mem states, uint32_t threads);
+    void enqueue(tart::device_ptr queue, uint32_t nonce, size_t threads);
+    void setArgs(tart::buffer_ptr input, int inlen, tart::buffer_ptr scratchpads, tart::buffer_ptr states, uint32_t threads);
 };
 
 

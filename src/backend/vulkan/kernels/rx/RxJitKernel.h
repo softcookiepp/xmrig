@@ -35,10 +35,10 @@ namespace xmrig {
 class RxJitKernel : public VkKernel
 {
 public:
-    inline RxJitKernel(cl_program program) : VkKernel(program, "randomx_jit") {}
+    inline RxJitKernel(tart::cl_program_ptr program) : VkKernel(program, "randomx_jit") {}
 
-    void enqueue(cl_command_queue queue, size_t threads, uint32_t iteration);
-    void setArgs(cl_mem entropy, cl_mem registers, cl_mem intermediate_programs, cl_mem programs, uint32_t batch_size, cl_mem rounding);
+    void enqueue(tart::device_ptr queue, size_t threads, uint32_t iteration);
+    void setArgs(tart::buffer_ptr entropy, tart::buffer_ptr registers, tart::buffer_ptr intermediate_programs, tart::buffer_ptr programs, uint32_t batch_size, tart::buffer_ptr rounding);
 };
 
 

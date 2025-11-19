@@ -22,8 +22,8 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLVENDOR_H
-#define XMRIG_OCLVENDOR_H
+#ifndef XMRIG_VKVENDOR_H
+#define XMRIG_VKVENDOR_H
 
 
 namespace xmrig {
@@ -41,4 +41,4 @@ enum VkVendor : unsigned {
 } // namespace xmrig
 
 
-#endif /* XMRIG_OCLVENDOR_H */
+#endif /* XMRIG_VKVENDOR_H */

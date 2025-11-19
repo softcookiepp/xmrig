@@ -142,7 +142,7 @@ size_t xmrig::VkWorker::intensity() const
 
 void xmrig::VkWorker::start()
 {
-    cl_uint results[0x100];
+    uint32_t results[0x100];
 
     while (Nonce::sequence(Nonce::OPENCL) > 0) {
         if (!isReady()) {

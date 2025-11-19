@@ -22,8 +22,8 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLPLATFORM_H
-#define XMRIG_OCLPLATFORM_H
+#ifndef XMRIG_VKPLATFORM_H
+#define XMRIG_VKPLATFORM_H
 
 
 #include <vector>
@@ -33,7 +33,7 @@
 #include "base/tools/String.h"
 
 
-using cl_platform_id = struct _cl_platform_id *;
+
 
 
 namespace xmrig {
@@ -43,13 +43,13 @@ class VkPlatform
 {
 public:
     VkPlatform() = default;
-    VkPlatform(size_t index, cl_platform_id id) : m_id(id), m_index(index) {}
+    VkPlatform(size_t index, size_t id) : m_id(id), m_index(index) {}
 
     static std::vector<VkPlatform> get();
     static void print();
 
-    inline bool isValid() const      { return m_id != nullptr; }
-    inline cl_platform_id id() const { return m_id; }
+    inline bool isValid() const      { return true; }
+    inline size_t id() const { return m_id; }
     inline size_t index() const      { return m_index; }
 
     rapidjson::Value toJSON(rapidjson::Document &doc) const;
@@ -61,7 +61,7 @@ public:
     String version() const;
 
 private:
-    cl_platform_id m_id = nullptr;
+    size_t m_id = 0;
     size_t m_index      = 0;
 };
 
@@ -69,4 +69,4 @@ private:
 } // namespace xmrig
 
 
-#endif /* XMRIG_OCLPLATFORM_H */
+#endif /* XMRIG_VKPLATFORM_H */

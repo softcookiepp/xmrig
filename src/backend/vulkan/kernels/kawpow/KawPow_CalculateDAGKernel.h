@@ -29,10 +29,10 @@ namespace xmrig {
 class KawPow_CalculateDAGKernel : public VkKernel
 {
 public:
-    inline KawPow_CalculateDAGKernel(cl_program program) : VkKernel(program, "ethash_calculate_dag_item") {}
+    inline KawPow_CalculateDAGKernel(tart::cl_program_ptr program) : VkKernel(program, "ethash_calculate_dag_item") {}
 
-    void enqueue(cl_command_queue queue, size_t threads, size_t workgroup_size);
-    void setArgs(uint32_t start, cl_mem g_light, cl_mem g_dag, uint32_t dag_words, uint32_t light_words);
+    void enqueue(tart::device_ptr queue, size_t threads, size_t workgroup_size);
+    void setArgs(uint32_t start, tart::buffer_ptr g_light, tart::buffer_ptr g_dag, uint32_t dag_words, uint32_t light_words);
 };
 
 

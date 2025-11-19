@@ -27,7 +27,7 @@
 
 
 #include "backend/vulkan/wrappers/VkKernel.h"
-
+#include "tart.hpp"
 
 namespace xmrig {
 
@@ -35,9 +35,9 @@ namespace xmrig {
 class CnBranchKernel : public VkKernel
 {
 public:
-    CnBranchKernel(size_t index, cl_program program);
-    void enqueue(cl_command_queue queue, uint32_t nonce, size_t threads, size_t worksize);
-    void setArgs(cl_mem states, cl_mem branch, cl_mem output, uint32_t threads);
+    CnBranchKernel(size_t index, tart::cl_program_ptr program);
+    void enqueue(tart::device_ptr queue, uint32_t nonce, size_t threads, size_t worksize);
+    void setArgs(tart::buffer_ptr states, tart::buffer_ptr branch, tart::buffer_ptr output, uint32_t threads);
     void setTarget(uint64_t target);
 };
 

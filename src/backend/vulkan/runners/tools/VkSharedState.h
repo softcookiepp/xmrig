@@ -22,8 +22,8 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLSHAREDSTATE_H
-#define XMRIG_OCLSHAREDSTATE_H
+#ifndef XMRIG_VKSHAREDSTATE_H
+#define XMRIG_VKSHAREDSTATE_H
 
 
 #include "backend/vulkan/VkLaunchData.h"
@@ -44,4 +44,4 @@ public:
 } /* namespace xmrig */
 
 
-#endif /* XMRIG_OCLSHAREDSTATE_H */
+#endif /* XMRIG_VKSHAREDSTATE_H */

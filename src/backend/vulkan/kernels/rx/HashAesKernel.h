@@ -35,10 +35,10 @@ namespace xmrig {
 class HashAesKernel : public VkKernel
 {
 public:
-    inline HashAesKernel(cl_program program) : VkKernel(program, "hashAes1Rx4") {}
+    inline HashAesKernel(tart::cl_program_ptr program) : VkKernel(program, "hashAes1Rx4") {}
 
-    void enqueue(cl_command_queue queue, size_t threads);
-    void setArgs(cl_mem input, cl_mem hash, uint32_t hashStrideBytes, uint32_t batch_size);
+    void enqueue(tart::device_ptr queue, size_t threads);
+    void setArgs(tart::buffer_ptr input, tart::buffer_ptr hash, uint32_t hashStrideBytes, uint32_t batch_size);
 };
 
 

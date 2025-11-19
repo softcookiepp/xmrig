@@ -78,7 +78,7 @@ xmrig::VkBaseRunner::~VkBaseRunner()
 
 size_t xmrig::VkBaseRunner::bufferSize() const
 {
-    return align(Job::kMaxBlobSize) + align(sizeof(cl_uint) * 0x100);
+    return align(Job::kMaxBlobSize) + align(sizeof(uint32_t) * 0x100);
 }
 
 
@@ -114,11 +114,11 @@ void xmrig::VkBaseRunner::init()
     }
 
     m_input  = createSubBuffer(CL_MEM_READ_ONLY | CL_MEM_HOST_WRITE_ONLY, Job::kMaxBlobSize);
-    m_output = createSubBuffer(CL_MEM_READ_WRITE, sizeof(cl_uint) * 0x100);
+    m_output = createSubBuffer(CL_MEM_READ_WRITE, sizeof(uint32_t) * 0x100);
 }
 
 
-cl_mem xmrig::VkBaseRunner::createSubBuffer(cl_mem_flags flags, size_t size)
+tart::buffer_ptr xmrig::VkBaseRunner::createSubBuffer(tart::buffer_ptr_flags flags, size_t size)
 {
     auto mem = VkLib::createSubBuffer(m_buffer, flags, m_offset, size);
 
@@ -134,18 +134,18 @@ size_t xmrig::VkBaseRunner::align(size_t size) const
 }
 
 
-void xmrig::VkBaseRunner::enqueueReadBuffer(cl_mem buffer, cl_bool blocking_read, size_t offset, size_t size, void *ptr)
+void xmrig::VkBaseRunner::enqueueReadBuffer(tart::buffer_ptr buffer, cl_bool blocking_read, size_t offset, size_t size, void *ptr)
 {
-    const cl_int ret = VkLib::enqueueReadBuffer(m_queue, buffer, blocking_read, offset, size, ptr, 0, nullptr, nullptr);
+    const int32_t ret = VkLib::enqueueReadBuffer(m_queue, buffer, blocking_read, offset, size, ptr, 0, nullptr, nullptr);
     if (ret != CL_SUCCESS) {
         throw std::runtime_error(VkError::toString(ret));
     }
 }
 
 
-void xmrig::VkBaseRunner::enqueueWriteBuffer(cl_mem buffer, cl_bool blocking_write, size_t offset, size_t size, const void *ptr)
+void xmrig::VkBaseRunner::enqueueWriteBuffer(tart::buffer_ptr buffer, cl_bool blocking_write, size_t offset, size_t size, const void *ptr)
 {
-    const cl_int ret = VkLib::enqueueWriteBuffer(m_queue, buffer, blocking_write, offset, size, ptr, 0, nullptr, nullptr);
+    const int32_t ret = VkLib::enqueueWriteBuffer(m_queue, buffer, blocking_write, offset, size, ptr, 0, nullptr, nullptr);
     if (ret != CL_SUCCESS) {
         throw std::runtime_error(VkError::toString(ret));
     }
@@ -154,7 +154,7 @@ void xmrig::VkBaseRunner::enqueueWriteBuffer(cl_mem buffer, cl_bool blocking_wri
 
 void xmrig::VkBaseRunner::finalize(uint32_t *hashOutput)
 {
-    enqueueReadBuffer(m_output, CL_TRUE, 0, sizeof(cl_uint) * 0x100, hashOutput);
+    enqueueReadBuffer(m_output, CL_TRUE, 0, sizeof(uint32_t) * 0x100, hashOutput);
 
     uint32_t &results = hashOutput[0xFF];
     if (results > 0xFF) {

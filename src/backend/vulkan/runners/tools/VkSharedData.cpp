@@ -33,7 +33,7 @@
 constexpr size_t oneGiB = 1024 * 1024 * 1024;
 
 
-cl_mem xmrig::VkSharedData::createBuffer(cl_context context, size_t size, size_t &offset, size_t limit)
+tart::buffer_ptr xmrig::VkSharedData::createBuffer(tart::device_ptr context, size_t size, size_t &offset, size_t limit)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
 
@@ -164,7 +164,7 @@ void xmrig::VkSharedData::setRunTime(uint64_t time)
 
 
 #ifdef XMRIG_ALGO_RANDOMX
-cl_mem xmrig::VkSharedData::dataset() const
+tart::buffer_ptr xmrig::VkSharedData::dataset() const
 {
     if (!m_dataset) {
         throw std::runtime_error("RandomX dataset is not available");
@@ -174,13 +174,13 @@ cl_mem xmrig::VkSharedData::dataset() const
 }
 
 
-void xmrig::VkSharedData::createDataset(cl_context ctx, const Job &job, bool host)
+void xmrig::VkSharedData::createDataset(tart::device_ptr ctx, const Job &job, bool host)
 {
     if (m_dataset) {
         return;
     }
 
-    cl_int ret = 0;
+    int32_t ret = 0;
 
     if (host) {
         auto dataset = Rx::dataset(job, 0);

@@ -26,7 +26,7 @@
 #include "backend/vulkan/wrappers/VkError.h"
 
 
-const char *xmrig::VkError::toString(cl_int ret)
+const char *xmrig::VkError::toString(int32_t ret)
 {
     switch(ret)
     {

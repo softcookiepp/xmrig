@@ -27,7 +27,7 @@
 #include "backend/vulkan/wrappers/VkLib.h"
 
 
-void xmrig::FindSharesKernel::enqueue(cl_command_queue queue, size_t threads)
+void xmrig::FindSharesKernel::enqueue(tart::device_ptr queue, size_t threads)
 {
     const size_t gthreads        = threads;
     static const size_t lthreads = 64;
@@ -37,10 +37,10 @@ void xmrig::FindSharesKernel::enqueue(cl_command_queue queue, size_t threads)
 
 
 // __kernel void find_shares(__global const uint64_t* hashes, uint64_t target, uint32_t start_nonce, __global uint32_t* shares)
-void xmrig::FindSharesKernel::setArgs(cl_mem hashes, cl_mem shares)
+void xmrig::FindSharesKernel::setArgs(tart::buffer_ptr hashes, tart::buffer_ptr shares)
 {
-    setArg(0, sizeof(cl_mem), &hashes);
-    setArg(3, sizeof(cl_mem), &shares);
+    setArg(0, sizeof(tart::buffer_ptr), &hashes);
+    setArg(3, sizeof(tart::buffer_ptr), &shares);
 }
 
 

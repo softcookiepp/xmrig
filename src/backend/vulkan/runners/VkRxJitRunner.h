@@ -16,8 +16,8 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLRXJITRUNNER_H
-#define XMRIG_OCLRXJITRUNNER_H
+#ifndef XMRIG_VKRXJITRUNNER_H
+#define XMRIG_VKRXJITRUNNER_H
 
 
 #include "backend/vulkan/runners/VkRxBaseRunner.h"
@@ -47,10 +47,10 @@ protected:
 private:
     bool loadAsmProgram();
 
-    cl_mem m_intermediate_programs  = nullptr;
-    cl_mem m_programs               = nullptr;
-    cl_mem m_registers              = nullptr;
-    cl_program m_asmProgram         = nullptr;
+    tart::buffer_ptr m_intermediate_programs  = nullptr;
+    tart::buffer_ptr m_programs               = nullptr;
+    tart::buffer_ptr m_registers              = nullptr;
+    tart::cl_program_ptr m_asmProgram         = nullptr;
     RxJitKernel *m_randomx_jit      = nullptr;
     RxRunKernel *m_randomx_run      = nullptr;
 };
@@ -59,4 +59,4 @@ private:
 } /* namespace xmrig */
 
 
-#endif // XMRIG_OCLRXRUNNER_H
+#endif // XMRIG_VKRXRUNNER_H

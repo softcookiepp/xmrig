@@ -16,14 +16,14 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLCACHE_H
-#define XMRIG_OCLCACHE_H
+#ifndef XMRIG_VKCACHE_H
+#define XMRIG_VKCACHE_H
 
 
 #include <string>
+#include "tart.hpp"
 
 
-using cl_program = struct _cl_program *;
 
 
 namespace xmrig {
@@ -35,18 +35,22 @@ class IVkRunner;
 class VkCache
 {
 public:
-    static cl_program build(const IVkRunner *runner);
+#if 1
+    static tart::cl_program_ptr build(const IVkRunner *runner);
+#else
+    static tart::cl_program_ptr build(const IVkRunner *runner);
+#endif
     static std::string cacheKey(const char *deviceKey, const char *options, const char *source);
     static std::string cacheKey(const IVkRunner *runner);
 
 private:
     static std::string prefix();
     static void createDirectory();
-    static void save(cl_program program, const std::string &fileName);
+    static void save(tart::cl_program_ptr program, const std::string &fileName);
 };
 
 
 } // namespace xmrig
 
 
-#endif /* XMRIG_OCLCACHE_H */
+#endif /* XMRIG_VKCACHE_H */

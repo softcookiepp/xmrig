@@ -39,7 +39,7 @@ namespace xmrig {
 
 
 struct topology_amd {
-    cl_uint type;
+    uint32_t type;
     cl_char unused[17];
     cl_char bus;
     cl_char device;
@@ -81,7 +81,7 @@ static VkVendor getPlatformVendorId(const String &vendor, const String &extensio
         return OCL_VENDOR_NVIDIA;
     }
 
-    if (extensions.contains("cl_intel_") || vendor.contains("Intel")) {
+    if (extensions.contains("int32_tel_") || vendor.contains("Intel")) {
         return OCL_VENDOR_INTEL;
     }
 
@@ -122,7 +122,7 @@ static VkVendor getVendorId(const String &vendor)
 } // namespace xmrig
 
 
-xmrig::VkDevice::VkDevice(uint32_t index, cl_device_id id, cl_platform_id platform) :
+xmrig::VkDevice::VkDevice(uint32_t index, tart::device_ptr id, size_t platform) :
     m_id(id),
     m_platform(platform),
     m_platformVendor(VkLib::getString(platform, CL_PLATFORM_VENDOR)),
@@ -134,6 +134,8 @@ xmrig::VkDevice::VkDevice(uint32_t index, cl_device_id id, cl_platform_id platfo
     m_computeUnits(VkLib::getUint(id, CL_DEVICE_MAX_COMPUTE_UNITS, 1)),
     m_index(index)
 {
+	m_device = gTartInstance.createDevice(index);
+	
     m_vendorId  = getVendorId(m_vendor);
     m_platformVendorId = getPlatformVendorId(m_platformVendor, m_extensions);
     m_type      = getType(m_name);
@@ -147,9 +149,9 @@ xmrig::VkDevice::VkDevice(uint32_t index, cl_device_id id, cl_platform_id platfo
         m_board = VkLib::getString(id, CL_DEVICE_BOARD_NAME_AMD);
     }
     else if (m_extensions.contains("cl_nv_device_attribute_query")) {
-        cl_uint bus = 0;
+        uint32_t bus = 0;
         if (VkLib::getDeviceInfo(id, CL_DEVICE_PCI_BUS_ID_NV, sizeof(bus), &bus) == CL_SUCCESS) {
-            cl_uint slot  = VkLib::getUint(id, CL_DEVICE_PCI_SLOT_ID_NV);
+            uint32_t slot  = VkLib::getUint(id, CL_DEVICE_PCI_SLOT_ID_NV);
             m_topology = { bus, (slot >> 3) & 0xff, slot & 7 };
         }
     }

@@ -16,10 +16,10 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLKAWPOWRUNNER_H
-#define XMRIG_OCLKAWPOWRUNNER_H
+#ifndef XMRIG_VKKAWPOWRUNNER_H
+#define XMRIG_VKKAWPOWRUNNER_H
 
-
+#include "backend/vulkan/wrappers/VkLib.h"
 #include "backend/vulkan/runners/VkBaseRunner.h"
 #include "crypto/kawpow/KPCache.h"
 
@@ -54,26 +54,30 @@ private:
     uint32_t m_blockHeight = 0;
     uint32_t m_epoch = 0xFFFFFFFFUL;
 
-    cl_mem m_lightCache = nullptr;
+    tart::buffer_ptr m_lightCache = nullptr;
     size_t m_lightCacheSize = 0;
     size_t m_lightCacheCapacity = 0;
 
-    cl_mem m_dag = nullptr;
+    tart::buffer_ptr m_dag = nullptr;
     size_t m_dagCapacity = 0;
 
     KawPow_CalculateDAGKernel* m_calculateDagKernel = nullptr;
 
-    cl_kernel m_searchKernel = nullptr;
+    kernel_pair m_searchKernel;// = nullptr;
 
     size_t m_workGroupSize = 256;
     size_t m_dagWorkGroupSize = 64;
 
-    cl_command_queue m_controlQueue = nullptr;
-    cl_mem m_stop = nullptr;
+#if 1
+	tart::device_ptr m_device = nullptr;
+#else
+    tart::device_ptr m_controlQueue = nullptr;
+#endif
+    tart::buffer_ptr m_stop = nullptr;
 };
 
 
 } /* namespace xmrig */
 
 
-#endif // XMRIG_OCLKAWPOWRUNNER_H
+#endif // XMRIG_VKKAWPOWRUNNER_H

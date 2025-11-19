@@ -35,10 +35,10 @@ namespace xmrig {
 class Blake2bHashRegistersKernel : public VkKernel
 {
 public:
-    inline Blake2bHashRegistersKernel(cl_program program, const char *name) : VkKernel(program, name) {}
+    inline Blake2bHashRegistersKernel(tart::cl_program_ptr program, const char *name) : VkKernel(program, name) {}
 
-    void enqueue(cl_command_queue queue, size_t threads);
-    void setArgs(cl_mem out, cl_mem in, uint32_t inStrideBytes);
+    void enqueue(tart::device_ptr queue, size_t threads);
+    void setArgs(tart::buffer_ptr out, tart::buffer_ptr in, uint32_t inStrideBytes);
 };
 
 

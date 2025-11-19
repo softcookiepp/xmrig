@@ -35,10 +35,10 @@ namespace xmrig {
 class ExecuteVmKernel : public VkKernel
 {
 public:
-    inline ExecuteVmKernel(cl_program program) : VkKernel(program, "execute_vm") {}
+    inline ExecuteVmKernel(tart::cl_program_ptr program) : VkKernel(program, "execute_vm") {}
 
-    void enqueue(cl_command_queue queue, size_t threads, size_t worksize);
-    void setArgs(cl_mem vm_states, cl_mem rounding, cl_mem scratchpads, cl_mem dataset_ptr, uint32_t batch_size);
+    void enqueue(tart::device_ptr queue, size_t threads, size_t worksize);
+    void setArgs(tart::buffer_ptr vm_states, tart::buffer_ptr rounding, tart::buffer_ptr scratchpads, tart::buffer_ptr dataset_ptr, uint32_t batch_size);
     void setFirst(uint32_t first);
     void setIterations(uint32_t num_iterations);
     void setLast(uint32_t last);

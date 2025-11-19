@@ -16,16 +16,16 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLSHAREDDATA_H
-#define XMRIG_OCLSHAREDDATA_H
+#ifndef XMRIG_VKSHAREDDATA_H
+#define XMRIG_VKSHAREDDATA_H
 
 
 #include <memory>
 #include <mutex>
+#include "tart.hpp"
 
 
-using cl_context = struct _cl_context *;
-using cl_mem     = struct _cl_mem *;
+
 
 
 namespace xmrig {
@@ -39,7 +39,7 @@ class VkSharedData
 public:
     VkSharedData() = default;
 
-    cl_mem createBuffer(cl_context context, size_t size, size_t &offset, size_t limit);
+    tart::buffer_ptr createBuffer(tart::device_ptr context, size_t size, size_t &offset, size_t limit);
     uint64_t adjustDelay(size_t id);
     uint64_t resumeDelay(size_t id);
     void release();
@@ -51,12 +51,12 @@ public:
     inline VkSharedData &operator++()  { ++m_threads; return *this; }
 
 #   ifdef XMRIG_ALGO_RANDOMX
-    cl_mem dataset() const;
-    void createDataset(cl_context ctx, const Job &job, bool host);
+    tart::buffer_ptr dataset() const;
+    void createDataset(tart::device_ptr ctx, const Job &job, bool host);
 #   endif
 
 private:
-    cl_mem m_buffer           = nullptr;
+    tart::buffer_ptr m_buffer           = nullptr;
     double m_averageRunTime   = 0.0;
     double m_threshold        = 0.95;
     size_t m_offset           = 0;
@@ -66,7 +66,7 @@ private:
     uint64_t m_timestamp      = 0;
 
 #   ifdef XMRIG_ALGO_RANDOMX
-    cl_mem m_dataset          = nullptr;
+    tart::buffer_ptr m_dataset          = nullptr;
 #   endif
 };
 
@@ -74,4 +74,4 @@ private:
 } /* namespace xmrig */
 
 
-#endif /* XMRIG_OCLSHAREDDATA_H */
+#endif /* XMRIG_VKSHAREDDATA_H */

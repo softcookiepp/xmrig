@@ -30,7 +30,7 @@
 
 std::vector<xmrig::VkPlatform> xmrig::VkPlatform::get()
 {
-    const std::vector<cl_platform_id> platforms = VkLib::getPlatformIDs();
+    const std::vector<size_t> platforms = VkLib::getPlatformIDs();
     std::vector<VkPlatform> out;
     if (platforms.empty()) {
         return out;
@@ -91,14 +91,14 @@ std::vector<xmrig::VkDevice> xmrig::VkPlatform::devices() const
         return out;
     }
 
-    cl_uint num_devices = 0;
+    uint32_t num_devices = 0;
     VkLib::getDeviceIDs(id(), CL_DEVICE_TYPE_GPU, 0, nullptr, &num_devices);
     if (num_devices == 0) {
         return out;
     }
 
     out.reserve(num_devices);
-    std::vector<cl_device_id> devices(num_devices);
+    std::vector<tart::device_ptr> devices(num_devices);
     VkLib::getDeviceIDs(id(), CL_DEVICE_TYPE_GPU, num_devices, devices.data(), nullptr);
 
     for (size_t i = 0; i < devices.size(); ++i) {

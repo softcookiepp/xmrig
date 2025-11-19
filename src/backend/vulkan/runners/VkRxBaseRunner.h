@@ -22,8 +22,8 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLRXBASERUNNER_H
-#define XMRIG_OCLRXBASERUNNER_H
+#ifndef XMRIG_VKRXBASERUNNER_H
+#define XMRIG_VKRXBASERUNNER_H
 
 
 #include "backend/vulkan/runners/VkBaseRunner.h"
@@ -66,11 +66,11 @@ protected:
     Blake2bInitialHashDoubleKernel *m_blake2b_initial_hash_double = nullptr;
     Blake2bInitialHashBigKernel* m_blake2b_initial_hash_big       = nullptr;
     Buffer m_seed;
-    cl_mem m_dataset                                              = nullptr;
-    cl_mem m_entropy                                              = nullptr;
-    cl_mem m_hashes                                               = nullptr;
-    cl_mem m_rounding                                             = nullptr;
-    cl_mem m_scratchpads                                          = nullptr;
+    tart::buffer_ptr m_dataset                                              = nullptr;
+    tart::buffer_ptr m_entropy                                              = nullptr;
+    tart::buffer_ptr m_hashes                                               = nullptr;
+    tart::buffer_ptr m_rounding                                             = nullptr;
+    tart::buffer_ptr m_scratchpads                                          = nullptr;
     FillAesKernel *m_fillAes1Rx4_scratchpad                       = nullptr;
     FillAesKernel *m_fillAes4Rx4_entropy                          = nullptr;
     FindSharesKernel *m_find_shares                               = nullptr;
@@ -85,4 +85,4 @@ protected:
 } /* namespace xmrig */
 
 
-#endif // XMRIG_OCLRXBASERUNNER_H
+#endif // XMRIG_VKRXBASERUNNER_H

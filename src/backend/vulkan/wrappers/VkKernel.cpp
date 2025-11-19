@@ -33,34 +33,47 @@
 #include <stdexcept>
 
 
-xmrig::VkKernel::VkKernel(cl_program program, const char *name) :
-    m_name(name)
+xmrig::VkKernel::VkKernel(tart::cl_program_ptr program, const char *name) :
+    m_name(name),
+    m_program(program)
 {
-    m_kernel = VkLib::createKernel(program, name);
+    //m_kernel = VkLib::createKernel(program, name);
 }
 
 
 xmrig::VkKernel::~VkKernel()
 {
-    VkLib::release(m_kernel);
+    //VkLib::release(m_kernel);
 }
 
 
-void xmrig::VkKernel::enqueueNDRange(cl_command_queue queue, uint32_t work_dim, const size_t *global_work_offset, const size_t *global_work_size, const size_t *local_work_size)
+void xmrig::VkKernel::enqueueNDRange(tart::device_ptr queue, uint32_t work_dim, const size_t *global_work_offset, const size_t *global_work_size, const size_t *local_work_size)
 {
-    const cl_int ret = VkLib::enqueueNDRangeKernel(queue, m_kernel, work_dim, global_work_offset, global_work_size, local_work_size, 0, nullptr, nullptr);
-    if (ret != CL_SUCCESS) {
-        LOG_ERR("%s" RED(" error ") RED_BOLD("%s") RED(" when calling ") RED_BOLD("clEnqueueNDRangeKernel") RED(" for kernel ") RED_BOLD("%s"),
-                vulkan_tag(), VkError::toString(ret), name().data());
+#if 1
+	if (global_work_offset) throw std::runtime_error(VkError::toString("global_work_offset not implemented!!!"));
+	
+	std::vector<uint32_t> localSize(work_dim);
+	std::vector<uint32_t> globalSize(work_dim);
+	for (size_t i = 0; i < work_dim; i += 1)
+	{
+		localSize[i] = local_work_size[i];
+		if (global_work_size[i] % local_work_size[i] > 0)
+			throw std::runtime_error("can't have indivisible global sizes, sillybum");
+		
+		globalSize[i] = global_work_size[i] / localSize[i];
+	}
+	
+	throw std::runtime_error("argument setting has not been configured yet!");
+	//m_program->dispatch(m_kernel.first, globalSize, localSize, std::vector<buffer_ptr> buffers, std::vector<uint8_t> pushConstants = {});
+#else
 
-        throw std::runtime_error(VkError::toString(ret));
-    }
+#endif
 }
 
 
 void xmrig::VkKernel::setArg(uint32_t index, size_t size, const void *value)
 {
-    const cl_int ret = VkLib::setKernelArg(m_kernel, index, size, value);
+    const int32_t ret = VkLib::setKernelArg(m_kernel, index, size, value);
     if (ret != CL_SUCCESS) {
         LOG_ERR("%s" RED(" error ") RED_BOLD("%s") RED(" when calling ") RED_BOLD("clSetKernelArg") RED(" for kernel ") RED_BOLD("%s")
                 RED(" argument ") RED_BOLD("%u") RED(" size ") RED_BOLD("%zu"),

@@ -30,20 +30,20 @@
 #include "crypto/rx/RxAlgo.h"
 
 
-void xmrig::RxRunKernel::enqueue(cl_command_queue queue, size_t threads, size_t workgroup_size)
+void xmrig::RxRunKernel::enqueue(tart::device_ptr queue, size_t threads, size_t workgroup_size)
 {
     const size_t gthreads        = threads * workgroup_size;
     enqueueNDRange(queue, 1, nullptr, &gthreads, &workgroup_size);
 }
 
 
-void xmrig::RxRunKernel::setArgs(cl_mem dataset, cl_mem scratchpads, cl_mem registers, cl_mem rounding, cl_mem programs, uint32_t batch_size, const Algorithm &algorithm)
+void xmrig::RxRunKernel::setArgs(tart::buffer_ptr dataset, tart::buffer_ptr scratchpads, tart::buffer_ptr registers, tart::buffer_ptr rounding, tart::buffer_ptr programs, uint32_t batch_size, const Algorithm &algorithm)
 {
-    setArg(0, sizeof(cl_mem), &dataset);
-    setArg(1, sizeof(cl_mem), &scratchpads);
-    setArg(2, sizeof(cl_mem), &registers);
-    setArg(3, sizeof(cl_mem), &rounding);
-    setArg(4, sizeof(cl_mem), &programs);
+    setArg(0, sizeof(tart::buffer_ptr), &dataset);
+    setArg(1, sizeof(tart::buffer_ptr), &scratchpads);
+    setArg(2, sizeof(tart::buffer_ptr), &registers);
+    setArg(3, sizeof(tart::buffer_ptr), &rounding);
+    setArg(4, sizeof(tart::buffer_ptr), &programs);
     setArg(5, sizeof(uint32_t), &batch_size);
 
     auto PowerOf2 = [](size_t N)

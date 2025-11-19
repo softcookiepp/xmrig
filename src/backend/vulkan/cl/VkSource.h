@@ -22,8 +22,8 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLSOURCE_H
-#define XMRIG_OCLSOURCE_H
+#ifndef XMRIG_VKSOURCE_H
+#define XMRIG_VKSOURCE_H
 
 
 namespace xmrig {
@@ -43,4 +43,4 @@ public:
 } // namespace xmrig
 
 
-#endif /* XMRIG_OCLSOURCE_H */
+#endif /* XMRIG_VKSOURCE_H */

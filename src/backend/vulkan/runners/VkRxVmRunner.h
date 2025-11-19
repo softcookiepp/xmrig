@@ -16,8 +16,8 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLRXVMRUNNER_H
-#define XMRIG_OCLRXVMRUNNER_H
+#ifndef XMRIG_VKRXVMRUNNER_H
+#define XMRIG_VKRXVMRUNNER_H
 
 
 #include "backend/vulkan/runners/VkRxBaseRunner.h"
@@ -45,7 +45,7 @@ protected:
     void init() override;
 
 private:
-    cl_mem m_vm_states              = nullptr;
+    tart::buffer_ptr m_vm_states              = nullptr;
     ExecuteVmKernel *m_execute_vm   = nullptr;
     InitVmKernel *m_init_vm         = nullptr;
 };
@@ -54,4 +54,4 @@ private:
 } /* namespace xmrig */
 
 
-#endif // XMRIG_OCLRXVMRUNNER_H
+#endif // XMRIG_VKRXVMRUNNER_H

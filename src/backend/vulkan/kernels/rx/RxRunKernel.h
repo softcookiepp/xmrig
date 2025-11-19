@@ -38,10 +38,10 @@ class Algorithm;
 class RxRunKernel : public VkKernel
 {
 public:
-    inline RxRunKernel(cl_program program) : VkKernel(program, "randomx_run") {}
+    inline RxRunKernel(tart::cl_program_ptr program) : VkKernel(program, "randomx_run") {}
 
-    void enqueue(cl_command_queue queue, size_t threads, size_t workgroup_size);
-    void setArgs(cl_mem dataset, cl_mem scratchpads, cl_mem registers, cl_mem rounding, cl_mem programs, uint32_t batch_size, const Algorithm &algorithm);
+    void enqueue(tart::device_ptr queue, size_t threads, size_t workgroup_size);
+    void setArgs(tart::buffer_ptr dataset, tart::buffer_ptr scratchpads, tart::buffer_ptr registers, tart::buffer_ptr rounding, tart::buffer_ptr programs, uint32_t batch_size, const Algorithm &algorithm);
 };
 
 

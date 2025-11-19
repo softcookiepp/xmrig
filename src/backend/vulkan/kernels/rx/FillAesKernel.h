@@ -35,10 +35,10 @@ namespace xmrig {
 class FillAesKernel : public VkKernel
 {
 public:
-    inline FillAesKernel(cl_program program, const char *name) : VkKernel(program, name) {}
+    inline FillAesKernel(tart::cl_program_ptr program, const char *name) : VkKernel(program, name) {}
 
-    void enqueue(cl_command_queue queue, size_t threads);
-    void setArgs(cl_mem state, cl_mem out, uint32_t batch_size, uint32_t rx_version);
+    void enqueue(tart::device_ptr queue, size_t threads);
+    void setArgs(tart::buffer_ptr state, tart::buffer_ptr out, uint32_t batch_size, uint32_t rx_version);
 };
 
 

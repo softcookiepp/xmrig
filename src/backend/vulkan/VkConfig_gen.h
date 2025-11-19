@@ -16,8 +16,8 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLCONFIG_GEN_H
-#define XMRIG_OCLCONFIG_GEN_H
+#ifndef XMRIG_VKCONFIG_GEN_H
+#define XMRIG_VKCONFIG_GEN_H
 
 
 #include "backend/common/Threads.h"
@@ -157,4 +157,4 @@ static inline std::vector<VkDevice> filterDevices(const std::vector<VkDevice> &d
 } /* namespace xmrig */
 
 
-#endif /* XMRIG_OCLCONFIG_GEN_H */
+#endif /* XMRIG_VKCONFIG_GEN_H */

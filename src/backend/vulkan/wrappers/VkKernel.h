@@ -22,18 +22,19 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLKERNEL_H
-#define XMRIG_OCLKERNEL_H
+#ifndef XMRIG_VKKERNEL_H
+#define XMRIG_VKKERNEL_H
 
-
+#include "tart.hpp"
 #include "base/tools/Object.h"
 #include "base/tools/String.h"
+#include <string>
+#include <utility>
 
 
-using cl_command_queue  = struct _cl_command_queue *;
-using cl_kernel         = struct _cl_kernel *;
-using cl_mem            = struct _cl_mem *;
-using cl_program        = struct _cl_program *;
+
+
+
 
 
 namespace xmrig {
@@ -44,23 +45,33 @@ class VkKernel
 public:
     XMRIG_DISABLE_COPY_MOVE_DEFAULT(VkKernel)
 
-    VkKernel(cl_program program, const char *name);
+    VkKernel(tart::cl_program_ptr program, const char *name);
     virtual ~VkKernel();
 
-    inline bool isValid() const         { return m_kernel != nullptr; }
-    inline cl_kernel kernel() const     { return m_kernel; }
-    inline const String &name() const   { return m_name; }
+    //inline bool isValid() const         { return m_kernel != nullptr; }
+    inline bool isValid() const         { return true; }
+    inline std::pair<std::string, tart::cl_program_ptr> kernel() const     { return m_kernel; }
+    inline const String name() const   { return m_name.c_str(); }
 
-    void enqueueNDRange(cl_command_queue queue, uint32_t work_dim, const size_t *global_work_offset, const size_t *global_work_size, const size_t *local_work_size);
+    void enqueueNDRange(tart::device_ptr queue, uint32_t work_dim, const size_t *global_work_offset, const size_t *global_work_size, const size_t *local_work_size);
     void setArg(uint32_t index, size_t size, const void *value);
 
 private:
-    cl_kernel m_kernel = nullptr;
+#if 1
+	// there is no tart equivalent for a CL kernel. should there be?
+	// for now, just store both
+	std::string m_name;
+	tart::cl_program_ptr m_program;
+	std::pair<std::string, tart::cl_program_ptr> m_kernel;
+#else
+    kernel_pair m_kernel = nullptr;
+
     const String m_name;
+#endif
 };
 
 
 } // namespace xmrig
 
 
-#endif /* XMRIG_OCLKERNEL_H */
+#endif /* XMRIG_VKKERNEL_H */

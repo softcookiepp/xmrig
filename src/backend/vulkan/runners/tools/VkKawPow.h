@@ -16,15 +16,15 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLKAWPOW_H
-#define XMRIG_OCLKAWPOW_H
+#ifndef XMRIG_VKKAWPOW_H
+#define XMRIG_VKKAWPOW_H
 
 
 #include <cstddef>
 #include <cstdint>
 
 
-using cl_kernel = struct _cl_kernel *;
+
 
 
 namespace xmrig {
@@ -36,7 +36,7 @@ class IVkRunner;
 class VkKawPow
 {
 public:
-    static cl_kernel get(const IVkRunner &runner, uint64_t height, uint32_t worksize);
+    static kernel_pair get(const IVkRunner &runner, uint64_t height, uint32_t worksize);
     static void clear();
 };
 
@@ -44,4 +44,4 @@ public:
 } // namespace xmrig
 
 
-#endif /* XMRIG_OCLKAWPOW_H */
+#endif /* XMRIG_VKKAWPOW_H */

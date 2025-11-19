@@ -22,8 +22,8 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLTHREADS_H
-#define XMRIG_OCLTHREADS_H
+#ifndef XMRIG_VKTHREADS_H
+#define XMRIG_VKTHREADS_H
 
 
 #include <vector>
@@ -63,4 +63,4 @@ private:
 } /* namespace xmrig */
 
 
-#endif /* XMRIG_OCLTHREADS_H */
+#endif /* XMRIG_VKTHREADS_H */

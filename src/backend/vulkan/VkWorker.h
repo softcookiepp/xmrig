@@ -16,8 +16,8 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLWORKER_H
-#define XMRIG_OCLWORKER_H
+#ifndef XMRIG_VKWORKER_H
+#define XMRIG_VKWORKER_H
 
 
 #include "backend/common/GpuWorker.h"
@@ -67,4 +67,4 @@ private:
 } // namespace xmrig
 
 
-#endif /* XMRIG_OCLWORKER_H */
+#endif /* XMRIG_VKWORKER_H */

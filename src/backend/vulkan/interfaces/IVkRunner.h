@@ -32,7 +32,7 @@
 #include <cstdint>
 
 
-using cl_context = struct _cl_context *;
+
 
 
 namespace xmrig {
@@ -51,7 +51,7 @@ public:
     IVkRunner()          = default;
     virtual ~IVkRunner() = default;
 
-    virtual cl_context ctx() const                          = 0;
+    virtual tart::device_ptr ctx() const                          = 0;
     virtual const Algorithm &algorithm() const              = 0;
     virtual const char *buildOptions() const                = 0;
     virtual const char *deviceKey() const                   = 0;

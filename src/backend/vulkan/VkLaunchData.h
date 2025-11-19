@@ -23,8 +23,8 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLLAUNCHDATA_H
-#define XMRIG_OCLLAUNCHDATA_H
+#ifndef XMRIG_VKLAUNCHDATA_H
+#define XMRIG_VKLAUNCHDATA_H
 
 
 #include "backend/vulkan/VkThread.h"
@@ -33,9 +33,9 @@
 #include "backend/vulkan/wrappers/VkPlatform.h"
 #include "base/crypto/Algorithm.h"
 #include "crypto/common/Nonce.h"
+#include "tart.hpp"
 
 
-using cl_context = struct _cl_context *;
 
 
 namespace xmrig {
@@ -59,7 +59,7 @@ public:
 
     static const char *tag();
 
-    cl_context ctx = nullptr;
+    tart::device_ptr ctx = nullptr;
     const Algorithm algorithm;
     const bool cache;
     const int64_t affinity;
@@ -74,4 +74,4 @@ public:
 } // namespace xmrig
 
 
-#endif /* XMRIG_OCLLAUNCHDATA_H */
+#endif /* XMRIG_VKLAUNCHDATA_H */

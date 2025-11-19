@@ -27,7 +27,7 @@
 #include "backend/vulkan/wrappers/VkLib.h"
 
 
-void xmrig::ExecuteVmKernel::enqueue(cl_command_queue queue, size_t threads, size_t worksize)
+void xmrig::ExecuteVmKernel::enqueue(tart::device_ptr queue, size_t threads, size_t worksize)
 {
     const size_t gthreads = (worksize == 16) ? (threads * 16) : (threads * 8);
     const size_t lthreads = (worksize == 16) ? 32 : 16;
@@ -37,12 +37,12 @@ void xmrig::ExecuteVmKernel::enqueue(cl_command_queue queue, size_t threads, siz
 
 
 // __kernel void execute_vm(__global void* vm_states, __global void* rounding, __global void* scratchpads, __global const void* dataset_ptr, uint32_t batch_size, uint32_t num_iterations, uint32_t first, uint32_t last)
-void xmrig::ExecuteVmKernel::setArgs(cl_mem vm_states, cl_mem rounding, cl_mem scratchpads, cl_mem dataset_ptr, uint32_t batch_size)
+void xmrig::ExecuteVmKernel::setArgs(tart::buffer_ptr vm_states, tart::buffer_ptr rounding, tart::buffer_ptr scratchpads, tart::buffer_ptr dataset_ptr, uint32_t batch_size)
 {
-    setArg(0, sizeof(cl_mem), &vm_states);
-    setArg(1, sizeof(cl_mem), &rounding);
-    setArg(2, sizeof(cl_mem), &scratchpads);
-    setArg(3, sizeof(cl_mem), &dataset_ptr);
+    setArg(0, sizeof(tart::buffer_ptr), &vm_states);
+    setArg(1, sizeof(tart::buffer_ptr), &rounding);
+    setArg(2, sizeof(tart::buffer_ptr), &scratchpads);
+    setArg(3, sizeof(tart::buffer_ptr), &dataset_ptr);
     setArg(4, sizeof(uint32_t), &batch_size);
 }
 

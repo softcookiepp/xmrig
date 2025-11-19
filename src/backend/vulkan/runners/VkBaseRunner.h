@@ -22,17 +22,17 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLBASERUNNER_H
-#define XMRIG_OCLBASERUNNER_H
+#ifndef XMRIG_VKBASERUNNER_H
+#define XMRIG_VKBASERUNNER_H
 
 
 #include <string>
 
 
-#include "3rdparty/cl.h"
+#include "tart.hpp"
 #include "backend/vulkan/interfaces/IVkRunner.h"
 #include "base/crypto/Algorithm.h"
-
+#include "tart.hpp"
 
 namespace xmrig {
 
@@ -49,7 +49,7 @@ public:
     ~VkBaseRunner() override;
 
 protected:
-    inline cl_context ctx() const override                { return m_ctx; }
+    inline tart::device_ptr ctx() const override                { return m_device; }
     inline const Algorithm &algorithm() const override    { return m_algorithm; }
     inline const char *buildOptions() const override      { return m_options.c_str(); }
     inline const char *deviceKey() const override         { return m_deviceKey.c_str(); }
@@ -67,18 +67,35 @@ protected:
     void init() override;
 
 protected:
-    cl_mem createSubBuffer(cl_mem_flags flags, size_t size);
+#if 1
+    tart::buffer_ptr createSubBuffer(size_t size);
+#else
+    tart::buffer_ptr createSubBuffer(tart::buffer_ptr_flags flags, size_t size);
+#endif
     size_t align(size_t size) const;
-    void enqueueReadBuffer(cl_mem buffer, cl_bool blocking_read, size_t offset, size_t size, void *ptr);
-    void enqueueWriteBuffer(cl_mem buffer, cl_bool blocking_write, size_t offset, size_t size, const void *ptr);
+#if 1
+	void enqueueReadBuffer(tart::buffer_ptr buffer, bool blocking_read, size_t offset, size_t size, void *ptr);
+    void enqueueWriteBuffer(tart::buffer_ptr buffer, bool blocking_write, size_t offset, size_t size, const void *ptr);
+#else
+    void enqueueReadBuffer(tart::buffer_ptr buffer, cl_bool blocking_read, size_t offset, size_t size, void *ptr);
+    void enqueueWriteBuffer(tart::buffer_ptr buffer, cl_bool blocking_write, size_t offset, size_t size, const void *ptr);
+#endif
     void finalize(uint32_t *hashOutput);
 
-    cl_command_queue m_queue    = nullptr;
-    cl_context m_ctx;
-    cl_mem m_buffer             = nullptr;
-    cl_mem m_input              = nullptr;
-    cl_mem m_output             = nullptr;
-    cl_program m_program        = nullptr;
+#if 1
+	tart::device_ptr m_device = nullptr;
+	tart::buffer_ptr m_buffer = nullptr;
+	tart::buffer_ptr m_input = nullptr;
+	tart::buffer_ptr m_output = nullptr;
+	tart::cl_program_ptr m_program = nullptr;
+#else
+    tart::device_ptr m_queue    = nullptr;
+    tart::device_ptr m_ctx;
+    tart::buffer_ptr m_buffer             = nullptr;
+    tart::buffer_ptr m_input              = nullptr;
+    tart::buffer_ptr m_output             = nullptr;
+    tart::cl_program_ptr m_program        = nullptr;
+#endif
     const Algorithm m_algorithm;
     const char *m_source;
     const VkLaunchData &m_data;
@@ -94,4 +111,4 @@ protected:
 } /* namespace xmrig */
 
 
-#endif // XMRIG_OCLBASERUNNER_H
+#endif // XMRIG_VKBASERUNNER_H

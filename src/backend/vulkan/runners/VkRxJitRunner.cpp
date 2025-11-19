@@ -140,9 +140,9 @@ bool xmrig::VkRxJitRunner::loadAsmProgram()
         *reinterpret_cast<uint32_t*>(binary + elf_header_flags_offset) = elf_header_flags;
     }
 
-    cl_int status   = 0;
-    cl_int ret      = 0;
-    cl_device_id device = data().device.id();
+    int32_t status   = 0;
+    int32_t ret      = 0;
+    tart::device_ptr device = data().device.id();
 
     m_asmProgram = VkLib::createProgramWithBinary(ctx(), 1, &device, &len, (const unsigned char**) &binary, &status, &ret);
     if (ret != CL_SUCCESS) {

@@ -16,8 +16,8 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLCONFIG_H
-#define XMRIG_OCLCONFIG_H
+#ifndef XMRIG_VKCONFIG_H
+#define XMRIG_VKCONFIG_H
 
 
 #include "backend/common/Threads.h"
@@ -76,4 +76,4 @@ private:
 } /* namespace xmrig */
 
 
-#endif /* XMRIG_OCLCONFIG_H */
+#endif /* XMRIG_VKCONFIG_H */

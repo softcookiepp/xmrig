@@ -35,10 +35,10 @@ namespace xmrig {
 class FindSharesKernel : public VkKernel
 {
 public:
-    inline FindSharesKernel(cl_program program) : VkKernel(program, "find_shares") {}
+    inline FindSharesKernel(tart::cl_program_ptr program) : VkKernel(program, "find_shares") {}
 
-    void enqueue(cl_command_queue queue, size_t threads);
-    void setArgs(cl_mem hashes, cl_mem shares);
+    void enqueue(tart::device_ptr queue, size_t threads);
+    void setArgs(tart::buffer_ptr hashes, tart::buffer_ptr shares);
     void setTarget(uint64_t target);
     void setNonce(uint32_t nonce);
 };

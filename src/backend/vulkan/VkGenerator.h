@@ -22,8 +22,8 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLGENERATOR_H
-#define XMRIG_OCLGENERATOR_H
+#ifndef XMRIG_VKGENERATOR_H
+#define XMRIG_VKGENERATOR_H
 
 
 namespace xmrig {
@@ -40,4 +40,4 @@ using ocl_gen_config_fun = bool (*)(const VkDevice &device, const Algorithm &alg
 } // namespace xmrig
 
 
-#endif /* XMRIG_OCLGENERATOR_H */
+#endif /* XMRIG_VKGENERATOR_H */

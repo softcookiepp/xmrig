@@ -16,8 +16,8 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLTHREAD_H
-#define XMRIG_OCLTHREAD_H
+#ifndef XMRIG_VKTHREAD_H
+#define XMRIG_VKTHREAD_H
 
 
 #include "3rdparty/rapidjson/fwd.h"
@@ -122,4 +122,4 @@ private:
 } /* namespace xmrig */
 
 
-#endif /* XMRIG_OCLTHREAD_H */
+#endif /* XMRIG_VKTHREAD_H */

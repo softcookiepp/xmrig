@@ -16,20 +16,21 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLDEVICE_H
-#define XMRIG_OCLDEVICE_H
+#ifndef XMRIG_VKDEVICE_H
+#define XMRIG_VKDEVICE_H
 
 
 #include "backend/common/misc/PciTopology.h"
 #include "backend/vulkan/wrappers/VkVendor.h"
 #include "base/tools/String.h"
+#include "tart.hpp"
 
 #include <algorithm>
 #include <vector>
 
 
-using cl_device_id      = struct _cl_device_id *;
-using cl_platform_id    = struct _cl_platform_id *;
+
+
 
 
 namespace xmrig {
@@ -58,14 +59,18 @@ public:
     };
 
     VkDevice() = delete;
-    VkDevice(uint32_t index, cl_device_id id, cl_platform_id platform);
+    VkDevice(uint32_t index, tart::device_ptr id, size_t platform);
 
     String printableName() const;
     uint32_t clock() const;
     void generate(const Algorithm &algorithm, VkThreads &threads) const;
 
-    inline bool isValid() const                 { return m_id != nullptr && m_platform != nullptr; }
-    inline cl_device_id id() const              { return m_id; }
+    inline bool isValid() const                 { return m_id != nullptr; }
+#if 1
+	inline tart::device_ptr id() const { return m_device; }
+#else
+    inline tart::device_ptr id() const              { return m_id; }
+#endif
     inline const String &platformVendor() const { return m_platformVendor; }
     inline VkVendor platformVendorId() const   { return m_vendorId; }
     inline const PciTopology &topology() const  { return m_topology; }
@@ -88,8 +93,8 @@ public:
 private:
     static VkDevice::Type getType(const String &name);
 
-    cl_device_id m_id               = nullptr;
-    cl_platform_id m_platform       = nullptr;
+    tart::device_ptr m_id               = nullptr;
+    size_t m_platform       = 0;
     const String m_platformVendor;
     String m_board;
     const String m_name;
@@ -103,10 +108,13 @@ private:
     VkVendor m_vendorId            = OCL_VENDOR_UNKNOWN;
     PciTopology m_topology;
     Type m_type                     = Unknown;
+    
+    // here we goes
+    tart::device_ptr m_device;
 };
 
 
 } // namespace xmrig
 
 
-#endif /* XMRIG_OCLDEVICE_H */
+#endif /* XMRIG_VKDEVICE_H */

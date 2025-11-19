@@ -75,42 +75,42 @@ static const char *kUnloadPlatformCompiler           = "clUnloadPlatformCompiler
 
 
 #if defined(CL_VERSION_2_0)
-typedef cl_command_queue (CL_API_CALL *createCommandQueueWithProperties_t)(cl_context, cl_device_id, const cl_queue_properties *, cl_int *);
+typedef tart::device_ptr (CL_API_CALL *createCommandQueueWithProperties_t)(tart::device_ptr, tart::device_ptr, const cl_queue_properties *, int32_t *);
 #endif
 
-typedef cl_command_queue (CL_API_CALL *createCommandQueue_t)(cl_context, cl_device_id, cl_command_queue_properties, cl_int *);
-typedef cl_context (CL_API_CALL *createContext_t)(const cl_context_properties *, cl_uint, const cl_device_id *, void (CL_CALLBACK *pfn_notify)(const char *, const void *, size_t, void *), void *, cl_int *);
-typedef cl_int (CL_API_CALL *buildProgram_t)(cl_program, cl_uint, const cl_device_id *, const char *, void (CL_CALLBACK *pfn_notify)(cl_program, void *), void *);
-typedef cl_int (CL_API_CALL *enqueueNDRangeKernel_t)(cl_command_queue, cl_kernel, cl_uint, const size_t *, const size_t *, const size_t *, cl_uint, const cl_event *, cl_event *);
-typedef cl_int (CL_API_CALL *enqueueReadBuffer_t)(cl_command_queue, cl_mem, cl_bool, size_t, size_t, void *, cl_uint, const cl_event *, cl_event *);
-typedef cl_int (CL_API_CALL *enqueueWriteBuffer_t)(cl_command_queue, cl_mem, cl_bool, size_t, size_t, const void *, cl_uint, const cl_event *, cl_event *);
-typedef cl_int (CL_API_CALL *finish_t)(cl_command_queue);
-typedef cl_int (CL_API_CALL *getCommandQueueInfo_t)(cl_command_queue, cl_command_queue_info, size_t, void *, size_t *);
-typedef cl_int (CL_API_CALL *getContextInfo_t)(cl_context, cl_context_info, size_t, void *, size_t *);
-typedef cl_int (CL_API_CALL *getDeviceIDs_t)(cl_platform_id, cl_device_type, cl_uint, cl_device_id *, cl_uint *);
-typedef cl_int (CL_API_CALL *getDeviceInfo_t)(cl_device_id, cl_device_info, size_t, void *, size_t *);
-typedef cl_int (CL_API_CALL *getKernelInfo_t)(cl_kernel, cl_kernel_info, size_t, void *, size_t *);
-typedef cl_int (CL_API_CALL *getMemObjectInfo_t)(cl_mem, cl_mem_info, size_t, void *, size_t *);
-typedef cl_int (CL_API_CALL *getPlatformIDs_t)(cl_uint, cl_platform_id *, cl_uint *);
-typedef cl_int (CL_API_CALL *getPlatformInfo_t)(cl_platform_id, cl_platform_info, size_t, void *, size_t *);
-typedef cl_int (CL_API_CALL *getProgramBuildInfo_t)(cl_program, cl_device_id, cl_program_build_info, size_t, void *, size_t *);
-typedef cl_int (CL_API_CALL *getProgramInfo_t)(cl_program, cl_program_info, size_t, void *, size_t *);
-typedef cl_int (CL_API_CALL *releaseCommandQueue_t)(cl_command_queue);
-typedef cl_int (CL_API_CALL *releaseContext_t)(cl_context);
-typedef cl_int (CL_API_CALL *releaseDevice_t)(cl_device_id device);
-typedef cl_int (CL_API_CALL *releaseKernel_t)(cl_kernel);
-typedef cl_int (CL_API_CALL *releaseMemObject_t)(cl_mem);
-typedef cl_int (CL_API_CALL *releaseProgram_t)(cl_program);
-typedef cl_int (CL_API_CALL *retainMemObject_t)(cl_mem);
-typedef cl_int (CL_API_CALL *retainProgram_t)(cl_program);
-typedef cl_int (CL_API_CALL *setKernelArg_t)(cl_kernel, cl_uint, size_t, const void *);
-typedef cl_int (CL_API_CALL *setMemObjectDestructorCallback_t)(cl_mem, void (CL_CALLBACK *)(cl_mem, void *), void *);
-typedef cl_int (CL_API_CALL *unloadPlatformCompiler_t)(cl_platform_id);
-typedef cl_kernel (CL_API_CALL *createKernel_t)(cl_program, const char *, cl_int *);
-typedef cl_mem (CL_API_CALL *createBuffer_t)(cl_context, cl_mem_flags, size_t, void *, cl_int *);
-typedef cl_mem (CL_API_CALL *createSubBuffer_t)(cl_mem, cl_mem_flags, cl_buffer_create_type, const void *, cl_int *);
-typedef cl_program (CL_API_CALL *createProgramWithBinary_t)(cl_context, cl_uint, const cl_device_id *, const size_t *, const unsigned char **, cl_int *, cl_int *);
-typedef cl_program (CL_API_CALL *createProgramWithSource_t)(cl_context, cl_uint, const char **, const size_t *, cl_int *);
+typedef tart::device_ptr (CL_API_CALL *createCommandQueue_t)(tart::device_ptr, tart::device_ptr, tart::device_ptr_properties, int32_t *);
+typedef tart::device_ptr (CL_API_CALL *createContext_t)(const tart::device_ptr_properties *, uint32_t, const tart::device_ptr *, void (CL_CALLBACK *pfn_notify)(const char *, const void *, size_t, void *), void *, int32_t *);
+typedef int32_t (CL_API_CALL *buildProgram_t)(tart::cl_program_ptr, uint32_t, const tart::device_ptr *, const char *, void (CL_CALLBACK *pfn_notify)(tart::cl_program_ptr, void *), void *);
+typedef int32_t (CL_API_CALL *enqueueNDRangeKernel_t)(tart::device_ptr, kernel_pair, uint32_t, const size_t *, const size_t *, const size_t *, uint32_t, const cl_event *, cl_event *);
+typedef int32_t (CL_API_CALL *enqueueReadBuffer_t)(tart::device_ptr, tart::buffer_ptr, cl_bool, size_t, size_t, void *, uint32_t, const cl_event *, cl_event *);
+typedef int32_t (CL_API_CALL *enqueueWriteBuffer_t)(tart::device_ptr, tart::buffer_ptr, cl_bool, size_t, size_t, const void *, uint32_t, const cl_event *, cl_event *);
+typedef int32_t (CL_API_CALL *finish_t)(tart::device_ptr);
+typedef int32_t (CL_API_CALL *getCommandQueueInfo_t)(tart::device_ptr, tart::device_ptr_info, size_t, void *, size_t *);
+typedef int32_t (CL_API_CALL *getContextInfo_t)(tart::device_ptr, tart::device_ptr_info, size_t, void *, size_t *);
+typedef int32_t (CL_API_CALL *getDeviceIDs_t)(size_t, cl_device_type, uint32_t, tart::device_ptr *, uint32_t *);
+typedef int32_t (CL_API_CALL *getDeviceInfo_t)(tart::device_ptr, cl_device_info, size_t, void *, size_t *);
+typedef int32_t (CL_API_CALL *getKernelInfo_t)(kernel_pair, kernel_pair_info, size_t, void *, size_t *);
+typedef int32_t (CL_API_CALL *getMemObjectInfo_t)(tart::buffer_ptr, tart::buffer_ptr_info, size_t, void *, size_t *);
+typedef int32_t (CL_API_CALL *getPlatformIDs_t)(uint32_t, size_t *, uint32_t *);
+typedef int32_t (CL_API_CALL *getPlatformInfo_t)(size_t, cl_platform_info, size_t, void *, size_t *);
+typedef int32_t (CL_API_CALL *getProgramBuildInfo_t)(tart::cl_program_ptr, tart::device_ptr, tart::cl_program_ptr_build_info, size_t, void *, size_t *);
+typedef int32_t (CL_API_CALL *getProgramInfo_t)(tart::cl_program_ptr, tart::cl_program_ptr_info, size_t, void *, size_t *);
+typedef int32_t (CL_API_CALL *releaseCommandQueue_t)(tart::device_ptr);
+typedef int32_t (CL_API_CALL *releaseContext_t)(tart::device_ptr);
+typedef int32_t (CL_API_CALL *releaseDevice_t)(tart::device_ptr device);
+typedef int32_t (CL_API_CALL *releaseKernel_t)(kernel_pair);
+typedef int32_t (CL_API_CALL *releaseMemObject_t)(tart::buffer_ptr);
+typedef int32_t (CL_API_CALL *releaseProgram_t)(tart::cl_program_ptr);
+typedef int32_t (CL_API_CALL *retainMemObject_t)(tart::buffer_ptr);
+typedef int32_t (CL_API_CALL *retainProgram_t)(tart::cl_program_ptr);
+typedef int32_t (CL_API_CALL *setKernelArg_t)(kernel_pair, uint32_t, size_t, const void *);
+typedef int32_t (CL_API_CALL *setMemObjectDestructorCallback_t)(tart::buffer_ptr, void (CL_CALLBACK *)(tart::buffer_ptr, void *), void *);
+typedef int32_t (CL_API_CALL *unloadPlatformCompiler_t)(size_t);
+typedef kernel_pair (CL_API_CALL *createKernel_t)(tart::cl_program_ptr, const char *, int32_t *);
+typedef tart::buffer_ptr (CL_API_CALL *createBuffer_t)(tart::device_ptr, tart::buffer_ptr_flags, size_t, void *, int32_t *);
+typedef tart::buffer_ptr (CL_API_CALL *createSubBuffer_t)(tart::buffer_ptr, tart::buffer_ptr_flags, cl_buffer_create_type, const void *, int32_t *);
+typedef tart::cl_program_ptr (CL_API_CALL *createProgramWithBinary_t)(tart::device_ptr, uint32_t, const tart::device_ptr *, const size_t *, const unsigned char **, int32_t *, int32_t *);
+typedef tart::cl_program_ptr (CL_API_CALL *createProgramWithSource_t)(tart::device_ptr, uint32_t, const char **, const size_t *, int32_t *);
 
 #if defined(CL_VERSION_2_0)
 static createCommandQueueWithProperties_t pCreateCommandQueueWithProperties = nullptr;
@@ -154,6 +154,8 @@ static unloadPlatformCompiler_t pUnloadPlatformCompiler                     = nu
 
 
 namespace xmrig {
+	
+tart::Instance gTartInstance;
 
 bool VkLib::m_initialized = false;
 bool VkLib::m_ready       = false;
@@ -262,9 +264,9 @@ xmrig::String xmrig::VkLib::defaultLoader()
 }
 
 
-cl_command_queue xmrig::VkLib::createCommandQueue(cl_context context, cl_device_id device, cl_int *errcode_ret) noexcept
+tart::device_ptr xmrig::VkLib::createCommandQueue(tart::device_ptr context, tart::device_ptr device, int32_t *errcode_ret) noexcept
 {
-    cl_command_queue result = nullptr;
+    tart::device_ptr result = nullptr;
 
 #   if defined(CL_VERSION_2_0)
     if (pCreateCommandQueueWithProperties) {
@@ -273,7 +275,7 @@ cl_command_queue xmrig::VkLib::createCommandQueue(cl_context context, cl_device_
     }
     else {
 #   endif
-        const cl_command_queue_properties commandQueueProperties = { 0 };
+        const tart::device_ptr_properties commandQueueProperties = { 0 };
         result = pCreateCommandQueue(context, device, commandQueueProperties, errcode_ret);
 #   if defined(CL_VERSION_2_0)
     }
@@ -289,10 +291,10 @@ cl_command_queue xmrig::VkLib::createCommandQueue(cl_context context, cl_device_
 }
 
 
-cl_command_queue xmrig::VkLib::createCommandQueue(cl_context context, cl_device_id device)
+tart::device_ptr xmrig::VkLib::createCommandQueue(tart::device_ptr context, tart::device_ptr device)
 {
-    cl_int ret = 0;
-    cl_command_queue queue = createCommandQueue(context, device, &ret);
+    int32_t ret = 0;
+    tart::device_ptr queue = createCommandQueue(context, device, &ret);
     if (ret != CL_SUCCESS) {
         throw std::runtime_error(VkError::toString(ret));
     }
@@ -301,7 +303,7 @@ cl_command_queue xmrig::VkLib::createCommandQueue(cl_context context, cl_device_
 }
 
 
-cl_context xmrig::VkLib::createContext(const cl_context_properties *properties, cl_uint num_devices, const cl_device_id *devices, void (CL_CALLBACK *pfn_notify)(const char *, const void *, size_t, void *), void *user_data, cl_int *errcode_ret)
+tart::device_ptr xmrig::VkLib::createContext(const tart::device_ptr_properties *properties, uint32_t num_devices, const tart::device_ptr *devices, void (CL_CALLBACK *pfn_notify)(const char *, const void *, size_t, void *), void *user_data, int32_t *errcode_ret)
 {
     assert(pCreateContext != nullptr);
 
@@ -316,18 +318,18 @@ cl_context xmrig::VkLib::createContext(const cl_context_properties *properties, 
 }
 
 
-cl_context xmrig::VkLib::createContext(const std::vector<cl_device_id> &ids)
+tart::device_ptr xmrig::VkLib::createContext(const std::vector<tart::device_ptr> &ids)
 {
-    cl_int ret = 0;
-    return createContext(nullptr, static_cast<cl_uint>(ids.size()), ids.data(), nullptr, nullptr, &ret);
+    int32_t ret = 0;
+    return createContext(nullptr, static_cast<uint32_t>(ids.size()), ids.data(), nullptr, nullptr, &ret);
 }
 
 
-cl_int xmrig::VkLib::buildProgram(cl_program program, cl_uint num_devices, const cl_device_id *device_list, const char *options, void (CL_CALLBACK *pfn_notify)(cl_program program, void *user_data), void *user_data) noexcept
+int32_t xmrig::VkLib::buildProgram(tart::cl_program_ptr program, uint32_t num_devices, const tart::device_ptr *device_list, const char *options, void (CL_CALLBACK *pfn_notify)(tart::cl_program_ptr program, void *user_data), void *user_data) noexcept
 {
     assert(pBuildProgram != nullptr);
 
-    const cl_int ret = pBuildProgram(program, num_devices, device_list, options, pfn_notify, user_data);
+    const int32_t ret = pBuildProgram(program, num_devices, device_list, options, pfn_notify, user_data);
     if (ret != CL_SUCCESS) {
         LOG_ERR(kErrorTemplate, VkError::toString(ret), kBuildProgram);
     }
@@ -336,7 +338,7 @@ cl_int xmrig::VkLib::buildProgram(cl_program program, cl_uint num_devices, const
 }
 
 
-cl_int xmrig::VkLib::enqueueNDRangeKernel(cl_command_queue command_queue, cl_kernel kernel, cl_uint work_dim, const size_t *global_work_offset, const size_t *global_work_size, const size_t *local_work_size, cl_uint num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept
+int32_t xmrig::VkLib::enqueueNDRangeKernel(tart::device_ptr command_queue, kernel_pair kernel, uint32_t work_dim, const size_t *global_work_offset, const size_t *global_work_size, const size_t *local_work_size, uint32_t num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept
 {
     assert(pEnqueueNDRangeKernel != nullptr);
 
@@ -344,11 +346,11 @@ cl_int xmrig::VkLib::enqueueNDRangeKernel(cl_command_queue command_queue, cl_ker
 }
 
 
-cl_int xmrig::VkLib::enqueueReadBuffer(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_read, size_t offset, size_t size, void *ptr, cl_uint num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept
+int32_t xmrig::VkLib::enqueueReadBuffer(tart::device_ptr command_queue, tart::buffer_ptr buffer, cl_bool blocking_read, size_t offset, size_t size, void *ptr, uint32_t num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept
 {
     assert(pEnqueueReadBuffer != nullptr);
 
-    const cl_int ret = pEnqueueReadBuffer(command_queue, buffer, blocking_read, offset, size, ptr, num_events_in_wait_list, event_wait_list, event);
+    const int32_t ret = pEnqueueReadBuffer(command_queue, buffer, blocking_read, offset, size, ptr, num_events_in_wait_list, event_wait_list, event);
     if (ret != CL_SUCCESS) {
         LOG_ERR(kErrorTemplate, VkError::toString(ret), kEnqueueReadBuffer);
     }
@@ -357,11 +359,11 @@ cl_int xmrig::VkLib::enqueueReadBuffer(cl_command_queue command_queue, cl_mem bu
 }
 
 
-cl_int xmrig::VkLib::enqueueWriteBuffer(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_write, size_t offset, size_t size, const void *ptr, cl_uint num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept
+int32_t xmrig::VkLib::enqueueWriteBuffer(tart::device_ptr command_queue, tart::buffer_ptr buffer, cl_bool blocking_write, size_t offset, size_t size, const void *ptr, uint32_t num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept
 {
     assert(pEnqueueWriteBuffer != nullptr);
 
-    const cl_int ret = pEnqueueWriteBuffer(command_queue, buffer, blocking_write, offset, size, ptr, num_events_in_wait_list, event_wait_list, event);
+    const int32_t ret = pEnqueueWriteBuffer(command_queue, buffer, blocking_write, offset, size, ptr, num_events_in_wait_list, event_wait_list, event);
     if (ret != CL_SUCCESS) {
         LOG_ERR(kErrorTemplate, VkError::toString(ret), kEnqueueWriteBuffer);
     }
@@ -370,7 +372,7 @@ cl_int xmrig::VkLib::enqueueWriteBuffer(cl_command_queue command_queue, cl_mem b
 }
 
 
-cl_int xmrig::VkLib::finish(cl_command_queue command_queue) noexcept
+int32_t xmrig::VkLib::finish(tart::device_ptr command_queue) noexcept
 {
     assert(pFinish != nullptr);
 
@@ -378,19 +380,19 @@ cl_int xmrig::VkLib::finish(cl_command_queue command_queue) noexcept
 }
 
 
-cl_int xmrig::VkLib::getCommandQueueInfo(cl_command_queue command_queue, cl_command_queue_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept
+int32_t xmrig::VkLib::getCommandQueueInfo(tart::device_ptr command_queue, tart::device_ptr_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept
 {
     return pGetCommandQueueInfo(command_queue, param_name, param_value_size, param_value, param_value_size_ret);
 }
 
 
-cl_int xmrig::VkLib::getContextInfo(cl_context context, cl_context_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept
+int32_t xmrig::VkLib::getContextInfo(tart::device_ptr context, tart::device_ptr_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept
 {
     return pGetContextInfo(context, param_name, param_value_size, param_value, param_value_size_ret);
 }
 
 
-cl_int xmrig::VkLib::getDeviceIDs(cl_platform_id platform, cl_device_type device_type, cl_uint num_entries, cl_device_id *devices, cl_uint *num_devices) noexcept
+int32_t xmrig::VkLib::getDeviceIDs(size_t platform, cl_device_type device_type, uint32_t num_entries, tart::device_ptr *devices, uint32_t *num_devices) noexcept
 {
     assert(pGetDeviceIDs != nullptr);
 
@@ -398,11 +400,11 @@ cl_int xmrig::VkLib::getDeviceIDs(cl_platform_id platform, cl_device_type device
 }
 
 
-cl_int xmrig::VkLib::getDeviceInfo(cl_device_id device, cl_device_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept
+int32_t xmrig::VkLib::getDeviceInfo(tart::device_ptr device, cl_device_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept
 {
     assert(pGetDeviceInfo != nullptr);
 
-    const cl_int ret = pGetDeviceInfo(device, param_name, param_value_size, param_value, param_value_size_ret);
+    const int32_t ret = pGetDeviceInfo(device, param_name, param_value_size, param_value, param_value_size_ret);
     if (ret != CL_SUCCESS && param_name != CL_DEVICE_BOARD_NAME_AMD) {
         LOG_ERR("Error %s when calling %s, param 0x%04x", VkError::toString(ret), kGetDeviceInfo, param_name);
     }
@@ -411,19 +413,19 @@ cl_int xmrig::VkLib::getDeviceInfo(cl_device_id device, cl_device_info param_nam
 }
 
 
-cl_int xmrig::VkLib::getKernelInfo(cl_kernel kernel, cl_kernel_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept
+int32_t xmrig::VkLib::getKernelInfo(kernel_pair kernel, kernel_pair_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept
 {
     return pGetKernelInfo(kernel, param_name, param_value_size, param_value, param_value_size_ret);
 }
 
 
-cl_int xmrig::VkLib::getMemObjectInfo(cl_mem memobj, cl_mem_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept
+int32_t xmrig::VkLib::getMemObjectInfo(tart::buffer_ptr memobj, tart::buffer_ptr_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept
 {
     return pGetMemObjectInfo(memobj, param_name, param_value_size, param_value, param_value_size_ret);
 }
 
 
-cl_int xmrig::VkLib::getPlatformIDs(cl_uint num_entries, cl_platform_id *platforms, cl_uint *num_platforms)
+int32_t xmrig::VkLib::getPlatformIDs(uint32_t num_entries, size_t *platforms, uint32_t *num_platforms)
 {
     assert(pGetPlatformIDs != nullptr);
 
@@ -431,7 +433,7 @@ cl_int xmrig::VkLib::getPlatformIDs(cl_uint num_entries, cl_platform_id *platfor
 }
 
 
-cl_int xmrig::VkLib::getPlatformInfo(cl_platform_id platform, cl_platform_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept
+int32_t xmrig::VkLib::getPlatformInfo(size_t platform, cl_platform_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept
 {
     assert(pGetPlatformInfo != nullptr);
 
@@ -439,11 +441,11 @@ cl_int xmrig::VkLib::getPlatformInfo(cl_platform_id platform, cl_platform_info p
 }
 
 
-cl_int xmrig::VkLib::getProgramBuildInfo(cl_program program, cl_device_id device, cl_program_build_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept
+int32_t xmrig::VkLib::getProgramBuildInfo(tart::cl_program_ptr program, tart::device_ptr device, tart::cl_program_ptr_build_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept
 {
     assert(pGetProgramBuildInfo != nullptr);
 
-    const cl_int ret = pGetProgramBuildInfo(program, device, param_name, param_value_size, param_value, param_value_size_ret);
+    const int32_t ret = pGetProgramBuildInfo(program, device, param_name, param_value_size, param_value, param_value_size_ret);
     if (ret != CL_SUCCESS) {
         LOG_ERR(kErrorTemplate, VkError::toString(ret), kGetProgramBuildInfo);
     }
@@ -452,11 +454,11 @@ cl_int xmrig::VkLib::getProgramBuildInfo(cl_program program, cl_device_id device
 }
 
 
-cl_int xmrig::VkLib::getProgramInfo(cl_program program, cl_program_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret)
+int32_t xmrig::VkLib::getProgramInfo(tart::cl_program_ptr program, tart::cl_program_ptr_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret)
 {
     assert(pGetProgramInfo != nullptr);
 
-    const cl_int ret = pGetProgramInfo(program, param_name, param_value_size, param_value, param_value_size_ret);
+    const int32_t ret = pGetProgramInfo(program, param_name, param_value_size, param_value, param_value_size_ret);
     if (ret != CL_SUCCESS) {
         LOG_ERR(kErrorTemplate, VkError::toString(ret), kGetProgramInfo);
     }
@@ -465,7 +467,7 @@ cl_int xmrig::VkLib::getProgramInfo(cl_program program, cl_program_info param_na
 }
 
 
-cl_int xmrig::VkLib::release(cl_command_queue command_queue) noexcept
+int32_t xmrig::VkLib::release(tart::device_ptr command_queue) noexcept
 {
     assert(pReleaseCommandQueue != nullptr);
     assert(pGetCommandQueueInfo != nullptr);
@@ -480,7 +482,7 @@ cl_int xmrig::VkLib::release(cl_command_queue command_queue) noexcept
 
     finish(command_queue);
 
-    cl_int ret = pReleaseCommandQueue(command_queue);
+    int32_t ret = pReleaseCommandQueue(command_queue);
     if (ret != CL_SUCCESS) {
         LOG_ERR(kErrorTemplate, VkError::toString(ret), kReleaseCommandQueue);
     }
@@ -489,7 +491,7 @@ cl_int xmrig::VkLib::release(cl_command_queue command_queue) noexcept
 }
 
 
-cl_int xmrig::VkLib::release(cl_context context) noexcept
+int32_t xmrig::VkLib::release(tart::device_ptr context) noexcept
 {
     assert(pReleaseContext != nullptr);
 
@@ -497,7 +499,7 @@ cl_int xmrig::VkLib::release(cl_context context) noexcept
     LOG_REFS("%p %u ~context", context, getUint(context, CL_CONTEXT_REFERENCE_COUNT));
 #   endif
 
-    const cl_int ret = pReleaseContext(context);
+    const int32_t ret = pReleaseContext(context);
     if (ret != CL_SUCCESS) {
         LOG_ERR(kErrorTemplate, VkError::toString(ret), kReleaseContext);
     }
@@ -506,7 +508,7 @@ cl_int xmrig::VkLib::release(cl_context context) noexcept
 }
 
 
-cl_int xmrig::VkLib::release(cl_device_id id) noexcept
+int32_t xmrig::VkLib::release(tart::device_ptr id) noexcept
 {
     assert(pReleaseDevice != nullptr);
 
@@ -514,7 +516,7 @@ cl_int xmrig::VkLib::release(cl_device_id id) noexcept
     LOG_REFS("%p %u ~device", id, getUint(id, CL_DEVICE_REFERENCE_COUNT));
 #   endif
 
-    const cl_int ret = pReleaseDevice(id);
+    const int32_t ret = pReleaseDevice(id);
     if (ret != CL_SUCCESS) {
         LOG_ERR(kErrorTemplate, VkError::toString(ret), kReleaseDevice);
     }
@@ -523,7 +525,7 @@ cl_int xmrig::VkLib::release(cl_device_id id) noexcept
 }
 
 
-cl_int xmrig::VkLib::release(cl_kernel kernel) noexcept
+int32_t xmrig::VkLib::release(kernel_pair kernel) noexcept
 {
     assert(pReleaseKernel != nullptr);
 
@@ -535,7 +537,7 @@ cl_int xmrig::VkLib::release(cl_kernel kernel) noexcept
     LOG_REFS("%p %u ~kernel %s", kernel, getUint(kernel, CL_KERNEL_REFERENCE_COUNT), getString(kernel, CL_KERNEL_FUNCTION_NAME).data());
 #   endif
 
-    const cl_int ret = pReleaseKernel(kernel);
+    const int32_t ret = pReleaseKernel(kernel);
     if (ret != CL_SUCCESS) {
         LOG_ERR(kErrorTemplate, VkError::toString(ret), kReleaseKernel);
     }
@@ -544,7 +546,7 @@ cl_int xmrig::VkLib::release(cl_kernel kernel) noexcept
 }
 
 
-cl_int xmrig::VkLib::release(cl_mem mem_obj) noexcept
+int32_t xmrig::VkLib::release(tart::buffer_ptr mem_obj) noexcept
 {
     assert(pReleaseMemObject != nullptr);
 
@@ -556,7 +558,7 @@ cl_int xmrig::VkLib::release(cl_mem mem_obj) noexcept
     LOG_REFS("%p %u ~mem %zub", mem_obj, getUint(mem_obj, CL_MEM_REFERENCE_COUNT), getUlong(mem_obj, CL_MEM_SIZE));
 #   endif
 
-    const cl_int ret = pReleaseMemObject(mem_obj);
+    const int32_t ret = pReleaseMemObject(mem_obj);
     if (ret != CL_SUCCESS) {
         LOG_ERR(kErrorTemplate, VkError::toString(ret), kReleaseMemObject);
     }
@@ -565,7 +567,7 @@ cl_int xmrig::VkLib::release(cl_mem mem_obj) noexcept
 }
 
 
-cl_int xmrig::VkLib::release(cl_program program) noexcept
+int32_t xmrig::VkLib::release(tart::cl_program_ptr program) noexcept
 {
     assert(pReleaseProgram != nullptr);
 
@@ -577,7 +579,7 @@ cl_int xmrig::VkLib::release(cl_program program) noexcept
     LOG_REFS("%p %u ~program %s", program, getUint(program, CL_PROGRAM_REFERENCE_COUNT), getString(program, CL_PROGRAM_KERNEL_NAMES).data());
 #   endif
 
-    const cl_int ret = pReleaseProgram(program);
+    const int32_t ret = pReleaseProgram(program);
     if (ret != CL_SUCCESS) {
         LOG_ERR(kErrorTemplate, VkError::toString(ret), kReleaseProgram);
     }
@@ -586,7 +588,7 @@ cl_int xmrig::VkLib::release(cl_program program) noexcept
 }
 
 
-cl_int xmrig::VkLib::setKernelArg(cl_kernel kernel, cl_uint arg_index, size_t arg_size, const void *arg_value) noexcept
+int32_t xmrig::VkLib::setKernelArg(kernel_pair kernel, uint32_t arg_index, size_t arg_size, const void *arg_value) noexcept
 {
     assert(pSetKernelArg != nullptr);
 
@@ -594,13 +596,13 @@ cl_int xmrig::VkLib::setKernelArg(cl_kernel kernel, cl_uint arg_index, size_t ar
 }
 
 
-cl_int xmrig::VkLib::unloadPlatformCompiler(cl_platform_id platform) noexcept
+int32_t xmrig::VkLib::unloadPlatformCompiler(size_t platform) noexcept
 {
     return pUnloadPlatformCompiler(platform);
 }
 
 
-cl_kernel xmrig::VkLib::createKernel(cl_program program, const char *kernel_name, cl_int *errcode_ret) noexcept
+kernel_pair xmrig::VkLib::createKernel(tart::cl_program_ptr program, const char *kernel_name, int32_t *errcode_ret) noexcept
 {
     assert(pCreateKernel != nullptr);
 
@@ -616,10 +618,10 @@ cl_kernel xmrig::VkLib::createKernel(cl_program program, const char *kernel_name
 }
 
 
-cl_kernel xmrig::VkLib::createKernel(cl_program program, const char *kernel_name)
+kernel_pair xmrig::VkLib::createKernel(tart::cl_program_ptr program, const char *kernel_name)
 {
-    cl_int ret = 0;
-    cl_kernel kernel = createKernel(program, kernel_name, &ret);
+    int32_t ret = 0;
+    kernel_pair kernel = createKernel(program, kernel_name, &ret);
     if (ret != CL_SUCCESS) {
         throw std::runtime_error(VkError::toString(ret));
     }
@@ -628,10 +630,10 @@ cl_kernel xmrig::VkLib::createKernel(cl_program program, const char *kernel_name
 }
 
 
-cl_mem xmrig::VkLib::createBuffer(cl_context context, cl_mem_flags flags, size_t size, void *host_ptr)
+tart::buffer_ptr xmrig::VkLib::createBuffer(tart::device_ptr context, tart::buffer_ptr_flags flags, size_t size, void *host_ptr)
 {
-    cl_int ret = 0;
-    cl_mem mem = createBuffer(context, flags, size, host_ptr, &ret);
+    int32_t ret = 0;
+    tart::buffer_ptr mem = createBuffer(context, flags, size, host_ptr, &ret);
     if (ret != CL_SUCCESS) {
         throw std::runtime_error(VkError::toString(ret));
     }
@@ -640,7 +642,7 @@ cl_mem xmrig::VkLib::createBuffer(cl_context context, cl_mem_flags flags, size_t
 }
 
 
-cl_mem xmrig::VkLib::createBuffer(cl_context context, cl_mem_flags flags, size_t size, void *host_ptr, cl_int *errcode_ret) noexcept
+tart::buffer_ptr xmrig::VkLib::createBuffer(tart::device_ptr context, tart::buffer_ptr_flags flags, size_t size, void *host_ptr, int32_t *errcode_ret) noexcept
 {
     assert(pCreateBuffer != nullptr);
 
@@ -656,7 +658,7 @@ cl_mem xmrig::VkLib::createBuffer(cl_context context, cl_mem_flags flags, size_t
 }
 
 
-cl_mem xmrig::VkLib::createSubBuffer(cl_mem buffer, cl_mem_flags flags, size_t offset, size_t size, cl_int *errcode_ret) noexcept
+tart::buffer_ptr xmrig::VkLib::createSubBuffer(tart::buffer_ptr buffer, tart::buffer_ptr_flags flags, size_t offset, size_t size, int32_t *errcode_ret) noexcept
 {
     const cl_buffer_region region = { offset, size };
 
@@ -672,10 +674,10 @@ cl_mem xmrig::VkLib::createSubBuffer(cl_mem buffer, cl_mem_flags flags, size_t o
 }
 
 
-cl_mem xmrig::VkLib::createSubBuffer(cl_mem buffer, cl_mem_flags flags, size_t offset, size_t size)
+tart::buffer_ptr xmrig::VkLib::createSubBuffer(tart::buffer_ptr buffer, tart::buffer_ptr_flags flags, size_t offset, size_t size)
 {
-    cl_int ret = 0;
-    cl_mem mem = createSubBuffer(buffer, flags, offset, size, &ret);
+    int32_t ret = 0;
+    tart::buffer_ptr mem = createSubBuffer(buffer, flags, offset, size, &ret);
     if (ret != CL_SUCCESS) {
         throw std::runtime_error(VkError::toString(ret));
     }
@@ -684,7 +686,7 @@ cl_mem xmrig::VkLib::createSubBuffer(cl_mem buffer, cl_mem_flags flags, size_t o
 }
 
 
-cl_mem xmrig::VkLib::retain(cl_mem memobj) noexcept
+tart::buffer_ptr xmrig::VkLib::retain(tart::buffer_ptr memobj) noexcept
 {
     assert(pRetainMemObject != nullptr);
 
@@ -696,7 +698,7 @@ cl_mem xmrig::VkLib::retain(cl_mem memobj) noexcept
 }
 
 
-cl_program xmrig::VkLib::createProgramWithBinary(cl_context context, cl_uint num_devices, const cl_device_id *device_list, const size_t *lengths, const unsigned char **binaries, cl_int *binary_status, cl_int *errcode_ret) noexcept
+tart::cl_program_ptr xmrig::VkLib::createProgramWithBinary(tart::device_ptr context, uint32_t num_devices, const tart::device_ptr *device_list, const size_t *lengths, const unsigned char **binaries, int32_t *binary_status, int32_t *errcode_ret) noexcept
 {
     assert(pCreateProgramWithBinary != nullptr);
 
@@ -711,7 +713,7 @@ cl_program xmrig::VkLib::createProgramWithBinary(cl_context context, cl_uint num
 }
 
 
-cl_program xmrig::VkLib::createProgramWithSource(cl_context context, cl_uint count, const char **strings, const size_t *lengths, cl_int *errcode_ret) noexcept
+tart::cl_program_ptr xmrig::VkLib::createProgramWithSource(tart::device_ptr context, uint32_t count, const char **strings, const size_t *lengths, int32_t *errcode_ret) noexcept
 {
     assert(pCreateProgramWithSource != nullptr);
 
@@ -726,7 +728,7 @@ cl_program xmrig::VkLib::createProgramWithSource(cl_context context, cl_uint cou
 }
 
 
-cl_program xmrig::VkLib::retain(cl_program program) noexcept
+tart::cl_program_ptr xmrig::VkLib::retain(tart::cl_program_ptr program) noexcept
 {
     assert(pRetainProgram != nullptr);
 
@@ -738,10 +740,10 @@ cl_program xmrig::VkLib::retain(cl_program program) noexcept
 }
 
 
-cl_uint xmrig::VkLib::getNumPlatforms() noexcept
+uint32_t xmrig::VkLib::getNumPlatforms() noexcept
 {
-    cl_uint count   = 0;
-    cl_int ret      = 0;
+    uint32_t count   = 0;
+    int32_t ret      = 0;
 
     if ((ret = VkLib::getPlatformIDs(0, nullptr, &count)) != CL_SUCCESS) {
         LOG_ERR("Error %s when calling clGetPlatformIDs for number of platforms.", VkError::toString(ret));
@@ -755,55 +757,55 @@ cl_uint xmrig::VkLib::getNumPlatforms() noexcept
 }
 
 
-cl_uint xmrig::VkLib::getUint(cl_command_queue command_queue, cl_command_queue_info param_name, cl_uint defaultValue) noexcept
+uint32_t xmrig::VkLib::getUint(tart::device_ptr command_queue, tart::device_ptr_info param_name, uint32_t defaultValue) noexcept
 {
-    getCommandQueueInfo(command_queue, param_name, sizeof(cl_uint), &defaultValue);
+    getCommandQueueInfo(command_queue, param_name, sizeof(uint32_t), &defaultValue);
 
     return defaultValue;
 }
 
 
-cl_uint xmrig::VkLib::getUint(cl_context context, cl_context_info param_name, cl_uint defaultValue) noexcept
+uint32_t xmrig::VkLib::getUint(tart::device_ptr context, tart::device_ptr_info param_name, uint32_t defaultValue) noexcept
 {
-    getContextInfo(context, param_name, sizeof(cl_uint), &defaultValue);
+    getContextInfo(context, param_name, sizeof(uint32_t), &defaultValue);
 
     return defaultValue;
 }
 
 
-cl_uint xmrig::VkLib::getUint(cl_device_id id, cl_device_info param, cl_uint defaultValue) noexcept
+uint32_t xmrig::VkLib::getUint(tart::device_ptr id, cl_device_info param, uint32_t defaultValue) noexcept
 {
-    getDeviceInfo(id, param, sizeof(cl_uint), &defaultValue);
+    getDeviceInfo(id, param, sizeof(uint32_t), &defaultValue);
 
     return defaultValue;
 }
 
 
-cl_uint xmrig::VkLib::getUint(cl_kernel kernel, cl_kernel_info  param_name, cl_uint defaultValue) noexcept
+uint32_t xmrig::VkLib::getUint(kernel_pair kernel, kernel_pair_info  param_name, uint32_t defaultValue) noexcept
 {
-    getKernelInfo(kernel, param_name, sizeof(cl_uint), &defaultValue);
+    getKernelInfo(kernel, param_name, sizeof(uint32_t), &defaultValue);
 
     return defaultValue;
 }
 
 
-cl_uint xmrig::VkLib::getUint(cl_mem memobj, cl_mem_info param_name, cl_uint defaultValue) noexcept
+uint32_t xmrig::VkLib::getUint(tart::buffer_ptr memobj, tart::buffer_ptr_info param_name, uint32_t defaultValue) noexcept
 {
-    getMemObjectInfo(memobj, param_name, sizeof(cl_uint), &defaultValue);
+    getMemObjectInfo(memobj, param_name, sizeof(uint32_t), &defaultValue);
 
     return defaultValue;
 }
 
 
-cl_uint xmrig::VkLib::getUint(cl_program program, cl_program_info param, cl_uint defaultValue) noexcept
+uint32_t xmrig::VkLib::getUint(tart::cl_program_ptr program, tart::cl_program_ptr_info param, uint32_t defaultValue) noexcept
 {
-    getProgramInfo(program, param, sizeof(cl_uint), &defaultValue);
+    getProgramInfo(program, param, sizeof(uint32_t), &defaultValue);
 
     return defaultValue;
 }
 
 
-cl_ulong xmrig::VkLib::getUlong(cl_device_id id, cl_device_info param, cl_ulong defaultValue) noexcept
+cl_ulong xmrig::VkLib::getUlong(tart::device_ptr id, cl_device_info param, cl_ulong defaultValue) noexcept
 {
     getDeviceInfo(id, param, sizeof(cl_ulong), &defaultValue);
 
@@ -811,7 +813,7 @@ cl_ulong xmrig::VkLib::getUlong(cl_device_id id, cl_device_info param, cl_ulong 
 }
 
 
-cl_ulong xmrig::VkLib::getUlong(cl_mem memobj, cl_mem_info param_name, cl_ulong defaultValue) noexcept
+cl_ulong xmrig::VkLib::getUlong(tart::buffer_ptr memobj, tart::buffer_ptr_info param_name, cl_ulong defaultValue) noexcept
 {
     getMemObjectInfo(memobj, param_name, sizeof(cl_ulong), &defaultValue);
 
@@ -819,10 +821,10 @@ cl_ulong xmrig::VkLib::getUlong(cl_mem memobj, cl_mem_info param_name, cl_ulong 
 }
 
 
-std::vector<cl_platform_id> xmrig::VkLib::getPlatformIDs() noexcept
+std::vector<size_t> xmrig::VkLib::getPlatformIDs() noexcept
 {
     const uint32_t count = getNumPlatforms();
-    std::vector<cl_platform_id> platforms(count);
+    std::vector<size_t> platforms(count);
 
     if (count) {
         getPlatformIDs(count, platforms.data(), nullptr);
@@ -832,7 +834,7 @@ std::vector<cl_platform_id> xmrig::VkLib::getPlatformIDs() noexcept
 }
 
 
-xmrig::String xmrig::VkLib::getProgramBuildLog(cl_program program, cl_device_id device) noexcept
+xmrig::String xmrig::VkLib::getProgramBuildLog(tart::cl_program_ptr program, tart::device_ptr device) noexcept
 {
     size_t size = 0;
     if (getProgramBuildInfo(program, device, CL_PROGRAM_BUILD_LOG, 0, nullptr, &size) != CL_SUCCESS) {
@@ -856,25 +858,25 @@ xmrig::String xmrig::VkLib::getProgramBuildLog(cl_program program, cl_device_id 
 }
 
 
-xmrig::String xmrig::VkLib::getString(cl_device_id id, cl_device_info param) noexcept
+xmrig::String xmrig::VkLib::getString(tart::device_ptr id, cl_device_info param) noexcept
 {
     return getVkString(VkLib::getDeviceInfo, id, param);
 }
 
 
-xmrig::String xmrig::VkLib::getString(cl_kernel kernel, cl_kernel_info param_name) noexcept
+xmrig::String xmrig::VkLib::getString(kernel_pair kernel, kernel_pair_info param_name) noexcept
 {
     return getVkString(VkLib::getKernelInfo, kernel, param_name);
 }
 
 
-xmrig::String xmrig::VkLib::getString(cl_platform_id platform, cl_platform_info param_name) noexcept
+xmrig::String xmrig::VkLib::getString(size_t platform, cl_platform_info param_name) noexcept
 {
     return getVkString(VkLib::getPlatformInfo, platform, param_name);
 }
 
 
-xmrig::String xmrig::VkLib::getString(cl_program program, cl_program_info param_name) noexcept
+xmrig::String xmrig::VkLib::getString(tart::cl_program_ptr program, tart::cl_program_ptr_info param_name) noexcept
 {
     return getVkString(VkLib::getProgramInfo, program, param_name);
 }

@@ -22,15 +22,15 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLCNR_H
-#define XMRIG_OCLCNR_H
+#ifndef XMRIG_VKCNR_H
+#define XMRIG_VKCNR_H
 
 
 #include <cstddef>
 #include <cstdint>
 
 
-using cl_program = struct _cl_program *;
+
 
 
 namespace xmrig {
@@ -45,7 +45,7 @@ class VkCnR
 public:
     constexpr static size_t kHeightChunkSize = 10;
 
-    static cl_program get(const IVkRunner &runner, uint64_t height);
+    static tart::cl_program_ptr get(const IVkRunner &runner, uint64_t height);
     static void clear();
 };
 
@@ -53,4 +53,4 @@ public:
 } // namespace xmrig
 
 
-#endif /* XMRIG_OCLCNR_H */
+#endif /* XMRIG_VKCNR_H */

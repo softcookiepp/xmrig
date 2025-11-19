@@ -103,7 +103,7 @@ void xmrig::VkRxBaseRunner::run(uint32_t nonce, uint32_t nonce_offset, uint32_t 
 
     m_find_shares->setNonce(nonce);
 
-    enqueueWriteBuffer(m_output, CL_FALSE, sizeof(cl_uint) * 0xFF, sizeof(uint32_t), &zero);
+    enqueueWriteBuffer(m_output, CL_FALSE, sizeof(uint32_t) * 0xFF, sizeof(uint32_t), &zero);
 
     if (m_jobSize <= 128) {
         m_blake2b_initial_hash->enqueue(m_queue, m_intensity);

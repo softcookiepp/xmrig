@@ -30,7 +30,7 @@
 
 xmrig::VkContext::VkContext(const VkDevice &device)
 {
-    std::vector<cl_device_id> ids = { device.id() };
+    std::vector<tart::device_ptr> ids = { device.id() };
     m_ctx = VkLib::createContext(ids);
 }
 
@@ -46,7 +46,7 @@ xmrig::VkContext::~VkContext()
 bool xmrig::VkContext::init(const std::vector<VkDevice> &devices, std::vector<VkLaunchData> &threads)
 {
     if (!m_ctx) {
-        std::vector<cl_device_id> ids(devices.size());
+        std::vector<tart::device_ptr> ids(devices.size());
         for (size_t i = 0; i < devices.size(); ++i) {
             ids[i] = devices[i].id();
         }

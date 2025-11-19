@@ -16,14 +16,14 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLLIB_H
-#define XMRIG_OCLLIB_H
+#ifndef XMRIG_VKLIB_H
+#define XMRIG_VKLIB_H
 
 
 #include <vector>
 
 
-#include "3rdparty/cl.h"
+#include "tart.hpp"
 #include "base/tools/String.h"
 
 #ifndef CL_DEVICE_TOPOLOGY_AMD
@@ -44,7 +44,10 @@
 
 
 namespace xmrig {
+	
+typedef std::pair<std::string, tart::cl_program_ptr> kernel_pair;
 
+extern tart::Instance gTartInstance;
 
 class VkLib
 {
@@ -55,60 +58,61 @@ public:
 
     static inline bool isInitialized()   { return m_initialized; }
     static inline const String &loader() { return m_loader; }
-
-    static cl_command_queue createCommandQueue(cl_context context, cl_device_id device, cl_int *errcode_ret) noexcept;
-    static cl_command_queue createCommandQueue(cl_context context, cl_device_id device);
-    static cl_context createContext(const cl_context_properties *properties, cl_uint num_devices, const cl_device_id *devices, void (CL_CALLBACK *pfn_notify)(const char *, const void *, size_t, void *), void *user_data, cl_int *errcode_ret);
-    static cl_context createContext(const std::vector<cl_device_id> &ids);
-    static cl_int buildProgram(cl_program program, cl_uint num_devices, const cl_device_id *device_list, const char *options = nullptr, void (CL_CALLBACK *pfn_notify)(cl_program program, void *user_data) = nullptr, void *user_data = nullptr) noexcept;
-    static cl_int enqueueNDRangeKernel(cl_command_queue command_queue, cl_kernel kernel, cl_uint work_dim, const size_t *global_work_offset, const size_t *global_work_size, const size_t *local_work_size, cl_uint num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept;
-    static cl_int enqueueReadBuffer(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_read, size_t offset, size_t size, void *ptr, cl_uint num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept;
-    static cl_int enqueueWriteBuffer(cl_command_queue command_queue, cl_mem buffer, cl_bool blocking_write, size_t offset, size_t size, const void *ptr, cl_uint num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept;
-    static cl_int finish(cl_command_queue command_queue) noexcept;
-    static cl_int getCommandQueueInfo(cl_command_queue command_queue, cl_command_queue_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret = nullptr) noexcept;
-    static cl_int getContextInfo(cl_context context, cl_context_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret = nullptr) noexcept;
-    static cl_int getDeviceIDs(cl_platform_id platform, cl_device_type device_type, cl_uint num_entries, cl_device_id *devices, cl_uint *num_devices) noexcept;
-    static cl_int getDeviceInfo(cl_device_id device, cl_device_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret = nullptr) noexcept;
-    static cl_int getKernelInfo(cl_kernel kernel, cl_kernel_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret = nullptr) noexcept;
-    static cl_int getMemObjectInfo(cl_mem memobj, cl_mem_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret = nullptr) noexcept;
-    static cl_int getPlatformIDs(cl_uint num_entries, cl_platform_id *platforms, cl_uint *num_platforms);
-    static cl_int getPlatformInfo(cl_platform_id platform, cl_platform_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept;
-    static cl_int getProgramBuildInfo(cl_program program, cl_device_id device, cl_program_build_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept;
-    static cl_int getProgramInfo(cl_program program, cl_program_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret = nullptr);
-    static cl_int release(cl_command_queue command_queue) noexcept;
-    static cl_int release(cl_context context) noexcept;
-    static cl_int release(cl_device_id id) noexcept;
-    static cl_int release(cl_kernel kernel) noexcept;
-    static cl_int release(cl_mem mem_obj) noexcept;
-    static cl_int release(cl_program program) noexcept;
-    static cl_int setKernelArg(cl_kernel kernel, cl_uint arg_index, size_t arg_size, const void *arg_value) noexcept;
-    static cl_int unloadPlatformCompiler(cl_platform_id platform) noexcept;
-    static cl_kernel createKernel(cl_program program, const char *kernel_name, cl_int *errcode_ret) noexcept;
-    static cl_kernel createKernel(cl_program program, const char *kernel_name);
-    static cl_mem createBuffer(cl_context context, cl_mem_flags flags, size_t size, void *host_ptr = nullptr);
-    static cl_mem createBuffer(cl_context context, cl_mem_flags flags, size_t size, void *host_ptr, cl_int *errcode_ret) noexcept;
-    static cl_mem createSubBuffer(cl_mem buffer, cl_mem_flags flags, size_t offset, size_t size, cl_int *errcode_ret) noexcept;
-    static cl_mem createSubBuffer(cl_mem buffer, cl_mem_flags flags, size_t offset, size_t size);
-    static cl_mem retain(cl_mem memobj) noexcept;
-    static cl_program createProgramWithBinary(cl_context context, cl_uint num_devices, const cl_device_id *device_list, const size_t *lengths, const unsigned char **binaries, cl_int *binary_status, cl_int *errcode_ret) noexcept;
-    static cl_program createProgramWithSource(cl_context context, cl_uint count, const char **strings, const size_t *lengths, cl_int *errcode_ret) noexcept;
-    static cl_program retain(cl_program program) noexcept;
-    static cl_uint getNumPlatforms() noexcept;
-    static cl_uint getUint(cl_command_queue command_queue, cl_command_queue_info param_name, cl_uint defaultValue = 0) noexcept;
-    static cl_uint getUint(cl_context context, cl_context_info param_name, cl_uint defaultValue = 0) noexcept;
-    static cl_uint getUint(cl_device_id id, cl_device_info param, cl_uint defaultValue = 0) noexcept;
-    static cl_uint getUint(cl_kernel kernel, cl_kernel_info  param_name, cl_uint defaultValue = 0) noexcept;
-    static cl_uint getUint(cl_mem memobj, cl_mem_info param_name, cl_uint defaultValue = 0) noexcept;
-    static cl_uint getUint(cl_program program, cl_program_info param, cl_uint defaultValue = 0) noexcept;
-    static cl_ulong getUlong(cl_device_id id, cl_device_info param, cl_ulong defaultValue = 0) noexcept;
-    static cl_ulong getUlong(cl_mem memobj, cl_mem_info param_name, cl_ulong defaultValue = 0) noexcept;
-    static std::vector<cl_platform_id> getPlatformIDs() noexcept;
-    static String getProgramBuildLog(cl_program program, cl_device_id device) noexcept;
-    static String getString(cl_device_id id, cl_device_info param) noexcept;
-    static String getString(cl_kernel kernel, cl_kernel_info param_name) noexcept;
-    static String getString(cl_platform_id platform, cl_platform_info param_name) noexcept;
-    static String getString(cl_program program, cl_program_info param_name) noexcept;
-
+#if 1
+#else
+    static tart::device_ptr createCommandQueue(tart::device_ptr context, tart::device_ptr device, int32_t *errcode_ret) noexcept;
+    static tart::device_ptr createCommandQueue(tart::device_ptr context, tart::device_ptr device);
+    static tart::device_ptr createContext(const tart::device_ptr_properties *properties, uint32_t num_devices, const tart::device_ptr *devices, void (CL_CALLBACK *pfn_notify)(const char *, const void *, size_t, void *), void *user_data, int32_t *errcode_ret);
+    static tart::device_ptr createContext(const std::vector<tart::device_ptr> &ids);
+    static int32_t buildProgram(tart::cl_program_ptr program, uint32_t num_devices, const tart::device_ptr *device_list, const char *options = nullptr, void (CL_CALLBACK *pfn_notify)(tart::cl_program_ptr program, void *user_data) = nullptr, void *user_data = nullptr) noexcept;
+    static int32_t enqueueNDRangeKernel(tart::device_ptr command_queue, kernel_pair kernel, uint32_t work_dim, const size_t *global_work_offset, const size_t *global_work_size, const size_t *local_work_size, uint32_t num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept;
+    static int32_t enqueueReadBuffer(tart::device_ptr command_queue, tart::buffer_ptr buffer, cl_bool blocking_read, size_t offset, size_t size, void *ptr, uint32_t num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept;
+    static int32_t enqueueWriteBuffer(tart::device_ptr command_queue, tart::buffer_ptr buffer, cl_bool blocking_write, size_t offset, size_t size, const void *ptr, uint32_t num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept;
+    static int32_t finish(tart::device_ptr command_queue) noexcept;
+    static int32_t getCommandQueueInfo(tart::device_ptr command_queue, tart::device_ptr_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret = nullptr) noexcept;
+    static int32_t getContextInfo(tart::device_ptr context, tart::device_ptr_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret = nullptr) noexcept;
+    static int32_t getDeviceIDs(size_t platform, cl_device_type device_type, uint32_t num_entries, tart::device_ptr *devices, uint32_t *num_devices) noexcept;
+    static int32_t getDeviceInfo(tart::device_ptr device, cl_device_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret = nullptr) noexcept;
+    static int32_t getKernelInfo(kernel_pair kernel, kernel_pair_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret = nullptr) noexcept;
+    static int32_t getMemObjectInfo(tart::buffer_ptr memobj, tart::buffer_ptr_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret = nullptr) noexcept;
+    static int32_t getPlatformIDs(uint32_t num_entries, size_t *platforms, uint32_t *num_platforms);
+    static int32_t getPlatformInfo(size_t platform, cl_platform_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept;
+    static int32_t getProgramBuildInfo(tart::cl_program_ptr program, tart::device_ptr device, tart::cl_program_ptr_build_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept;
+    static int32_t getProgramInfo(tart::cl_program_ptr program, tart::cl_program_ptr_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret = nullptr);
+    static int32_t release(tart::device_ptr command_queue) noexcept;
+    static int32_t release(tart::device_ptr context) noexcept;
+    static int32_t release(tart::device_ptr id) noexcept;
+    static int32_t release(kernel_pair kernel) noexcept;
+    static int32_t release(tart::buffer_ptr mem_obj) noexcept;
+    static int32_t release(tart::cl_program_ptr program) noexcept;
+    static int32_t setKernelArg(kernel_pair kernel, uint32_t arg_index, size_t arg_size, const void *arg_value) noexcept;
+    static int32_t unloadPlatformCompiler(size_t platform) noexcept;
+    static kernel_pair createKernel(tart::cl_program_ptr program, const char *kernel_name, int32_t *errcode_ret) noexcept;
+    static kernel_pair createKernel(tart::cl_program_ptr program, const char *kernel_name);
+    static tart::buffer_ptr createBuffer(tart::device_ptr context, tart::buffer_ptr_flags flags, size_t size, void *host_ptr = nullptr);
+    static tart::buffer_ptr createBuffer(tart::device_ptr context, tart::buffer_ptr_flags flags, size_t size, void *host_ptr, int32_t *errcode_ret) noexcept;
+    static tart::buffer_ptr createSubBuffer(tart::buffer_ptr buffer, tart::buffer_ptr_flags flags, size_t offset, size_t size, int32_t *errcode_ret) noexcept;
+    static tart::buffer_ptr createSubBuffer(tart::buffer_ptr buffer, tart::buffer_ptr_flags flags, size_t offset, size_t size);
+    static tart::buffer_ptr retain(tart::buffer_ptr memobj) noexcept;
+    static tart::cl_program_ptr createProgramWithBinary(tart::device_ptr context, uint32_t num_devices, const tart::device_ptr *device_list, const size_t *lengths, const unsigned char **binaries, int32_t *binary_status, int32_t *errcode_ret) noexcept;
+    static tart::cl_program_ptr createProgramWithSource(tart::device_ptr context, uint32_t count, const char **strings, const size_t *lengths, int32_t *errcode_ret) noexcept;
+    static tart::cl_program_ptr retain(tart::cl_program_ptr program) noexcept;
+    static uint32_t getNumPlatforms() noexcept;
+    static uint32_t getUint(tart::device_ptr command_queue, tart::device_ptr_info param_name, uint32_t defaultValue = 0) noexcept;
+    static uint32_t getUint(tart::device_ptr context, tart::device_ptr_info param_name, uint32_t defaultValue = 0) noexcept;
+    static uint32_t getUint(tart::device_ptr id, cl_device_info param, uint32_t defaultValue = 0) noexcept;
+    static uint32_t getUint(kernel_pair kernel, kernel_pair_info  param_name, uint32_t defaultValue = 0) noexcept;
+    static uint32_t getUint(tart::buffer_ptr memobj, tart::buffer_ptr_info param_name, uint32_t defaultValue = 0) noexcept;
+    static uint32_t getUint(tart::cl_program_ptr program, tart::cl_program_ptr_info param, uint32_t defaultValue = 0) noexcept;
+    static cl_ulong getUlong(tart::device_ptr id, cl_device_info param, cl_ulong defaultValue = 0) noexcept;
+    static cl_ulong getUlong(tart::buffer_ptr memobj, tart::buffer_ptr_info param_name, cl_ulong defaultValue = 0) noexcept;
+    static std::vector<size_t> getPlatformIDs() noexcept;
+    static String getProgramBuildLog(tart::cl_program_ptr program, tart::device_ptr device) noexcept;
+    static String getString(tart::device_ptr id, cl_device_info param) noexcept;
+    static String getString(kernel_pair kernel, kernel_pair_info param_name) noexcept;
+    static String getString(size_t platform, cl_platform_info param_name) noexcept;
+    static String getString(tart::cl_program_ptr program, tart::cl_program_ptr_info param_name) noexcept;
+#endif
 
 private:
     static bool load();
@@ -123,4 +127,4 @@ private:
 } // namespace xmrig
 
 
-#endif /* XMRIG_OCLLIB_H */
+#endif /* XMRIG_VKLIB_H */

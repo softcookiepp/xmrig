@@ -22,8 +22,8 @@
  *   along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef XMRIG_OCLCONTEXT_H
-#define XMRIG_OCLCONTEXT_H
+#ifndef XMRIG_VKCONTEXT_H
+#define XMRIG_VKCONTEXT_H
 
 
 #include "backend/vulkan/VkLaunchData.h"
@@ -31,7 +31,7 @@
 #include "base/tools/Object.h"
 
 
-using cl_context = struct _cl_context *;
+
 
 
 namespace xmrig {
@@ -52,14 +52,14 @@ public:
     bool init(const std::vector<VkDevice> &devices, std::vector<VkLaunchData> &threads);
 
     inline bool isValid() const     { return m_ctx != nullptr; }
-    inline cl_context ctx() const   { return m_ctx; }
+    inline tart::device_ptr ctx() const   { return m_ctx; }
 
 private:
-    cl_context m_ctx = nullptr;
+    tart::device_ptr m_ctx = nullptr;
 };
 
 
 } // namespace xmrig
 
 
-#endif /* XMRIG_OCLCONTEXT_H */
+#endif /* XMRIG_VKCONTEXT_H */
