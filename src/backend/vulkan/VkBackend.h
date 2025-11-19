@@ -31,18 +31,18 @@ namespace xmrig {
 
 
 class Controller;
-class OclBackendPrivate;
+class VkBackendPrivate;
 class Miner;
 
 
-class OclBackend : public IBackend
+class VkBackend : public IBackend
 {
 public:
-    XMRIG_DISABLE_COPY_MOVE_DEFAULT(OclBackend)
+    XMRIG_DISABLE_COPY_MOVE_DEFAULT(VkBackend)
 
-    OclBackend(Controller *controller);
+    VkBackend(Controller *controller);
 
-    ~OclBackend() override;
+    ~VkBackend() override;
 
 protected:
     bool isEnabled() const override;
@@ -70,7 +70,7 @@ protected:
 #   endif
 
 private:
-    std::shared_ptr<OclBackendPrivate> d_ptr = nullptr;
+    std::shared_ptr<VkBackendPrivate> d_ptr = nullptr;
 };
 
 

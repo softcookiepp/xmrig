@@ -20,18 +20,18 @@
 #include <string>
 
 
-#include "backend/opencl/OclBackend.h"
+#include "backend/vulkan/VkBackend.h"
 #include "3rdparty/rapidjson/document.h"
 #include "backend/common/Hashrate.h"
 #include "backend/common/interfaces/IWorker.h"
 #include "backend/common/Tags.h"
 #include "backend/common/Workers.h"
-#include "backend/opencl/OclConfig.h"
-#include "backend/opencl/OclLaunchData.h"
-#include "backend/opencl/OclWorker.h"
-#include "backend/opencl/runners/tools/OclSharedState.h"
-#include "backend/opencl/wrappers/OclContext.h"
-#include "backend/opencl/wrappers/OclLib.h"
+#include "backend/vulkan/VkConfig.h"
+#include "backend/vulkan/VkLaunchData.h"
+#include "backend/vulkan/VkWorker.h"
+#include "backend/vulkan/runners/tools/VkSharedState.h"
+#include "backend/vulkan/wrappers/VkContext.h"
+#include "backend/vulkan/wrappers/VkLib.h"
 #include "base/io/log/Log.h"
 #include "base/io/log/Tags.h"
 #include "base/net/stratum/Job.h"
@@ -53,7 +53,7 @@
 
 
 #ifdef XMRIG_FEATURE_ADL
-#include "backend/opencl/wrappers/AdlLib.h"
+#include "backend/vulkan/wrappers/AdlLib.h"
 
 namespace xmrig { static const char *kAdlLabel = "ADL"; }
 #endif
@@ -62,7 +62,7 @@ namespace xmrig { static const char *kAdlLabel = "ADL"; }
 namespace xmrig {
 
 
-extern template class Threads<OclThreads>;
+extern template class Threads<VkThreads>;
 
 
 constexpr const size_t oneMiB   = 1024U * 1024U;
@@ -77,7 +77,7 @@ static void printDisabled(const char *label, const char *reason)
 }
 
 
-struct OclLaunchStatus
+struct VkLaunchStatus
 {
 public:
     inline size_t threads() const { return m_threads; }
@@ -95,7 +95,7 @@ public:
         m_errors         = 0;
         m_threads        = threads;
         m_ts             = Chrono::steadyMSecs();
-        OclWorker::ready = false;
+        VkWorker::ready = false;
     }
 
     inline void print() const
@@ -123,23 +123,23 @@ private:
 };
 
 
-class OclBackendPrivate
+class VkBackendPrivate
 {
 public:
-    inline explicit OclBackendPrivate(Controller *controller) :
+    inline explicit VkBackendPrivate(Controller *controller) :
         controller(controller)
     {
         init(controller->config()->vulkan());
     }
 
 
-    void init(const OclConfig &cl)
+    void init(const VkConfig &cl)
     {
         if (!cl.isEnabled()) {
             return printDisabled(kLabel, "");
         }
 
-        if (!OclLib::init(cl.loader())) {
+        if (!VkLib::init(cl.loader())) {
             return printDisabled(kLabel, RED_S " (failed to load OpenCL runtime)");
         }
 
@@ -175,7 +175,7 @@ public:
 
         Log::print(GREEN_BOLD(" * ") WHITE_BOLD("%-13s") CYAN_BOLD("#%zu ") WHITE_BOLD("%s") "/" WHITE_BOLD("%s"), "OPENCL", platform.index(), platform.name().data(), platform.version().data());
 
-        for (const OclDevice &device : devices) {
+        for (const VkDevice &device : devices) {
             Log::print(GREEN_BOLD(" * ") WHITE_BOLD("%-13s") CYAN_BOLD("#%zu") YELLOW(" %s") " %s " WHITE_BOLD("%u MHz") " cu:" WHITE_BOLD("%u") " mem:" CYAN("%zu/%zu") " MB",
                        "OPENCL GPU",
                        device.index(),
@@ -228,7 +228,7 @@ public:
                     i++;
         }
 
-        OclSharedState::start(threads, job);
+        VkSharedState::start(threads, job);
 
         status.start(threads.size());
         workers.start(threads);
@@ -263,13 +263,13 @@ public:
 
     Algorithm algo;
     Controller *controller;
-    OclContext context;
-    OclLaunchStatus status;
-    OclPlatform platform;
-    std::vector<OclDevice> devices;
-    std::vector<OclLaunchData> threads;
+    VkContext context;
+    VkLaunchStatus status;
+    VkPlatform platform;
+    std::vector<VkDevice> devices;
+    std::vector<VkLaunchData> threads;
     String profileName;
-    Workers<OclLaunchData> workers;
+    Workers<VkLaunchData> workers;
 };
 
 
@@ -282,16 +282,16 @@ const char *xmrig::vulkan_tag()
 }
 
 
-xmrig::OclBackend::OclBackend(Controller *controller) :
-    d_ptr(std::make_shared<OclBackendPrivate>(controller))
+xmrig::VkBackend::VkBackend(Controller *controller) :
+    d_ptr(std::make_shared<VkBackendPrivate>(controller))
 {
     d_ptr->workers.setBackend(this);
 }
 
 
-xmrig::OclBackend::~OclBackend()
+xmrig::VkBackend::~VkBackend()
 {
-    OclLib::close();
+    VkLib::close();
 
 #   ifdef XMRIG_FEATURE_ADL
     AdlLib::close();
@@ -299,42 +299,42 @@ xmrig::OclBackend::~OclBackend()
 }
 
 
-bool xmrig::OclBackend::isEnabled() const
+bool xmrig::VkBackend::isEnabled() const
 {
-    return d_ptr->controller->config()->vulkan().isEnabled() && OclLib::isInitialized() && d_ptr->platform.isValid() && !d_ptr->devices.empty();
+    return d_ptr->controller->config()->vulkan().isEnabled() && VkLib::isInitialized() && d_ptr->platform.isValid() && !d_ptr->devices.empty();
 }
 
 
-bool xmrig::OclBackend::isEnabled(const Algorithm &algorithm) const
+bool xmrig::VkBackend::isEnabled(const Algorithm &algorithm) const
 {
     return !d_ptr->controller->config()->vulkan().threads().get(algorithm).isEmpty();
 }
 
 
-const xmrig::Hashrate *xmrig::OclBackend::hashrate() const
+const xmrig::Hashrate *xmrig::VkBackend::hashrate() const
 {
     return d_ptr->workers.hashrate();
 }
 
 
-const xmrig::String &xmrig::OclBackend::profileName() const
+const xmrig::String &xmrig::VkBackend::profileName() const
 {
     return d_ptr->profileName;
 }
 
 
-const xmrig::String &xmrig::OclBackend::type() const
+const xmrig::String &xmrig::VkBackend::type() const
 {
     return kType;
 }
 
 
-void xmrig::OclBackend::execCommand(char)
+void xmrig::VkBackend::execCommand(char)
 {
 }
 
 
-void xmrig::OclBackend::prepare(const Job &job)
+void xmrig::VkBackend::prepare(const Job &job)
 {
     if (d_ptr) {
         d_ptr->workers.jobEarlyNotification(job);
@@ -342,7 +342,7 @@ void xmrig::OclBackend::prepare(const Job &job)
 }
 
 
-void xmrig::OclBackend::printHashrate(bool details)
+void xmrig::VkBackend::printHashrate(bool details)
 {
     if (!details || !hashrate()) {
         return;
@@ -397,7 +397,7 @@ void xmrig::OclBackend::printHashrate(bool details)
 }
 
 
-void xmrig::OclBackend::printHealth()
+void xmrig::VkBackend::printHealth()
 {
 #   ifdef XMRIG_FEATURE_ADL
     d_ptr->printHealth();
@@ -405,7 +405,7 @@ void xmrig::OclBackend::printHealth()
 }
 
 
-void xmrig::OclBackend::setJob(const Job &job)
+void xmrig::VkBackend::setJob(const Job &job)
 {
     const auto &cl = d_ptr->controller->config()->vulkan();
     if (cl.isEnabled()) {
@@ -443,14 +443,14 @@ void xmrig::OclBackend::setJob(const Job &job)
 }
 
 
-void xmrig::OclBackend::start(IWorker *worker, bool ready)
+void xmrig::VkBackend::start(IWorker *worker, bool ready)
 {
     mutex.lock();
 
     if (d_ptr->status.started(ready)) {
         d_ptr->status.print();
 
-        OclWorker::ready = true;
+        VkWorker::ready = true;
     }
 
     mutex.unlock();
@@ -461,7 +461,7 @@ void xmrig::OclBackend::start(IWorker *worker, bool ready)
 }
 
 
-void xmrig::OclBackend::stop()
+void xmrig::VkBackend::stop()
 {
     if (d_ptr->threads.empty()) {
         return;
@@ -472,20 +472,20 @@ void xmrig::OclBackend::stop()
     d_ptr->workers.stop();
     d_ptr->threads.clear();
 
-    OclSharedState::release();
+    VkSharedState::release();
 
     LOG_INFO("%s" YELLOW(" stopped") BLACK_BOLD(" (%" PRIu64 " ms)"), Tags::vulkan(), Chrono::steadyMSecs() - ts);
 }
 
 
-bool xmrig::OclBackend::tick(uint64_t ticks)
+bool xmrig::VkBackend::tick(uint64_t ticks)
 {
     return d_ptr->workers.tick(ticks);
 }
 
 
 #ifdef XMRIG_FEATURE_API
-rapidjson::Value xmrig::OclBackend::toJSON(rapidjson::Document &doc) const
+rapidjson::Value xmrig::VkBackend::toJSON(rapidjson::Document &doc) const
 {
     using namespace rapidjson;
     auto &allocator = doc.GetAllocator();
@@ -523,7 +523,7 @@ rapidjson::Value xmrig::OclBackend::toJSON(rapidjson::Document &doc) const
 }
 
 
-void xmrig::OclBackend::handleRequest(IApiRequest &)
+void xmrig::VkBackend::handleRequest(IApiRequest &)
 {
 }
 #endif

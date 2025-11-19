@@ -41,7 +41,7 @@
 #endif
 
 #ifdef XMRIG_FEATURE_VULKAN
-#   include "backend/opencl/OclConfig.h"
+#   include "backend/opencl/VkConfig.h"
 #endif
 
 #ifdef XMRIG_FEATURE_CUDA

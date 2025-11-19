@@ -39,8 +39,8 @@
 #endif
 
 #ifdef XMRIG_FEATURE_VULKAN
-#   include "backend/vulkan/wrappers/OclLib.h"
-#   include "backend/vulkan/wrappers/OclPlatform.h"
+#   include "backend/vulkan/wrappers/VkLib.h"
+#   include "backend/vulkan/wrappers/VkPlatform.h"
 #endif
 
 #include "base/kernel/Entry.h"

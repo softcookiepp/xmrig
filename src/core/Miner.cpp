@@ -50,7 +50,7 @@
 #endif
 
 #ifdef XMRIG_FEATURE_VULKAN
-#   include "backend/vulkan/OclBackend.h"
+#   include "backend/vulkan/VkBackend.h"
 #endif
 
 
