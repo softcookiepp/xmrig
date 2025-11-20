@@ -42,11 +42,11 @@ constexpr size_t oneGiB = 1024 * 1024 * 1024;
 
 
 xmrig::VkBaseRunner::VkBaseRunner(size_t id, const VkLaunchData &data) :
-    m_ctx(data.ctx),
+    //m_ctx(data.ctx),
     m_algorithm(data.algorithm),
     m_source(VkSource::get(data.algorithm)),
     m_data(data),
-    m_align(VkLib::getUint(data.device.id(), CL_DEVICE_MEM_BASE_ADDR_ALIGN)),
+	m_align(1),
     m_threadId(id),
     m_intensity(data.thread.intensity())
 {
@@ -57,7 +57,7 @@ xmrig::VkBaseRunner::VkBaseRunner(size_t id, const VkLaunchData &data) :
     m_deviceKey += data.platform.version();
 
     m_deviceKey += ":";
-    m_deviceKey += VkLib::getString(data.device.id(), CL_DRIVER_VERSION);
+    m_deviceKey += "1.2";//VkLib::getString(data.device.id(), CL_DRIVER_VERSION);
 #   endif
 
 #   if defined(__x86_64__) || defined(_M_AMD64) || defined (__arm64__) || defined (__aarch64__)
@@ -68,11 +68,12 @@ xmrig::VkBaseRunner::VkBaseRunner(size_t id, const VkLaunchData &data) :
 
 xmrig::VkBaseRunner::~VkBaseRunner()
 {
-    VkLib::release(m_program);
-    VkLib::release(m_input);
-    VkLib::release(m_output);
-    VkLib::release(m_buffer);
-    VkLib::release(m_queue);
+	// none of this stuff is necessary. thank goodness
+    //VkLib::release(m_program);
+    //VkLib::release(m_input);
+    //VkLib::release(m_output);
+    //VkLib::release(m_buffer);
+    //VkLib::release(m_queue);
 }
 
 
@@ -100,8 +101,12 @@ void xmrig::VkBaseRunner::build()
 
 void xmrig::VkBaseRunner::init()
 {
+ #if 1
+	// with tart, its just the device c:
+	m_queue = data().device.id();
+ #else
     m_queue = VkLib::createCommandQueue(m_ctx, data().device.id());
-
+#endif
     size_t size         = align(bufferSize());
     const size_t limit  = data().device.freeMemSize();
 

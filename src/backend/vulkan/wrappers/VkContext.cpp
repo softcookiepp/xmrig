@@ -30,16 +30,13 @@
 
 xmrig::VkContext::VkContext(const VkDevice &device)
 {
-    std::vector<tart::device_ptr> ids = { device.id() };
-    m_ctx = VkLib::createContext(ids);
+    //std::vector<tart::device_ptr> ids = { device.id() };
+    m_ctx = device.id();
 }
 
 
 xmrig::VkContext::~VkContext()
 {
-    if (m_ctx) {
-        VkLib::release(m_ctx);
-    }
 }
 
 

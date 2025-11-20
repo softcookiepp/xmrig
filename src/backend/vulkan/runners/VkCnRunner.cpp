@@ -62,17 +62,25 @@ xmrig::VkCnRunner::~VkCnRunner()
     delete m_cn0;
     delete m_cn1;
     delete m_cn2;
-
+#if 1
+	m_device->deallocateBuffer(m_scratchpads);
+	m_device->deallocateBuffer(m_states);
+#else
     VkLib::release(m_scratchpads);
     VkLib::release(m_states);
+#endif
 
-    for (size_t i = 0; i < BRANCH_MAX; ++i) {
+    for (size_t i = 0; i < BRANCH_MAX; ++i)
+    {
         delete m_branchKernels[i];
-        VkLib::release(m_branches[i]);
+        m_device->deallocateBuffer(m_branches[i]);
     }
 
-    if (m_algorithm == Algorithm::CN_R) {
-        VkLib::release(m_cnr);
+    if (m_algorithm == Algorithm::CN_R)
+    {
+		// not really sure if there is a means of deleting shader modules and/or pipelines yet in tart.
+		// will have to do that at some point hehe
+        //m_device->deallocateBuffer(m_cnr);
         VkCnR::clear();
     }
 }
@@ -97,6 +105,11 @@ void xmrig::VkCnRunner::run(uint32_t nonce, uint32_t /*nonce_offset*/, uint32_t 
     assert(g_thd % w_size == 0);
 
     for (size_t i = 0; i < BRANCH_MAX; ++i) {
+		// for now it will have to be blocking. im berry sorry :c
+		// also I gotta add more stuff to tart now. as usual
+		//m_branches[i]->copyIn(hostbuf, size);
+		//static int32_t enqueueWriteBuffer(tart::device_ptr command_queue, tart::buffer_ptr buffer, cl_bool blocking_write, size_t offset, size_t size, const void *ptr, uint32_t num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept;
+
         enqueueWriteBuffer(m_branches[i], CL_FALSE, sizeof(uint32_t) * m_intensity, sizeof(uint32_t), &zero);
     }
 

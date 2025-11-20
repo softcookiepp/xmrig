@@ -48,10 +48,15 @@ tart::buffer_ptr xmrig::VkSharedData::createBuffer(tart::device_ptr context, siz
     ++m_offset;
 
     if (!m_buffer) {
+#if 1
+		m_buffer = context->allocateBuffer(size);
+#else
         m_buffer = VkLib::createBuffer(context, CL_MEM_READ_WRITE, size);
+#endif
     }
 
-    return VkLib::retain(m_buffer);
+    //return VkLib::retain(m_buffer);
+    return m_buffer;
 }
 
 
@@ -132,10 +137,13 @@ uint64_t xmrig::VkSharedData::resumeDelay(size_t /*id*/)
 
 void xmrig::VkSharedData::release()
 {
-    VkLib::release(m_buffer);
-
+	tart::device_ptr device = m_buffer->getDevice();
+	device->deallocateBuffer(m_buffer);
+    //VkLib::release(m_buffer);
+	
 #   ifdef XMRIG_ALGO_RANDOMX
-    VkLib::release(m_dataset);
+    device->deallocateBuffer(m_buffer);
+    //VkLib::release(m_dataset);
 #   endif
 }
 
@@ -169,8 +177,8 @@ tart::buffer_ptr xmrig::VkSharedData::dataset() const
     if (!m_dataset) {
         throw std::runtime_error("RandomX dataset is not available");
     }
-
-    return VkLib::retain(m_dataset);
+	
+    return m_dataset;
 }
 
 
@@ -180,15 +188,13 @@ void xmrig::VkSharedData::createDataset(tart::device_ptr ctx, const Job &job, bo
         return;
     }
 
-    int32_t ret = 0;
+    //int32_t ret = 0;
 
+	m_dataset = ctx->allocateBuffer(RxDataset::maxSize(), host);
+	
     if (host) {
         auto dataset = Rx::dataset(job, 0);
-
-        m_dataset = VkLib::createBuffer(ctx, CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR, RxDataset::maxSize(), dataset->raw(), &ret);
-    }
-    else {
-        m_dataset = VkLib::createBuffer(ctx, CL_MEM_READ_ONLY, RxDataset::maxSize(), nullptr, &ret);
+        m_dataset->copyIn(dataset->raw(), RxDataset::maxSize());
     }
 }
 #endif
