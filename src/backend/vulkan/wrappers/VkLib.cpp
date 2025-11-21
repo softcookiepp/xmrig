@@ -81,15 +81,15 @@ typedef tart::device_ptr (CL_API_CALL *createCommandQueueWithProperties_t)(tart:
 typedef tart::device_ptr (CL_API_CALL *createCommandQueue_t)(tart::device_ptr, tart::device_ptr, tart::device_ptr_properties, int32_t *);
 typedef tart::device_ptr (CL_API_CALL *createContext_t)(const tart::device_ptr_properties *, uint32_t, const tart::device_ptr *, void (CL_CALLBACK *pfn_notify)(const char *, const void *, size_t, void *), void *, int32_t *);
 typedef int32_t (CL_API_CALL *buildProgram_t)(tart::cl_program_ptr, uint32_t, const tart::device_ptr *, const char *, void (CL_CALLBACK *pfn_notify)(tart::cl_program_ptr, void *), void *);
-typedef int32_t (CL_API_CALL *enqueueNDRangeKernel_t)(tart::device_ptr, kernel_pair, uint32_t, const size_t *, const size_t *, const size_t *, uint32_t, const cl_event *, cl_event *);
-typedef int32_t (CL_API_CALL *enqueueReadBuffer_t)(tart::device_ptr, tart::buffer_ptr, cl_bool, size_t, size_t, void *, uint32_t, const cl_event *, cl_event *);
-typedef int32_t (CL_API_CALL *enqueueWriteBuffer_t)(tart::device_ptr, tart::buffer_ptr, cl_bool, size_t, size_t, const void *, uint32_t, const cl_event *, cl_event *);
+typedef int32_t (CL_API_CALL *enqueueNDRangeKernel_t)(tart::device_ptr, tart::cl_kernel_ptr, uint32_t, const size_t *, const size_t *, const size_t *, uint32_t, const cl_event *, cl_event *);
+typedef int32_t (CL_API_CALL *enqueueReadBuffer_t)(tart::device_ptr, tart::buffer_ptr, bool, size_t, size_t, void *, uint32_t, const cl_event *, cl_event *);
+typedef int32_t (CL_API_CALL *enqueueWriteBuffer_t)(tart::device_ptr, tart::buffer_ptr, bool, size_t, size_t, const void *, uint32_t, const cl_event *, cl_event *);
 typedef int32_t (CL_API_CALL *finish_t)(tart::device_ptr);
 typedef int32_t (CL_API_CALL *getCommandQueueInfo_t)(tart::device_ptr, tart::device_ptr_info, size_t, void *, size_t *);
 typedef int32_t (CL_API_CALL *getContextInfo_t)(tart::device_ptr, tart::device_ptr_info, size_t, void *, size_t *);
 typedef int32_t (CL_API_CALL *getDeviceIDs_t)(size_t, cl_device_type, uint32_t, tart::device_ptr *, uint32_t *);
 typedef int32_t (CL_API_CALL *getDeviceInfo_t)(tart::device_ptr, cl_device_info, size_t, void *, size_t *);
-typedef int32_t (CL_API_CALL *getKernelInfo_t)(kernel_pair, kernel_pair_info, size_t, void *, size_t *);
+typedef int32_t (CL_API_CALL *getKernelInfo_t)(tart::cl_kernel_ptr, tart::cl_kernel_ptr_info, size_t, void *, size_t *);
 typedef int32_t (CL_API_CALL *getMemObjectInfo_t)(tart::buffer_ptr, tart::buffer_ptr_info, size_t, void *, size_t *);
 typedef int32_t (CL_API_CALL *getPlatformIDs_t)(uint32_t, size_t *, uint32_t *);
 typedef int32_t (CL_API_CALL *getPlatformInfo_t)(size_t, cl_platform_info, size_t, void *, size_t *);
@@ -98,17 +98,17 @@ typedef int32_t (CL_API_CALL *getProgramInfo_t)(tart::cl_program_ptr, tart::cl_p
 typedef int32_t (CL_API_CALL *releaseCommandQueue_t)(tart::device_ptr);
 typedef int32_t (CL_API_CALL *releaseContext_t)(tart::device_ptr);
 typedef int32_t (CL_API_CALL *releaseDevice_t)(tart::device_ptr device);
-typedef int32_t (CL_API_CALL *releaseKernel_t)(kernel_pair);
+typedef int32_t (CL_API_CALL *releaseKernel_t)(tart::cl_kernel_ptr);
 typedef int32_t (CL_API_CALL *releaseMemObject_t)(tart::buffer_ptr);
 typedef int32_t (CL_API_CALL *releaseProgram_t)(tart::cl_program_ptr);
 typedef int32_t (CL_API_CALL *retainMemObject_t)(tart::buffer_ptr);
 typedef int32_t (CL_API_CALL *retainProgram_t)(tart::cl_program_ptr);
-typedef int32_t (CL_API_CALL *setKernelArg_t)(kernel_pair, uint32_t, size_t, const void *);
+typedef int32_t (CL_API_CALL *setKernelArg_t)(tart::cl_kernel_ptr, uint32_t, size_t, const void *);
 typedef int32_t (CL_API_CALL *setMemObjectDestructorCallback_t)(tart::buffer_ptr, void (CL_CALLBACK *)(tart::buffer_ptr, void *), void *);
 typedef int32_t (CL_API_CALL *unloadPlatformCompiler_t)(size_t);
-typedef kernel_pair (CL_API_CALL *createKernel_t)(tart::cl_program_ptr, const char *, int32_t *);
-typedef tart::buffer_ptr (CL_API_CALL *createBuffer_t)(tart::device_ptr, tart::buffer_ptr_flags, size_t, void *, int32_t *);
-typedef tart::buffer_ptr (CL_API_CALL *createSubBuffer_t)(tart::buffer_ptr, tart::buffer_ptr_flags, cl_buffer_create_type, const void *, int32_t *);
+typedef tart::cl_kernel_ptr (CL_API_CALL *createKernel_t)(tart::cl_program_ptr, const char *, int32_t *);
+typedef tart::buffer_ptr (CL_API_CALL *createBuffer_t)(tart::device_ptr, uint64_t, size_t, void *, int32_t *);
+typedef tart::buffer_ptr (CL_API_CALL *createSubBuffer_t)(tart::buffer_ptr, uint64_t, cl_buffer_create_type, const void *, int32_t *);
 typedef tart::cl_program_ptr (CL_API_CALL *createProgramWithBinary_t)(tart::device_ptr, uint32_t, const tart::device_ptr *, const size_t *, const unsigned char **, int32_t *, int32_t *);
 typedef tart::cl_program_ptr (CL_API_CALL *createProgramWithSource_t)(tart::device_ptr, uint32_t, const char **, const size_t *, int32_t *);
 
@@ -338,7 +338,7 @@ int32_t xmrig::VkLib::buildProgram(tart::cl_program_ptr program, uint32_t num_de
 }
 
 
-int32_t xmrig::VkLib::enqueueNDRangeKernel(tart::device_ptr command_queue, kernel_pair kernel, uint32_t work_dim, const size_t *global_work_offset, const size_t *global_work_size, const size_t *local_work_size, uint32_t num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept
+int32_t xmrig::VkLib::enqueueNDRangeKernel(tart::device_ptr command_queue, tart::cl_kernel_ptr kernel, uint32_t work_dim, const size_t *global_work_offset, const size_t *global_work_size, const size_t *local_work_size, uint32_t num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept
 {
     assert(pEnqueueNDRangeKernel != nullptr);
 
@@ -346,7 +346,7 @@ int32_t xmrig::VkLib::enqueueNDRangeKernel(tart::device_ptr command_queue, kerne
 }
 
 
-int32_t xmrig::VkLib::enqueueReadBuffer(tart::device_ptr command_queue, tart::buffer_ptr buffer, cl_bool blocking_read, size_t offset, size_t size, void *ptr, uint32_t num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept
+int32_t xmrig::VkLib::enqueueReadBuffer(tart::device_ptr command_queue, tart::buffer_ptr buffer, bool blocking_read, size_t offset, size_t size, void *ptr, uint32_t num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept
 {
     assert(pEnqueueReadBuffer != nullptr);
 
@@ -359,7 +359,7 @@ int32_t xmrig::VkLib::enqueueReadBuffer(tart::device_ptr command_queue, tart::bu
 }
 
 
-int32_t xmrig::VkLib::enqueueWriteBuffer(tart::device_ptr command_queue, tart::buffer_ptr buffer, cl_bool blocking_write, size_t offset, size_t size, const void *ptr, uint32_t num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept
+int32_t xmrig::VkLib::enqueueWriteBuffer(tart::device_ptr command_queue, tart::buffer_ptr buffer, bool blocking_write, size_t offset, size_t size, const void *ptr, uint32_t num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept
 {
     assert(pEnqueueWriteBuffer != nullptr);
 
@@ -413,7 +413,7 @@ int32_t xmrig::VkLib::getDeviceInfo(tart::device_ptr device, cl_device_info para
 }
 
 
-int32_t xmrig::VkLib::getKernelInfo(kernel_pair kernel, kernel_pair_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept
+int32_t xmrig::VkLib::getKernelInfo(tart::cl_kernel_ptr kernel, tart::cl_kernel_ptr_info param_name, size_t param_value_size, void *param_value, size_t *param_value_size_ret) noexcept
 {
     return pGetKernelInfo(kernel, param_name, param_value_size, param_value, param_value_size_ret);
 }
@@ -525,7 +525,7 @@ int32_t xmrig::VkLib::release(tart::device_ptr id) noexcept
 }
 
 
-int32_t xmrig::VkLib::release(kernel_pair kernel) noexcept
+int32_t xmrig::VkLib::release(tart::cl_kernel_ptr kernel) noexcept
 {
     assert(pReleaseKernel != nullptr);
 
@@ -588,7 +588,7 @@ int32_t xmrig::VkLib::release(tart::cl_program_ptr program) noexcept
 }
 
 
-int32_t xmrig::VkLib::setKernelArg(kernel_pair kernel, uint32_t arg_index, size_t arg_size, const void *arg_value) noexcept
+int32_t xmrig::VkLib::setKernelArg(tart::cl_kernel_ptr kernel, uint32_t arg_index, size_t arg_size, const void *arg_value) noexcept
 {
     assert(pSetKernelArg != nullptr);
 
@@ -602,7 +602,7 @@ int32_t xmrig::VkLib::unloadPlatformCompiler(size_t platform) noexcept
 }
 
 
-kernel_pair xmrig::VkLib::createKernel(tart::cl_program_ptr program, const char *kernel_name, int32_t *errcode_ret) noexcept
+tart::cl_kernel_ptr xmrig::VkLib::createKernel(tart::cl_program_ptr program, const char *kernel_name, int32_t *errcode_ret) noexcept
 {
     assert(pCreateKernel != nullptr);
 
@@ -618,10 +618,10 @@ kernel_pair xmrig::VkLib::createKernel(tart::cl_program_ptr program, const char 
 }
 
 
-kernel_pair xmrig::VkLib::createKernel(tart::cl_program_ptr program, const char *kernel_name)
+tart::cl_kernel_ptr xmrig::VkLib::createKernel(tart::cl_program_ptr program, const char *kernel_name)
 {
     int32_t ret = 0;
-    kernel_pair kernel = createKernel(program, kernel_name, &ret);
+    tart::cl_kernel_ptr kernel = createKernel(program, kernel_name, &ret);
     if (ret != CL_SUCCESS) {
         throw std::runtime_error(VkError::toString(ret));
     }
@@ -630,7 +630,7 @@ kernel_pair xmrig::VkLib::createKernel(tart::cl_program_ptr program, const char 
 }
 
 
-tart::buffer_ptr xmrig::VkLib::createBuffer(tart::device_ptr context, tart::buffer_ptr_flags flags, size_t size, void *host_ptr)
+tart::buffer_ptr xmrig::VkLib::createBuffer(tart::device_ptr context, uint64_t flags, size_t size, void *host_ptr)
 {
     int32_t ret = 0;
     tart::buffer_ptr mem = createBuffer(context, flags, size, host_ptr, &ret);
@@ -642,7 +642,7 @@ tart::buffer_ptr xmrig::VkLib::createBuffer(tart::device_ptr context, tart::buff
 }
 
 
-tart::buffer_ptr xmrig::VkLib::createBuffer(tart::device_ptr context, tart::buffer_ptr_flags flags, size_t size, void *host_ptr, int32_t *errcode_ret) noexcept
+tart::buffer_ptr xmrig::VkLib::createBuffer(tart::device_ptr context, uint64_t flags, size_t size, void *host_ptr, int32_t *errcode_ret) noexcept
 {
     assert(pCreateBuffer != nullptr);
 
@@ -658,7 +658,7 @@ tart::buffer_ptr xmrig::VkLib::createBuffer(tart::device_ptr context, tart::buff
 }
 
 
-tart::buffer_ptr xmrig::VkLib::createSubBuffer(tart::buffer_ptr buffer, tart::buffer_ptr_flags flags, size_t offset, size_t size, int32_t *errcode_ret) noexcept
+tart::buffer_ptr xmrig::VkLib::createSubBuffer(tart::buffer_ptr buffer, uint64_t flags, size_t offset, size_t size, int32_t *errcode_ret) noexcept
 {
     const cl_buffer_region region = { offset, size };
 
@@ -674,7 +674,7 @@ tart::buffer_ptr xmrig::VkLib::createSubBuffer(tart::buffer_ptr buffer, tart::bu
 }
 
 
-tart::buffer_ptr xmrig::VkLib::createSubBuffer(tart::buffer_ptr buffer, tart::buffer_ptr_flags flags, size_t offset, size_t size)
+tart::buffer_ptr xmrig::VkLib::createSubBuffer(tart::buffer_ptr buffer, uint64_t flags, size_t offset, size_t size)
 {
     int32_t ret = 0;
     tart::buffer_ptr mem = createSubBuffer(buffer, flags, offset, size, &ret);
@@ -781,7 +781,7 @@ uint32_t xmrig::VkLib::getUint(tart::device_ptr id, cl_device_info param, uint32
 }
 
 
-uint32_t xmrig::VkLib::getUint(kernel_pair kernel, kernel_pair_info  param_name, uint32_t defaultValue) noexcept
+uint32_t xmrig::VkLib::getUint(tart::cl_kernel_ptr kernel, tart::cl_kernel_ptr_info  param_name, uint32_t defaultValue) noexcept
 {
     getKernelInfo(kernel, param_name, sizeof(uint32_t), &defaultValue);
 
@@ -864,7 +864,7 @@ xmrig::String xmrig::VkLib::getString(tart::device_ptr id, cl_device_info param)
 }
 
 
-xmrig::String xmrig::VkLib::getString(kernel_pair kernel, kernel_pair_info param_name) noexcept
+xmrig::String xmrig::VkLib::getString(tart::cl_kernel_ptr kernel, tart::cl_kernel_ptr_info param_name) noexcept
 {
     return getVkString(VkLib::getKernelInfo, kernel, param_name);
 }

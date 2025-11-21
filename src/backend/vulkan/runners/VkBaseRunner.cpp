@@ -46,7 +46,7 @@ xmrig::VkBaseRunner::VkBaseRunner(size_t id, const VkLaunchData &data) :
     m_algorithm(data.algorithm),
     m_source(VkSource::get(data.algorithm)),
     m_data(data),
-	m_align(1),
+	m_align(data.device.id()->getMetadata().physicalDeviceProperties.limits.minStorageBufferOffsetAlignment),
     m_threadId(id),
     m_intensity(data.thread.intensity())
 {
@@ -94,7 +94,7 @@ void xmrig::VkBaseRunner::build()
     m_program = VkCache::build(this);
 
     if (m_program == nullptr) {
-        throw std::runtime_error(VkError::toString(CL_INVALID_PROGRAM));
+        throw std::runtime_error("building the program didn't work for some reason :c");
     }
 }
 
@@ -104,6 +104,9 @@ void xmrig::VkBaseRunner::init()
  #if 1
 	// with tart, its just the device c:
 	m_queue = data().device.id();
+	// and this is the same. will clean this up later, but for now I just need it to work at the bare minimum
+	m_ctx = m_queue;
+	m_device = m_queue;
  #else
     m_queue = VkLib::createCommandQueue(m_ctx, data().device.id());
 #endif
@@ -115,20 +118,20 @@ void xmrig::VkBaseRunner::init()
     }
 
     if (!m_buffer) {
-        m_buffer = VkLib::createBuffer(m_ctx, CL_MEM_READ_WRITE, size);
+		m_buffer = m_ctx->allocateBuffer(size);
     }
 
-    m_input  = createSubBuffer(CL_MEM_READ_ONLY | CL_MEM_HOST_WRITE_ONLY, Job::kMaxBlobSize);
-    m_output = createSubBuffer(CL_MEM_READ_WRITE, sizeof(uint32_t) * 0x100);
+    m_input  = createSubBuffer(0, Job::kMaxBlobSize);
+    m_output = createSubBuffer(0, sizeof(uint32_t) * 0x100);
 }
 
 
-tart::buffer_ptr xmrig::VkBaseRunner::createSubBuffer(tart::buffer_ptr_flags flags, size_t size)
+tart::buffer_ptr xmrig::VkBaseRunner::createSubBuffer(uint64_t flags, size_t size)
 {
-    auto mem = VkLib::createSubBuffer(m_buffer, flags, m_offset, size);
-
+	// we can just use view for this c:
+	// although I do wonder if this is more efficient than just letting tart handle it via VMA.
+	auto mem = m_buffer->view(m_offset);
     m_offset += align(size);
-
     return mem;
 }
 
@@ -139,27 +142,21 @@ size_t xmrig::VkBaseRunner::align(size_t size) const
 }
 
 
-void xmrig::VkBaseRunner::enqueueReadBuffer(tart::buffer_ptr buffer, cl_bool blocking_read, size_t offset, size_t size, void *ptr)
+void xmrig::VkBaseRunner::enqueueReadBuffer(tart::buffer_ptr buffer, bool blocking_read, size_t offset, size_t size, void *ptr)
 {
-    const int32_t ret = VkLib::enqueueReadBuffer(m_queue, buffer, blocking_read, offset, size, ptr, 0, nullptr, nullptr);
-    if (ret != CL_SUCCESS) {
-        throw std::runtime_error(VkError::toString(ret));
-    }
+	buffer->copyOut(const_cast<void*>(ptr), (uint64_t)size, (uint64_t)offset);
 }
 
 
-void xmrig::VkBaseRunner::enqueueWriteBuffer(tart::buffer_ptr buffer, cl_bool blocking_write, size_t offset, size_t size, const void *ptr)
+void xmrig::VkBaseRunner::enqueueWriteBuffer(tart::buffer_ptr buffer, bool blocking_write, size_t offset, size_t size, const void *ptr)
 {
-    const int32_t ret = VkLib::enqueueWriteBuffer(m_queue, buffer, blocking_write, offset, size, ptr, 0, nullptr, nullptr);
-    if (ret != CL_SUCCESS) {
-        throw std::runtime_error(VkError::toString(ret));
-    }
+	buffer->copyIn(const_cast<void*>(ptr), (uint64_t)size, (uint64_t)offset);
 }
 
 
 void xmrig::VkBaseRunner::finalize(uint32_t *hashOutput)
 {
-    enqueueReadBuffer(m_output, CL_TRUE, 0, sizeof(uint32_t) * 0x100, hashOutput);
+    enqueueReadBuffer(m_output, true, 0, sizeof(uint32_t) * 0x100, hashOutput);
 
     uint32_t &results = hashOutput[0xFF];
     if (results > 0xFF) {

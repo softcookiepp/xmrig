@@ -108,12 +108,12 @@ void xmrig::VkCnRunner::run(uint32_t nonce, uint32_t /*nonce_offset*/, uint32_t 
 		// for now it will have to be blocking. im berry sorry :c
 		// also I gotta add more stuff to tart now. as usual
 		//m_branches[i]->copyIn(hostbuf, size);
-		//static int32_t enqueueWriteBuffer(tart::device_ptr command_queue, tart::buffer_ptr buffer, cl_bool blocking_write, size_t offset, size_t size, const void *ptr, uint32_t num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept;
+		//static int32_t enqueueWriteBuffer(tart::device_ptr command_queue, tart::buffer_ptr buffer, bool blocking_write, size_t offset, size_t size, const void *ptr, uint32_t num_events_in_wait_list, const cl_event *event_wait_list, cl_event *event) noexcept;
 
-        enqueueWriteBuffer(m_branches[i], CL_FALSE, sizeof(uint32_t) * m_intensity, sizeof(uint32_t), &zero);
+        enqueueWriteBuffer(m_branches[i], false, sizeof(uint32_t) * m_intensity, sizeof(uint32_t), &zero);
     }
 
-    enqueueWriteBuffer(m_output, CL_FALSE, sizeof(uint32_t) * 0xFF, sizeof(uint32_t), &zero);
+    enqueueWriteBuffer(m_output, false, sizeof(uint32_t) * 0xFF, sizeof(uint32_t), &zero);
 
     m_cn0->enqueue(m_queue, nonce, g_thd);
     m_cn1->enqueue(m_queue, nonce, g_thd, w_size);
@@ -140,7 +140,7 @@ void xmrig::VkCnRunner::set(const Job &job, uint8_t *blob)
 
     blob[inlen - 1] |= 0x80;
 
-    enqueueWriteBuffer(m_input, CL_TRUE, 0, inlen, blob);
+    enqueueWriteBuffer(m_input, true, 0, inlen, blob);
 
     m_cn0->setArg(1, sizeof(int), &inlen);
 
@@ -153,8 +153,8 @@ void xmrig::VkCnRunner::set(const Job &job, uint8_t *blob)
         m_cn1->setArgs(m_input, m_scratchpads, m_states, m_intensity);
 
         if (m_cnr != program) {
-            VkLib::release(m_cnr);
-            m_cnr = VkLib::retain(program);
+            //VkLib::release(m_cnr);
+            m_cnr = program;
         }
     }
 
@@ -192,10 +192,10 @@ void xmrig::VkCnRunner::init()
 {
     VkBaseRunner::init();
 
-    m_scratchpads = createSubBuffer(CL_MEM_READ_WRITE, m_algorithm.l3() * m_intensity);
-    m_states      = createSubBuffer(CL_MEM_READ_WRITE, 200 * m_intensity);
+    m_scratchpads = createSubBuffer(1, m_algorithm.l3() * m_intensity);
+    m_states      = createSubBuffer(1, 200 * m_intensity);
 
     for (size_t i = 0; i < BRANCH_MAX; ++i) {
-        m_branches[i] = createSubBuffer(CL_MEM_READ_WRITE, sizeof(uint32_t) * (m_intensity + 2));
+        m_branches[i] = createSubBuffer(1, sizeof(uint32_t) * (m_intensity + 2));
     }
 }

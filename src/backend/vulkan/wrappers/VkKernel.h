@@ -50,7 +50,7 @@ public:
 
     //inline bool isValid() const         { return m_kernel != nullptr; }
     inline bool isValid() const         { return true; }
-    inline std::pair<std::string, tart::cl_program_ptr> kernel() const     { return m_kernel; }
+    inline tart::cl_kernel_ptr kernel() const     { return m_kernel; }
     inline const String name() const   { return m_name.c_str(); }
 
     void enqueueNDRange(tart::device_ptr queue, uint32_t work_dim, const size_t *global_work_offset, const size_t *global_work_size, const size_t *local_work_size);
@@ -62,9 +62,9 @@ private:
 	// for now, just store both
 	std::string m_name;
 	tart::cl_program_ptr m_program;
-	std::pair<std::string, tart::cl_program_ptr> m_kernel;
+	tart::cl_kernel_ptr m_kernel;
 #else
-    kernel_pair m_kernel = nullptr;
+    tart::cl_kernel_ptr m_kernel = nullptr;
 
     const String m_name;
 #endif

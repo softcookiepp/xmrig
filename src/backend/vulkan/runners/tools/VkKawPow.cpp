@@ -48,7 +48,7 @@ namespace xmrig {
 class KawPowCacheEntry
 {
 public:
-    inline KawPowCacheEntry(const Algorithm &algo, uint64_t period, uint32_t worksize, uint32_t index, tart::cl_program_ptr program, kernel_pair kernel) :
+    inline KawPowCacheEntry(const Algorithm &algo, uint64_t period, uint32_t worksize, uint32_t index, tart::cl_program_ptr program, tart::cl_kernel_ptr kernel) :
         program(program),
         kernel(kernel),
         m_algo(algo),
@@ -60,10 +60,10 @@ public:
     inline bool isExpired(uint64_t period) const                                                       { return m_period + 1 < period; }
     inline bool match(const Algorithm &algo, uint64_t period, uint32_t worksize, uint32_t index) const { return m_algo == algo && m_period == period && m_worksize == worksize && m_index == index; }
     inline bool match(const IVkRunner &runner, uint64_t period, uint32_t worksize) const              { return match(runner.algorithm(), period, worksize, runner.deviceIndex()); }
-    inline void release() const                                                                        { VkLib::release(kernel); VkLib::release(program); }
+    inline void release() const                                                                       {} //{ VkLib::release(kernel); VkLib::release(program); }
 
     tart::cl_program_ptr program;
-    kernel_pair kernel;
+    tart::cl_kernel_ptr kernel;
 
 private:
     Algorithm m_algo;
@@ -78,10 +78,10 @@ class KawPowCache
 public:
     KawPowCache() = default;
 
-    inline kernel_pair search(const IVkRunner &runner, uint64_t period, uint32_t worksize) { return search(runner.algorithm(), period, worksize, runner.deviceIndex()); }
+    inline tart::cl_kernel_ptr search(const IVkRunner &runner, uint64_t period, uint32_t worksize) { return search(runner.algorithm(), period, worksize, runner.deviceIndex()); }
 
 
-    inline kernel_pair search(const Algorithm &algo, uint64_t period, uint32_t worksize, uint32_t index)
+    inline tart::cl_kernel_ptr search(const Algorithm &algo, uint64_t period, uint32_t worksize, uint32_t index)
     {
         std::lock_guard<std::mutex> lock(m_mutex);
 
@@ -95,7 +95,7 @@ public:
     }
 
 
-    void add(const Algorithm &algo, uint64_t period, uint32_t worksize, uint32_t index, tart::cl_program_ptr program, kernel_pair kernel)
+    void add(const Algorithm &algo, uint64_t period, uint32_t worksize, uint32_t index, tart::cl_program_ptr program, tart::cl_kernel_ptr kernel)
     {
         if (search(algo, period, worksize, index)) {
             VkLib::release(kernel);
@@ -182,13 +182,13 @@ public:
 
     void build_async(const IVkRunner& runner, uint64_t period, uint32_t worksize);
 
-    kernel_pair build(const IVkRunner &runner, uint64_t period, uint32_t worksize)
+    tart::cl_kernel_ptr build(const IVkRunner &runner, uint64_t period, uint32_t worksize)
     {
         std::lock_guard<std::mutex> lock(m_mutex);
 
         const uint64_t ts = Chrono::steadyMSecs();
 
-        kernel_pair kernel = cache.search(runner, period, worksize);
+        tart::cl_kernel_ptr kernel = cache.search(runner, period, worksize);
         if (kernel) {
             return kernel;
         }
@@ -456,7 +456,7 @@ void KawPowBuilder::build_async(const IVkRunner& runner, uint64_t period, uint32
 }
 
 
-kernel_pair VkKawPow::get(const IVkRunner &runner, uint64_t height, uint32_t worksize)
+tart::cl_kernel_ptr VkKawPow::get(const IVkRunner &runner, uint64_t height, uint32_t worksize)
 {
     const uint64_t period = height / KPHash::PERIOD_LENGTH;
 
@@ -464,7 +464,7 @@ kernel_pair VkKawPow::get(const IVkRunner &runner, uint64_t height, uint32_t wor
         builder.build_async(runner, period + 1, worksize);
     }
 
-    kernel_pair kernel = cache.search(runner, period, worksize);
+    tart::cl_kernel_ptr kernel = cache.search(runner, period, worksize);
     if (kernel) {
         return kernel;
     }

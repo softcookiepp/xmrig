@@ -44,11 +44,16 @@ bool xmrig::VkContext::init(const std::vector<VkDevice> &devices, std::vector<Vk
 {
     if (!m_ctx) {
         std::vector<tart::device_ptr> ids(devices.size());
+        if (devices.size() > 1) throw std::runtime_error("multiple devices not implemented!");
+#if 0
         for (size_t i = 0; i < devices.size(); ++i) {
             ids[i] = devices[i].id();
         }
 
         m_ctx = VkLib::createContext(ids);
+#else
+		m_ctx = ids[0];
+#endif
     }
 
     if (!m_ctx) {

@@ -36,10 +36,10 @@ xmrig::VkRxVmRunner::VkRxVmRunner(size_t index, const VkLaunchData &data) : VkRx
 
 xmrig::VkRxVmRunner::~VkRxVmRunner()
 {
-    delete m_init_vm;
-    delete m_execute_vm;
+    //delete m_init_vm;
+    //delete m_execute_vm;
 
-    VkLib::release(m_vm_states);
+    m_queue->deallocateBuffer(m_vm_states);
 }
 
 
@@ -94,5 +94,5 @@ void xmrig::VkRxVmRunner::init()
 {
     VkRxBaseRunner::init();
 
-    m_vm_states = createSubBuffer(CL_MEM_READ_WRITE, 2560 * m_intensity);
+    m_vm_states = createSubBuffer(1, 2560 * m_intensity);
 }

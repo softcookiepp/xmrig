@@ -63,7 +63,7 @@ private:
 
     KawPow_CalculateDAGKernel* m_calculateDagKernel = nullptr;
 
-    kernel_pair m_searchKernel;// = nullptr;
+    tart::cl_kernel_ptr m_searchKernel;// = nullptr;
 
     size_t m_workGroupSize = 256;
     size_t m_dagWorkGroupSize = 64;

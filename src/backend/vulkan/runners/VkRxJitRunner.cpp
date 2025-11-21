@@ -41,11 +41,10 @@ xmrig::VkRxJitRunner::~VkRxJitRunner()
 {
     delete m_randomx_jit;
     delete m_randomx_run;
-
-    VkLib::release(m_asmProgram);
-    VkLib::release(m_intermediate_programs);
-    VkLib::release(m_programs);
-    VkLib::release(m_registers);
+	
+    m_queue->deallocateBuffer(m_intermediate_programs);
+    m_queue->deallocateBuffer(m_programs);
+    m_queue->deallocateBuffer(m_registers);
 }
 
 
@@ -67,7 +66,7 @@ void xmrig::VkRxJitRunner::build()
     m_randomx_jit->setArgs(m_entropy, m_registers, m_intermediate_programs, m_programs, m_intensity, m_rounding);
 
     if (!loadAsmProgram()) {
-        throw std::runtime_error(VkError::toString(CL_INVALID_PROGRAM));
+        throw std::runtime_error("invalid program :c");
     }
 
     m_randomx_run = new RxRunKernel(m_asmProgram);
@@ -79,7 +78,7 @@ void xmrig::VkRxJitRunner::execute(uint32_t iteration)
 {
     m_randomx_jit->enqueue(m_queue, m_intensity, iteration);
 
-    VkLib::finish(m_queue);
+    m_queue->sync();
 
     m_randomx_run->enqueue(m_queue, m_intensity, (m_gcn_version == 15) ? 32 : 64);
 }
@@ -89,14 +88,19 @@ void xmrig::VkRxJitRunner::init()
 {
     VkRxBaseRunner::init();
 
-    m_registers             = createSubBuffer(CL_MEM_READ_WRITE | CL_MEM_HOST_NO_ACCESS, 256 * m_intensity);
-    m_intermediate_programs = createSubBuffer(CL_MEM_READ_WRITE | CL_MEM_HOST_NO_ACCESS, 5120 * m_intensity);
-    m_programs              = createSubBuffer(CL_MEM_READ_WRITE | CL_MEM_HOST_NO_ACCESS, 10048 * m_intensity);
+    m_registers             = createSubBuffer(1 | 1, 256 * m_intensity);
+    m_intermediate_programs = createSubBuffer(1 | 1, 5120 * m_intensity);
+    m_programs              = createSubBuffer(1 | 1, 10048 * m_intensity);
 }
 
 
 bool xmrig::VkRxJitRunner::loadAsmProgram()
 {
+#if 1
+	// not dealing with this crap right now, sorry lol
+	throw std::runtime_error("not implemented!");
+	return false;
+#else
     // Adrenaline drivers on Windows and amdgpu-pro drivers on Linux use ELF header's flags (offset 0x30) to store internal device ID
     // Read it from compiled OpenCL code and substitute this ID into pre-compiled binary to make sure the driver accepts it
     uint32_t elf_header_flags = 0;
@@ -150,4 +154,5 @@ bool xmrig::VkRxJitRunner::loadAsmProgram()
     }
 
     return VkLib::buildProgram(m_asmProgram, 1, &device) == CL_SUCCESS;
+#endif
 }

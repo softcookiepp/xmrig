@@ -79,11 +79,19 @@ xmrig::VkRxBaseRunner::~VkRxBaseRunner()
     delete m_blake2b_hash_registers_64;
     delete m_find_shares;
 
+#if 1
+	m_ctx->deallocateBuffer(m_entropy);
+	m_ctx->deallocateBuffer(m_hashes);
+	m_ctx->deallocateBuffer(m_rounding);
+	m_ctx->deallocateBuffer(m_scratchpads);
+	m_ctx->deallocateBuffer(m_dataset);
+#else
     VkLib::release(m_entropy);
     VkLib::release(m_hashes);
     VkLib::release(m_rounding);
     VkLib::release(m_scratchpads);
     VkLib::release(m_dataset);
+#endif
 }
 
 
@@ -103,7 +111,7 @@ void xmrig::VkRxBaseRunner::run(uint32_t nonce, uint32_t nonce_offset, uint32_t 
 
     m_find_shares->setNonce(nonce);
 
-    enqueueWriteBuffer(m_output, CL_FALSE, sizeof(uint32_t) * 0xFF, sizeof(uint32_t), &zero);
+    enqueueWriteBuffer(m_output, false, sizeof(uint32_t) * 0xFF, sizeof(uint32_t), &zero);
 
     if (m_jobSize <= 128) {
         m_blake2b_initial_hash->enqueue(m_queue, m_intensity);
@@ -137,7 +145,7 @@ void xmrig::VkRxBaseRunner::run(uint32_t nonce, uint32_t nonce_offset, uint32_t 
 
     finalize(hashOutput);
 
-    VkLib::finish(m_queue);
+    m_queue->sync(); //VkLib::finish(m_queue);
 }
 
 
@@ -147,7 +155,7 @@ void xmrig::VkRxBaseRunner::set(const Job &job, uint8_t *blob)
         m_seed = job.seed();
 
         auto dataset = Rx::dataset(job, 0);
-        enqueueWriteBuffer(m_dataset, CL_TRUE, 0, RxDataset::maxSize(), dataset->raw());
+        enqueueWriteBuffer(m_dataset, true, 0, RxDataset::maxSize(), dataset->raw());
     }
 
     if (job.size() < Job::kMaxBlobSize) {
@@ -156,7 +164,7 @@ void xmrig::VkRxBaseRunner::set(const Job &job, uint8_t *blob)
 
     memset(blob + job.nonceOffset(), 0, job.nonceSize());
 
-    enqueueWriteBuffer(m_input, CL_TRUE, 0, Job::kMaxBlobSize, blob);
+    enqueueWriteBuffer(m_input, true, 0, Job::kMaxBlobSize, blob);
 
     m_jobSize = job.size();
 
@@ -213,9 +221,9 @@ void xmrig::VkRxBaseRunner::init()
 {
     VkBaseRunner::init();
 
-    m_scratchpads = createSubBuffer(CL_MEM_READ_WRITE | CL_MEM_HOST_NO_ACCESS, (m_algorithm.l3() + 64) * m_intensity);
-    m_hashes      = createSubBuffer(CL_MEM_READ_WRITE | CL_MEM_HOST_NO_ACCESS, 64 * m_intensity);
-    m_entropy     = createSubBuffer(CL_MEM_READ_WRITE | CL_MEM_HOST_NO_ACCESS, (128 + 2560) * m_intensity);
-    m_rounding    = createSubBuffer(CL_MEM_READ_WRITE | CL_MEM_HOST_NO_ACCESS, sizeof(uint32_t) * m_intensity);
+    m_scratchpads = createSubBuffer(1 | 1, (m_algorithm.l3() + 64) * m_intensity);
+    m_hashes      = createSubBuffer(1 | 1, 64 * m_intensity);
+    m_entropy     = createSubBuffer(1 | 1, (128 + 2560) * m_intensity);
+    m_rounding    = createSubBuffer(1 | 1, sizeof(uint32_t) * m_intensity);
     m_dataset     = VkSharedState::get(data().device.index()).dataset();
 }

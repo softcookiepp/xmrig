@@ -22,7 +22,7 @@
 
 #include <cstddef>
 #include <cstdint>
-
+#include "tart.hpp"
 
 
 
@@ -36,7 +36,7 @@ class IVkRunner;
 class VkKawPow
 {
 public:
-    static kernel_pair get(const IVkRunner &runner, uint64_t height, uint32_t worksize);
+    static tart::cl_kernel_ptr get(const IVkRunner &runner, uint64_t height, uint32_t worksize);
     static void clear();
 };
 

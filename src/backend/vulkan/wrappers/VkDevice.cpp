@@ -40,10 +40,10 @@ namespace xmrig {
 
 struct topology_amd {
     uint32_t type;
-    cl_char unused[17];
-    cl_char bus;
-    cl_char device;
-    cl_char function;
+    int8_t unused[17];
+    int8_t bus;
+    int8_t device;
+    int8_t function;
 };
 
 
@@ -125,13 +125,13 @@ static VkVendor getVendorId(const String &vendor)
 xmrig::VkDevice::VkDevice(uint32_t index, tart::device_ptr id, size_t platform) :
     m_id(id),
     m_platform(platform),
-    m_platformVendor(VkLib::getString(platform, CL_PLATFORM_VENDOR)),
-    m_name(VkLib::getString(id, CL_DEVICE_NAME)),
-    m_vendor(VkLib::getString(id, CL_DEVICE_VENDOR)),
-    m_extensions(VkLib::getString(id, CL_DEVICE_EXTENSIONS)),
-    m_maxMemoryAlloc(VkLib::getUlong(id, CL_DEVICE_MAX_MEM_ALLOC_SIZE)),
-    m_globalMemory(VkLib::getUlong(id, CL_DEVICE_GLOBAL_MEM_SIZE)),
-    m_computeUnits(VkLib::getUint(id, CL_DEVICE_MAX_COMPUTE_UNITS, 1)),
+    m_platformVendor("VULKAN"), //m_platformVendor(VkLib::getString(platform, CL_PLATFORM_VENDOR)),
+    m_name("generic vulkan device"),//m_name(VkLib::getString(id, CL_DEVICE_NAME)),
+    m_vendor("VULKAN"), //m_vendor(VkLib::getString(id, CL_DEVICE_VENDOR)),
+    m_extensions(""),//m_extensions(VkLib::getString(id, CL_DEVICE_EXTENSIONS)),
+    m_maxMemoryAlloc(id->getMetadata().maxMemoryAllocationSize),//m_maxMemoryAlloc(VkLib::getUlong(id, CL_DEVICE_MAX_MEM_ALLOC_SIZE)),//m_maxMemoryAlloc(VkLib::getUlong(id, CL_DEVICE_MAX_MEM_ALLOC_SIZE)),
+    m_globalMemory(0),//m_globalMemory(VkLib::getUlong(id, CL_DEVICE_GLOBAL_MEM_SIZE)),
+    m_computeUnits(1),//m_computeUnits(VkLib::getUint(id, CL_DEVICE_MAX_COMPUTE_UNITS, 1)),
     m_index(index)
 {
 	m_device = gTartInstance.createDevice(index);

@@ -37,7 +37,7 @@ xmrig::VkKernel::VkKernel(tart::cl_program_ptr program, const char *name) :
     m_name(name),
     m_program(program)
 {
-    //m_kernel = VkLib::createKernel(program, name);
+    m_kernel = m_program->getKernel(name);
 }
 
 

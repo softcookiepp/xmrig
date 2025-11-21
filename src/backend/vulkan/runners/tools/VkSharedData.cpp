@@ -51,7 +51,7 @@ tart::buffer_ptr xmrig::VkSharedData::createBuffer(tart::device_ptr context, siz
 #if 1
 		m_buffer = context->allocateBuffer(size);
 #else
-        m_buffer = VkLib::createBuffer(context, CL_MEM_READ_WRITE, size);
+        m_buffer = VkLib::createBuffer(context, 1, size);
 #endif
     }
 

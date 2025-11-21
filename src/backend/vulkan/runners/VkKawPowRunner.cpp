@@ -63,13 +63,13 @@ VkKawPowRunner::VkKawPowRunner(size_t index, const VkLaunchData &data) : VkBaseR
 
 VkKawPowRunner::~VkKawPowRunner()
 {
-    VkLib::release(m_lightCache);
-    VkLib::release(m_dag);
+    m_ctx->deallocateBuffer(m_lightCache);
+    m_ctx->deallocateBuffer(m_dag);
 
-    delete m_calculateDagKernel;
+    //delete m_calculateDagKernel;
 
-    VkLib::release(m_controlQueue);
-    VkLib::release(m_stop);
+    //VkLib::release(m_controlQueue);
+    m_ctx->deallocateBuffer(m_stop);
 
     VkKawPow::clear();
 }
@@ -81,14 +81,19 @@ void VkKawPowRunner::run(uint32_t nonce, uint32_t /*nonce_offset*/, uint32_t *ha
     const size_t global_work_offset = nonce;
     const size_t global_work_size = m_intensity - (m_intensity % m_workGroupSize);
 
-    enqueueWriteBuffer(m_input, CL_FALSE, 0, BLOB_SIZE, m_blob);
+    enqueueWriteBuffer(m_input, false, 0, BLOB_SIZE, m_blob);
 
     const uint32_t zero[2] = {};
-    enqueueWriteBuffer(m_output, CL_FALSE, 0, sizeof(uint32_t), zero);
-    enqueueWriteBuffer(m_stop, CL_FALSE, 0, sizeof(uint32_t) * 2, zero);
+    enqueueWriteBuffer(m_output, false, 0, sizeof(uint32_t), zero);
+    enqueueWriteBuffer(m_stop, false, 0, sizeof(uint32_t) * 2, zero);
 
     m_skippedHashes = 0;
-
+	
+	if (global_work_offset > 0)
+		throw std::runtime_error("global offsets not implemented :c");
+#if 1
+	m_searchKernel->enqueue({global_work_size}, {local_work_size});
+#else
     const int32_t ret = VkLib::enqueueNDRangeKernel(m_queue, m_searchKernel, 1, &global_work_offset, &global_work_size, &local_work_size, 0, nullptr, nullptr);
     if (ret != CL_SUCCESS) {
         LOG_ERR("%s" RED(" error ") RED_BOLD("%s") RED(" when calling ") RED_BOLD("clEnqueueNDRangeKernel") RED(" for kernel ") RED_BOLD("progpow_search"),
@@ -96,12 +101,13 @@ void VkKawPowRunner::run(uint32_t nonce, uint32_t /*nonce_offset*/, uint32_t *ha
 
         throw std::runtime_error(VkError::toString(ret));
     }
+#endif
 
     uint32_t stop[2] = {};
-    enqueueReadBuffer(m_stop, CL_FALSE, 0, sizeof(stop), stop);
+    enqueueReadBuffer(m_stop, false, 0, sizeof(stop), stop);
 
     uint32_t output[16] = {};
-    enqueueReadBuffer(m_output, CL_TRUE, 0, sizeof(output), output);
+    enqueueReadBuffer(m_output, true, 0, sizeof(output), output);
 
     m_skippedHashes = stop[1] * m_workGroupSize;
 
@@ -123,10 +129,10 @@ void VkKawPowRunner::set(const Job &job, uint8_t *blob)
 
     const uint64_t dag_size = KPCache::dag_size(epoch);
     if (dag_size > m_dagCapacity) {
-        VkLib::release(m_dag);
+        m_queue->deallocateBuffer(m_dag); //VkLib::release(m_dag);
 
         m_dagCapacity = VirtualMemory::align(dag_size, 16 * 1024 * 1024);
-        m_dag = VkLib::createBuffer(m_ctx, CL_MEM_READ_WRITE, m_dagCapacity);
+        m_dag = m_queue->allocateBuffer(m_dagCapacity);//m_dag = VkLib::createBuffer(m_ctx, 1, m_dagCapacity);
     }
 
     if (epoch != m_epoch) {
@@ -138,14 +144,14 @@ void VkKawPowRunner::set(const Job &job, uint8_t *blob)
             KPCache::s_cache.init(epoch);
 
             if (KPCache::s_cache.size() > m_lightCacheCapacity) {
-                VkLib::release(m_lightCache);
+                m_queue->deallocateBuffer(m_lightCache);//VkLib::release(m_lightCache);
 
                 m_lightCacheCapacity = VirtualMemory::align(KPCache::s_cache.size());
-                m_lightCache = VkLib::createBuffer(m_ctx, CL_MEM_READ_ONLY, m_lightCacheCapacity);
+                m_lightCache = m_queue->allocateBuffer(m_lightCacheCapacity);//VkLib::createBuffer(m_ctx, 1, m_lightCacheCapacity);
             }
 
             m_lightCacheSize = KPCache::s_cache.size();
-            enqueueWriteBuffer(m_lightCache, CL_TRUE, 0, m_lightCacheSize, KPCache::s_cache.data());
+            enqueueWriteBuffer(m_lightCache, true, 0, m_lightCacheSize, KPCache::s_cache.data());
         }
 
         const uint64_t start_ms = Chrono::steadyMSecs();
@@ -160,33 +166,37 @@ void VkKawPowRunner::set(const Job &job, uint8_t *blob)
             m_calculateDagKernel->enqueue(m_queue, N, m_dagWorkGroupSize);
         }
 
-        VkLib::finish(m_queue);
+        m_queue->sync();//VkLib::finish(m_queue);
 
         LOG_INFO("%s " YELLOW("KawPow") " DAG for epoch " WHITE_BOLD("%u") " calculated " BLACK_BOLD("(%" PRIu64 "ms)"), Tags::vulkan(), epoch, Chrono::steadyMSecs() - start_ms);
     }
 
     const uint64_t target = job.target();
     const uint32_t hack_false = 0;
-
+#if 1
+	m_searchKernel->setArg(0, m_dag);
+	m_searchKernel->setArg(1, m_input);
+	m_searchKernel->setArg(2, target);
+	m_searchKernel->setArg(3, hack_false);
+	m_searchKernel->setArg(4, m_output);
+	m_searchKernel->setArg(5, m_stop);
+#else
     VkLib::setKernelArg(m_searchKernel, 0, sizeof(tart::buffer_ptr), &m_dag);
     VkLib::setKernelArg(m_searchKernel, 1, sizeof(tart::buffer_ptr), &m_input);
     VkLib::setKernelArg(m_searchKernel, 2, sizeof(target), &target);
     VkLib::setKernelArg(m_searchKernel, 3, sizeof(hack_false), &hack_false);
     VkLib::setKernelArg(m_searchKernel, 4, sizeof(tart::buffer_ptr), &m_output);
     VkLib::setKernelArg(m_searchKernel, 5, sizeof(tart::buffer_ptr), &m_stop);
-
+#endif
     m_blob = blob;
-    enqueueWriteBuffer(m_input, CL_TRUE, 0, BLOB_SIZE, m_blob);
+    enqueueWriteBuffer(m_input, true, 0, BLOB_SIZE, m_blob);
 }
 
 
 void VkKawPowRunner::jobEarlyNotification(const Job&)
 {
     const uint32_t one = 1;
-    const int32_t ret = VkLib::enqueueWriteBuffer(m_controlQueue, m_stop, CL_TRUE, 0, sizeof(one), &one, 0, nullptr, nullptr);
-    if (ret != CL_SUCCESS) {
-        throw std::runtime_error(VkError::toString(ret));
-    }
+    m_stop->copyIn((void*)(&one), sizeof(one), 0);
 }
 
 
@@ -206,7 +216,7 @@ void xmrig::VkKawPowRunner::init()
 #else
     m_controlQueue = VkLib::createCommandQueue(m_ctx, data().device.id());
 #endif
-    m_stop = VkLib::createBuffer(m_ctx, CL_MEM_READ_ONLY, sizeof(uint32_t) * 2);
+	m_stop = m_device->allocateBuffer(sizeof(uint32_t) * 2);
 }
 
 } // namespace xmrig

@@ -91,7 +91,7 @@ public:
     void add(const Algorithm &algo, uint64_t offset, uint32_t index, tart::cl_program_ptr program)
     {
         if (search(algo, offset, index)) {
-            VkLib::release(program);
+            //VkLib::release(program);
 
             return;
         }
@@ -162,11 +162,16 @@ public:
         const std::string source = getSource(offset);
         tart::device_ptr device      = runner.data().device.id();
         const char *s            = source.c_str();
-
+		
+#if 1
+		tart::shader_module_ptr shaderModule = device->compileCL(source);
+		program = device->createCLProgram(shaderModule);
+#else
         program = VkLib::createProgramWithSource(runner.ctx(), 1, &s, nullptr, &ret);
         if (ret != CL_SUCCESS) {
             return nullptr;
         }
+
 
         if (VkLib::buildProgram(program, 1, &device, runner.buildOptions()) != CL_SUCCESS) {
             printf("BUILD LOG:\n%s\n", VkLib::getProgramBuildLog(program, device).data());
@@ -174,7 +179,7 @@ public:
             VkLib::release(program);
             return nullptr;
         }
-
+#endif
         LOG_DEBUG(GREEN_BOLD("[ocl]") " programs for heights %" PRIu64 " - %" PRIu64 " compiled. (%" PRIu64 "ms)", offset, offset + VkCnR::kHeightChunkSize - 1, Chrono::steadyMSecs() - ts);
 
         cache.add(runner.algorithm(), offset, runner.deviceIndex(), program);

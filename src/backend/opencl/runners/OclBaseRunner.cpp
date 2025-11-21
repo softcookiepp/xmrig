@@ -134,7 +134,7 @@ size_t xmrig::OclBaseRunner::align(size_t size) const
 }
 
 
-void xmrig::OclBaseRunner::enqueueReadBuffer(cl_mem buffer, cl_bool blocking_read, size_t offset, size_t size, void *ptr)
+void xmrig::OclBaseRunner::enqueueReadBuffer(cl_mem buffer, bool blocking_read, size_t offset, size_t size, void *ptr)
 {
     const cl_int ret = OclLib::enqueueReadBuffer(m_queue, buffer, blocking_read, offset, size, ptr, 0, nullptr, nullptr);
     if (ret != CL_SUCCESS) {
@@ -143,7 +143,7 @@ void xmrig::OclBaseRunner::enqueueReadBuffer(cl_mem buffer, cl_bool blocking_rea
 }
 
 
-void xmrig::OclBaseRunner::enqueueWriteBuffer(cl_mem buffer, cl_bool blocking_write, size_t offset, size_t size, const void *ptr)
+void xmrig::OclBaseRunner::enqueueWriteBuffer(cl_mem buffer, bool blocking_write, size_t offset, size_t size, const void *ptr)
 {
     const cl_int ret = OclLib::enqueueWriteBuffer(m_queue, buffer, blocking_write, offset, size, ptr, 0, nullptr, nullptr);
     if (ret != CL_SUCCESS) {
@@ -154,7 +154,7 @@ void xmrig::OclBaseRunner::enqueueWriteBuffer(cl_mem buffer, cl_bool blocking_wr
 
 void xmrig::OclBaseRunner::finalize(uint32_t *hashOutput)
 {
-    enqueueReadBuffer(m_output, CL_TRUE, 0, sizeof(cl_uint) * 0x100, hashOutput);
+    enqueueReadBuffer(m_output, true, 0, sizeof(cl_uint) * 0x100, hashOutput);
 
     uint32_t &results = hashOutput[0xFF];
     if (results > 0xFF) {

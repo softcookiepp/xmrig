@@ -28,6 +28,9 @@
 
 const char *xmrig::VkError::toString(int32_t ret)
 {
+#if 1
+	return "error";
+#else
     switch(ret)
     {
     case CL_SUCCESS:
@@ -157,4 +160,5 @@ const char *xmrig::VkError::toString(int32_t ret)
     default:
         return "UNKNOWN_ERROR";
     }
+#endif
 }
