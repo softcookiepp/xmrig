@@ -213,7 +213,7 @@ bool xmrig::Config::isShouldSave() const
     }
 #   endif
 
-#   ifdef XMRIG_FEATURE_OPENCL
+#   ifdef XMRIG_FEATURE_VULKAN
     if (vulkan().isShouldSave()) {
         return true;
     }
