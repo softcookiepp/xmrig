@@ -30,6 +30,11 @@
 
 std::vector<xmrig::VkPlatform> xmrig::VkPlatform::get()
 {
+#if 1
+	std::vector<VkPlatform> out;
+	out.emplace_back(0, 0);
+	return out;
+#else
     const std::vector<size_t> platforms = VkLib::getPlatformIDs();
     std::vector<VkPlatform> out;
     if (platforms.empty()) {
@@ -43,6 +48,7 @@ std::vector<xmrig::VkPlatform> xmrig::VkPlatform::get()
     }
 
     return out;
+#endif
 }
 
 
@@ -86,6 +92,14 @@ rapidjson::Value xmrig::VkPlatform::toJSON(rapidjson::Document &doc) const
 
 std::vector<xmrig::VkDevice> xmrig::VkPlatform::devices() const
 {
+#if 1
+	std::vector<VkDevice> out;
+	for (size_t i = 0; i < gTartInstance.getNumDevices(); i += 1)
+	{
+		out.emplace_back(i, gTartInstance.createDevice(i), id() );
+	}
+	return out;
+#else
     std::vector<VkDevice> out;
     if (!isValid()) {
         return out;
@@ -106,34 +120,35 @@ std::vector<xmrig::VkDevice> xmrig::VkPlatform::devices() const
     }
 
     return out;
+#endif
 }
 
 
 xmrig::String xmrig::VkPlatform::extensions() const
 {
-    return VkLib::getString(id(), CL_PLATFORM_EXTENSIONS);
+    return "";//return VkLib::getString(id(), CL_PLATFORM_EXTENSIONS);
 }
 
 
 xmrig::String xmrig::VkPlatform::name() const
 {
-    return VkLib::getString(id(), CL_PLATFORM_NAME);
+    return "Vulkan";//return VkLib::getString(id(), CL_PLATFORM_NAME);
 }
 
 
 xmrig::String xmrig::VkPlatform::profile() const
 {
-    return VkLib::getString(id(), CL_PLATFORM_PROFILE);
+    return "Vulkan";//return VkLib::getString(id(), CL_PLATFORM_PROFILE);
 }
 
 
 xmrig::String xmrig::VkPlatform::vendor() const
 {
-    return VkLib::getString(id(), CL_PLATFORM_VENDOR);
+    return "Vulkan";//return VkLib::getString(id(), CL_PLATFORM_VENDOR);
 }
 
 
 xmrig::String xmrig::VkPlatform::version() const
 {
-    return VkLib::getString(id(), CL_PLATFORM_VERSION);
+    return "1.2";//return VkLib::getString(id(), CL_PLATFORM_VERSION);
 }

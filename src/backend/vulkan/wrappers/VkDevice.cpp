@@ -139,7 +139,8 @@ xmrig::VkDevice::VkDevice(uint32_t index, tart::device_ptr id, size_t platform) 
     m_vendorId  = getVendorId(m_vendor);
     m_platformVendorId = getPlatformVendorId(m_platformVendor, m_extensions);
     m_type      = getType(m_name);
-
+#if 1
+#else
     if (m_extensions.contains("cl_amd_device_attribute_query")) {
         topology_amd topology{};
         if (VkLib::getDeviceInfo(id, CL_DEVICE_TOPOLOGY_AMD, sizeof(topology), &topology) == CL_SUCCESS && topology.type == CL_DEVICE_TOPOLOGY_TYPE_PCIE_AMD) {
@@ -155,6 +156,7 @@ xmrig::VkDevice::VkDevice(uint32_t index, tart::device_ptr id, size_t platform) 
             m_topology = { bus, (slot >> 3) & 0xff, slot & 7 };
         }
     }
+#endif
 }
 
 
@@ -170,7 +172,7 @@ xmrig::String xmrig::VkDevice::printableName() const
 
 uint32_t xmrig::VkDevice::clock() const
 {
-    return VkLib::getUint(id(), CL_DEVICE_MAX_CLOCK_FREQUENCY);
+    return 9001;//return VkLib::getUint(id(), CL_DEVICE_MAX_CLOCK_FREQUENCY);
 }
 
 

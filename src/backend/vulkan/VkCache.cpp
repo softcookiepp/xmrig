@@ -52,7 +52,8 @@ static tart::cl_program_ptr createFromSource(const IVkRunner *runner)
     const uint64_t ts   = Chrono::steadyMSecs();
 #if 1
 	// TODO: figure out if there is a way to just compile SPIR-V
-	tart::shader_module_ptr mod = device->compileCL(source);
+	std::string options = runner->buildOptions();
+	tart::shader_module_ptr mod = device->compileCL(source, options);
 	tart::cl_program_ptr program = device->createCLProgram(mod);
 #else
     tart::cl_program_ptr program = VkLib::createProgramWithSource(runner->ctx(), 1, &source, nullptr, &ret);

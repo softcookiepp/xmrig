@@ -98,8 +98,8 @@ public:
     void add(const Algorithm &algo, uint64_t period, uint32_t worksize, uint32_t index, tart::cl_program_ptr program, tart::cl_kernel_ptr kernel)
     {
         if (search(algo, period, worksize, index)) {
-            VkLib::release(kernel);
-            VkLib::release(program);
+            //VkLib::release(kernel);
+            //VkLib::release(program);
             return;
         }
 
@@ -193,16 +193,16 @@ public:
             return kernel;
         }
 
-        int32_t ret = 0;
+        //int32_t ret = 0;
         const std::string source = getSource(period);
         tart::device_ptr device      = runner.data().device.id();
-        const char *s            = source.c_str();
-
+        //const char *s            = source.c_str();
+#if 0
         tart::cl_program_ptr program = VkLib::createProgramWithSource(runner.ctx(), 1, &s, nullptr, &ret);
         if (ret != CL_SUCCESS) {
             return nullptr;
         }
-
+#endif
         std::string options = " -DPROGPOW_DAG_ELEMENTS=";
 
         const uint64_t epoch = (period * KPHash::PERIOD_LENGTH) / KPHash::EPOCH_LENGTH;
@@ -214,19 +214,26 @@ public:
         options += std::to_string(worksize);
 
         options += runner.buildOptions();
-
+#if 1
+		tart::shader_module_ptr shaderModule = device->compileCL(source, options);
+		tart::cl_program_ptr program = device->createCLProgram(shaderModule);
+#else
         if (VkLib::buildProgram(program, 1, &device, options.c_str()) != CL_SUCCESS) {
             printf("BUILD LOG:\n%s\n", VkLib::getProgramBuildLog(program, device).data());
 
             VkLib::release(program);
             return nullptr;
         }
-
+#endif
+#if 1
+		kernel = program->getKernel("progpow_search");
+#else
         kernel = VkLib::createKernel(program, "progpow_search", &ret);
         if (ret != CL_SUCCESS) {
             VkLib::release(program);
             return nullptr;
         }
+#endif
 
         LOG_INFO("%s " YELLOW("KawPow") " program for period " WHITE_BOLD("%" PRIu64) " compiled " BLACK_BOLD("(%" PRIu64 "ms)"), Tags::vulkan(), period, Chrono::steadyMSecs() - ts);
 

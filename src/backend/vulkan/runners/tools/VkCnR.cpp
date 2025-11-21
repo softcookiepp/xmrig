@@ -55,7 +55,7 @@ public:
     inline bool isExpired(uint64_t offset) const                                    { return m_offset + VkCnR::kHeightChunkSize < offset; }
     inline bool match(const Algorithm &algo, uint64_t offset, uint32_t index) const { return m_algo == algo && m_offset == offset && m_index == index; }
     inline bool match(const IVkRunner &runner, uint64_t offset) const              { return match(runner.algorithm(), offset, runner.deviceIndex()); }
-    inline void release() const                                                     { VkLib::release(program); }
+    inline void release() const                                                     {}//{ VkLib::release(program); }
 
     tart::cl_program_ptr program;
 
@@ -158,13 +158,14 @@ public:
             return program;
         }
 
-        int32_t ret = 0;
+        //int32_t ret = 0;
         const std::string source = getSource(offset);
         tart::device_ptr device      = runner.data().device.id();
-        const char *s            = source.c_str();
+        //const char *s            = source.c_str();
 		
 #if 1
-		tart::shader_module_ptr shaderModule = device->compileCL(source);
+		std::string options(runner.buildOptions());
+		tart::shader_module_ptr shaderModule = device->compileCL(source, options);
 		program = device->createCLProgram(shaderModule);
 #else
         program = VkLib::createProgramWithSource(runner.ctx(), 1, &s, nullptr, &ret);

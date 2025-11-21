@@ -50,7 +50,7 @@ xmrig::VkKernel::~VkKernel()
 void xmrig::VkKernel::enqueueNDRange(tart::device_ptr queue, uint32_t work_dim, const size_t *global_work_offset, const size_t *global_work_size, const size_t *local_work_size)
 {
 #if 1
-	if (global_work_offset) throw std::runtime_error(VkError::toString("global_work_offset not implemented!!!"));
+	if (global_work_offset) throw std::runtime_error("global_work_offset not implemented!!!");
 	
 	std::vector<uint32_t> localSize(work_dim);
 	std::vector<uint32_t> globalSize(work_dim);
@@ -70,7 +70,7 @@ void xmrig::VkKernel::enqueueNDRange(tart::device_ptr queue, uint32_t work_dim, 
 #endif
 }
 
-
+#if 0
 void xmrig::VkKernel::setArg(uint32_t index, size_t size, const void *value)
 {
     const int32_t ret = VkLib::setKernelArg(m_kernel, index, size, value);
@@ -82,3 +82,4 @@ void xmrig::VkKernel::setArg(uint32_t index, size_t size, const void *value)
         throw std::runtime_error(VkError::toString(ret));
     }
 }
+#endif

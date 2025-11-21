@@ -54,7 +54,7 @@ public:
     inline const String name() const   { return m_name.c_str(); }
 
     void enqueueNDRange(tart::device_ptr queue, uint32_t work_dim, const size_t *global_work_offset, const size_t *global_work_size, const size_t *local_work_size);
-    void setArg(uint32_t index, size_t size, const void *value);
+    //void setArg(uint32_t index, size_t size, const void *value);
 
 private:
 #if 1
@@ -68,6 +68,20 @@ private:
 
     const String m_name;
 #endif
+public:
+	void setArg(uint32_t index, size_t size, tart::buffer_ptr* buf)
+	{
+		if (size > sizeof(tart::buffer_ptr))
+			throw std::runtime_error("attempting to pass multiple buffers!");
+		tart::buffer_ptr deref = *buf;
+		m_kernel->setArg(index, deref);
+	}
+
+	template <typename T>
+	void setArg(uint32_t index, size_t size, const T* value)
+	{
+		m_kernel->setArg(index, size, value);
+	}
 };
 
 

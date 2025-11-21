@@ -32,7 +32,7 @@
 #   define LOG_REFS(x, ...) xmrig::Log::print(xmrig::Log::WARNING, x, ##__VA_ARGS__)
 #endif
 
-
+#if 1
 static uv_lib_t oclLib;
 
 static const char *kErrorTemplate                    = MAGENTA_BG_BOLD(WHITE_BOLD_S " opencl  ") RED(" error ") RED_BOLD("%s") RED(" when calling ") RED_BOLD("%s");
@@ -77,7 +77,7 @@ static const char *kUnloadPlatformCompiler           = "clUnloadPlatformCompiler
 #if defined(CL_VERSION_2_0)
 typedef tart::device_ptr (CL_API_CALL *createCommandQueueWithProperties_t)(tart::device_ptr, tart::device_ptr, const cl_queue_properties *, int32_t *);
 #endif
-
+#if 0
 typedef tart::device_ptr (CL_API_CALL *createCommandQueue_t)(tart::device_ptr, tart::device_ptr, tart::device_ptr_properties, int32_t *);
 typedef tart::device_ptr (CL_API_CALL *createContext_t)(const tart::device_ptr_properties *, uint32_t, const tart::device_ptr *, void (CL_CALLBACK *pfn_notify)(const char *, const void *, size_t, void *), void *, int32_t *);
 typedef int32_t (CL_API_CALL *buildProgram_t)(tart::cl_program_ptr, uint32_t, const tart::device_ptr *, const char *, void (CL_CALLBACK *pfn_notify)(tart::cl_program_ptr, void *), void *);
@@ -111,11 +111,11 @@ typedef tart::buffer_ptr (CL_API_CALL *createBuffer_t)(tart::device_ptr, uint64_
 typedef tart::buffer_ptr (CL_API_CALL *createSubBuffer_t)(tart::buffer_ptr, uint64_t, cl_buffer_create_type, const void *, int32_t *);
 typedef tart::cl_program_ptr (CL_API_CALL *createProgramWithBinary_t)(tart::device_ptr, uint32_t, const tart::device_ptr *, const size_t *, const unsigned char **, int32_t *, int32_t *);
 typedef tart::cl_program_ptr (CL_API_CALL *createProgramWithSource_t)(tart::device_ptr, uint32_t, const char **, const size_t *, int32_t *);
-
+#endif
 #if defined(CL_VERSION_2_0)
 static createCommandQueueWithProperties_t pCreateCommandQueueWithProperties = nullptr;
 #endif
-
+#if 0
 static buildProgram_t  pBuildProgram                                        = nullptr;
 static createBuffer_t pCreateBuffer                                         = nullptr;
 static createCommandQueue_t pCreateCommandQueue                             = nullptr;
@@ -149,8 +149,8 @@ static retainProgram_t pRetainProgram                                       = nu
 static setKernelArg_t pSetKernelArg                                         = nullptr;
 static setMemObjectDestructorCallback_t pSetMemObjectDestructorCallback     = nullptr;
 static unloadPlatformCompiler_t pUnloadPlatformCompiler                     = nullptr;
-
-#define DLSYM(x) if (uv_dlsym(&oclLib, k##x, reinterpret_cast<void**>(&p##x)) == -1) { throw std::runtime_error(kSymbolNotFound); }
+#endif
+//#define DLSYM(x) if (uv_dlsym(&oclLib, k##x, reinterpret_cast<void**>(&p##x)) == -1) { throw std::runtime_error(kSymbolNotFound); }
 
 
 namespace xmrig {
@@ -165,11 +165,14 @@ String VkLib::m_loader;
 template<typename FUNC, typename OBJ, typename PARAM>
 static String getVkString(FUNC fn, OBJ obj, PARAM param)
 {
+#if 0
     size_t size = 0;
     if (fn(obj, param, 0, nullptr, &size) != CL_SUCCESS) {
         return String();
     }
-
+#endif
+	// whatever its not like im using this anyway
+	size_t size = 1024;
     char *buf = new char[size]();
     fn(obj, param, size, buf, nullptr);
 
@@ -206,6 +209,7 @@ void xmrig::VkLib::close()
 
 bool xmrig::VkLib::load()
 {
+#if 0
     try {
         DLSYM(CreateCommandQueue);
         DLSYM(CreateContext);
@@ -247,7 +251,7 @@ bool xmrig::VkLib::load()
 #   if defined(CL_VERSION_2_0)
     uv_dlsym(&oclLib, kCreateCommandQueueWithProperties, reinterpret_cast<void**>(&pCreateCommandQueueWithProperties));
 #   endif
-
+#endif
     return true;
 }
 
@@ -263,7 +267,7 @@ xmrig::String xmrig::VkLib::defaultLoader()
 #   endif
 }
 
-
+#if 0
 tart::device_ptr xmrig::VkLib::createCommandQueue(tart::device_ptr context, tart::device_ptr device, int32_t *errcode_ret) noexcept
 {
     tart::device_ptr result = nullptr;
@@ -880,3 +884,5 @@ xmrig::String xmrig::VkLib::getString(tart::cl_program_ptr program, tart::cl_pro
 {
     return getVkString(VkLib::getProgramInfo, program, param_name);
 }
+#endif
+#endif
