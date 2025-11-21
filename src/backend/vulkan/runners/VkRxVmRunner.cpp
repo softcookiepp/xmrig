@@ -39,7 +39,7 @@ xmrig::VkRxVmRunner::~VkRxVmRunner()
     //delete m_init_vm;
     //delete m_execute_vm;
 
-    m_queue->deallocateBuffer(m_vm_states);
+    m_device->deallocateBuffer(m_vm_states);
 }
 
 
@@ -72,7 +72,7 @@ void xmrig::VkRxVmRunner::execute(uint32_t iteration)
     const uint32_t bfactor        = std::min(data().thread.bfactor(), 8U);
     const uint32_t num_iterations = RxAlgo::programIterations(m_algorithm) >> bfactor;
 
-    m_init_vm->enqueue(m_queue, m_intensity, iteration);
+    m_init_vm->enqueue(m_device, m_intensity, iteration);
 
     m_execute_vm->setIterations(num_iterations);
 
@@ -81,7 +81,7 @@ void xmrig::VkRxVmRunner::execute(uint32_t iteration)
             m_execute_vm->setLast(1);
         }
 
-        m_execute_vm->enqueue(m_queue, m_intensity, m_worksize);
+        m_execute_vm->enqueue(m_device, m_intensity, m_worksize);
 
         if (j == 0) {
             m_execute_vm->setFirst(0);

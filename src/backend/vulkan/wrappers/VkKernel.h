@@ -57,17 +57,10 @@ public:
     //void setArg(uint32_t index, size_t size, const void *value);
 
 private:
-#if 1
-	// there is no tart equivalent for a CL kernel. should there be?
 	// for now, just store both
 	std::string m_name;
 	tart::cl_program_ptr m_program;
 	tart::cl_kernel_ptr m_kernel;
-#else
-    tart::cl_kernel_ptr m_kernel = nullptr;
-
-    const String m_name;
-#endif
 public:
 	void setArg(uint32_t index, size_t size, tart::buffer_ptr* buf)
 	{

@@ -214,26 +214,11 @@ public:
         options += std::to_string(worksize);
 
         options += runner.buildOptions();
-#if 1
+
 		tart::shader_module_ptr shaderModule = device->compileCL(source, options);
 		tart::cl_program_ptr program = device->createCLProgram(shaderModule);
-#else
-        if (VkLib::buildProgram(program, 1, &device, options.c_str()) != CL_SUCCESS) {
-            printf("BUILD LOG:\n%s\n", VkLib::getProgramBuildLog(program, device).data());
 
-            VkLib::release(program);
-            return nullptr;
-        }
-#endif
-#if 1
 		kernel = program->getKernel("progpow_search");
-#else
-        kernel = VkLib::createKernel(program, "progpow_search", &ret);
-        if (ret != CL_SUCCESS) {
-            VkLib::release(program);
-            return nullptr;
-        }
-#endif
 
         LOG_INFO("%s " YELLOW("KawPow") " program for period " WHITE_BOLD("%" PRIu64) " compiled " BLACK_BOLD("(%" PRIu64 "ms)"), Tags::vulkan(), period, Chrono::steadyMSecs() - ts);
 

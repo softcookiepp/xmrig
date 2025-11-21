@@ -79,19 +79,11 @@ xmrig::VkRxBaseRunner::~VkRxBaseRunner()
     delete m_blake2b_hash_registers_64;
     delete m_find_shares;
 
-#if 1
-	m_ctx->deallocateBuffer(m_entropy);
-	m_ctx->deallocateBuffer(m_hashes);
-	m_ctx->deallocateBuffer(m_rounding);
-	m_ctx->deallocateBuffer(m_scratchpads);
-	m_ctx->deallocateBuffer(m_dataset);
-#else
-    VkLib::release(m_entropy);
-    VkLib::release(m_hashes);
-    VkLib::release(m_rounding);
-    VkLib::release(m_scratchpads);
-    VkLib::release(m_dataset);
-#endif
+	m_device->deallocateBuffer(m_entropy);
+	m_device->deallocateBuffer(m_hashes);
+	m_device->deallocateBuffer(m_rounding);
+	m_device->deallocateBuffer(m_scratchpads);
+	m_device->deallocateBuffer(m_dataset);
 }
 
 
@@ -114,38 +106,38 @@ void xmrig::VkRxBaseRunner::run(uint32_t nonce, uint32_t nonce_offset, uint32_t 
     enqueueWriteBuffer(m_output, false, sizeof(uint32_t) * 0xFF, sizeof(uint32_t), &zero);
 
     if (m_jobSize <= 128) {
-        m_blake2b_initial_hash->enqueue(m_queue, m_intensity);
+        m_blake2b_initial_hash->enqueue(m_device, m_intensity);
     }
     else if (m_jobSize <= 256) {
-        m_blake2b_initial_hash_double->enqueue(m_queue, m_intensity);
+        m_blake2b_initial_hash_double->enqueue(m_device, m_intensity);
     }
     else {
-        m_blake2b_initial_hash_big->enqueue(m_queue, m_intensity);
+        m_blake2b_initial_hash_big->enqueue(m_device, m_intensity);
     }
 
-    m_fillAes1Rx4_scratchpad->enqueue(m_queue, m_intensity);
+    m_fillAes1Rx4_scratchpad->enqueue(m_device, m_intensity);
 
     const uint32_t programCount = RxAlgo::programCount(m_algorithm);
 
     for (uint32_t i = 0; i < programCount; ++i) {
-        m_fillAes4Rx4_entropy->enqueue(m_queue, m_intensity);
+        m_fillAes4Rx4_entropy->enqueue(m_device, m_intensity);
 
         execute(i);
 
         if (i == programCount - 1) {
-            m_hashAes1Rx4->enqueue(m_queue, m_intensity);
-            m_blake2b_hash_registers_32->enqueue(m_queue, m_intensity);
+            m_hashAes1Rx4->enqueue(m_device, m_intensity);
+            m_blake2b_hash_registers_32->enqueue(m_device, m_intensity);
         }
         else {
-            m_blake2b_hash_registers_64->enqueue(m_queue, m_intensity);
+            m_blake2b_hash_registers_64->enqueue(m_device, m_intensity);
         }
     }
 
-    m_find_shares->enqueue(m_queue, m_intensity);
+    m_find_shares->enqueue(m_device, m_intensity);
 
     finalize(hashOutput);
 
-    m_queue->sync(); //VkLib::finish(m_queue);
+    m_device->sync(); //VkLib::finish(m_device);
 }
 
 

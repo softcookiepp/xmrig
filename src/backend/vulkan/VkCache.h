@@ -35,11 +35,8 @@ class IVkRunner;
 class VkCache
 {
 public:
-#if 1
     static tart::cl_program_ptr build(const IVkRunner *runner);
-#else
-    static tart::cl_program_ptr build(const IVkRunner *runner);
-#endif
+
     static std::string cacheKey(const char *deviceKey, const char *options, const char *source);
     static std::string cacheKey(const IVkRunner *runner);
 

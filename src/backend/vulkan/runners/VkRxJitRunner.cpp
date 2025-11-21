@@ -42,9 +42,9 @@ xmrig::VkRxJitRunner::~VkRxJitRunner()
     delete m_randomx_jit;
     delete m_randomx_run;
 	
-    m_queue->deallocateBuffer(m_intermediate_programs);
-    m_queue->deallocateBuffer(m_programs);
-    m_queue->deallocateBuffer(m_registers);
+    m_device->deallocateBuffer(m_intermediate_programs);
+    m_device->deallocateBuffer(m_programs);
+    m_device->deallocateBuffer(m_registers);
 }
 
 
@@ -76,11 +76,11 @@ void xmrig::VkRxJitRunner::build()
 
 void xmrig::VkRxJitRunner::execute(uint32_t iteration)
 {
-    m_randomx_jit->enqueue(m_queue, m_intensity, iteration);
+    m_randomx_jit->enqueue(m_device, m_intensity, iteration);
 
-    m_queue->sync();
+    m_device->sync();
 
-    m_randomx_run->enqueue(m_queue, m_intensity, (m_gcn_version == 15) ? 32 : 64);
+    m_randomx_run->enqueue(m_device, m_intensity, (m_gcn_version == 15) ? 32 : 64);
 }
 
 
@@ -98,7 +98,8 @@ bool xmrig::VkRxJitRunner::loadAsmProgram()
 {
 #if 1
 	// not dealing with this crap right now, sorry lol
-	throw std::runtime_error("not implemented!");
+	// im 90% sure that this can't even apply to Vulkan anyways, since SPIR-V likely won't support it
+	throw std::runtime_error("Assembly programs are not implemented, and likely will not be.");
 	return false;
 #else
     // Adrenaline drivers on Windows and amdgpu-pro drivers on Linux use ELF header's flags (offset 0x30) to store internal device ID

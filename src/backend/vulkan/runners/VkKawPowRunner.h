@@ -68,11 +68,8 @@ private:
     size_t m_workGroupSize = 256;
     size_t m_dagWorkGroupSize = 64;
 
-#if 1
 	tart::device_ptr m_device = nullptr;
-#else
-    tart::device_ptr m_controlQueue = nullptr;
-#endif
+
     tart::buffer_ptr m_stop = nullptr;
 };
 

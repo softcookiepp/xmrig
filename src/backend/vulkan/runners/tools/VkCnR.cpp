@@ -158,29 +158,13 @@ public:
             return program;
         }
 
-        //int32_t ret = 0;
         const std::string source = getSource(offset);
         tart::device_ptr device      = runner.data().device.id();
-        //const char *s            = source.c_str();
 		
-#if 1
 		std::string options(runner.buildOptions());
 		tart::shader_module_ptr shaderModule = device->compileCL(source, options);
 		program = device->createCLProgram(shaderModule);
-#else
-        program = VkLib::createProgramWithSource(runner.ctx(), 1, &s, nullptr, &ret);
-        if (ret != CL_SUCCESS) {
-            return nullptr;
-        }
 
-
-        if (VkLib::buildProgram(program, 1, &device, runner.buildOptions()) != CL_SUCCESS) {
-            printf("BUILD LOG:\n%s\n", VkLib::getProgramBuildLog(program, device).data());
-
-            VkLib::release(program);
-            return nullptr;
-        }
-#endif
         LOG_DEBUG(GREEN_BOLD("[ocl]") " programs for heights %" PRIu64 " - %" PRIu64 " compiled. (%" PRIu64 "ms)", offset, offset + VkCnR::kHeightChunkSize - 1, Chrono::steadyMSecs() - ts);
 
         cache.add(runner.algorithm(), offset, runner.deviceIndex(), program);

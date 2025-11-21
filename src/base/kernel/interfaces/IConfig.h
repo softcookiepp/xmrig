@@ -129,13 +129,13 @@ public:
         OclKey               = 1411,
         
         // xmrig vulkan
-        VkPlatformKey       = 1900,
+        //VkPlatformKey       = 1900,
         VkAffinityKey       = 1901,
         VkDevicesKey        = 1902,
         VkLaunchKey         = 1903,
         VkCacheKey          = 1904,
         VkPrintKey          = 1905,
-        VkLoaderKey         = 1906,
+        //VkLoaderKey         = 1906,
         VkSridedIndexKey    = 1907,
         VkMemChunkKey       = 1908,
         VkUnrollKey         = 1909,

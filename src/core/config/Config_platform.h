@@ -149,8 +149,8 @@ static const option options[] = {
 #   ifdef XMRIG_FEATURE_VULKAN
     { "vulkan",                0, nullptr, IConfig::VkKey                },
     { "vulkan-devices",        1, nullptr, IConfig::VkDevicesKey         },
-    { "vulkan-platform",       1, nullptr, IConfig::VkPlatformKey        },
-    { "vulkan-loader",         1, nullptr, IConfig::VkLoaderKey          },
+    //{ "vulkan-platform",       1, nullptr, IConfig::VkPlatformKey        },
+    //{ "vulkan-loader",         1, nullptr, IConfig::VkLoaderKey          },
     { "vulkan-no-cache",       0, nullptr, IConfig::VkCacheKey           },
 #   endif
 #   ifdef XMRIG_FEATURE_CUDA

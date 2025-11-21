@@ -42,7 +42,7 @@ constexpr size_t oneGiB = 1024 * 1024 * 1024;
 
 
 xmrig::VkBaseRunner::VkBaseRunner(size_t id, const VkLaunchData &data) :
-    //m_ctx(data.ctx),
+    //m_device(data.ctx),
     m_algorithm(data.algorithm),
     m_source(VkSource::get(data.algorithm)),
     m_data(data),
@@ -73,7 +73,7 @@ xmrig::VkBaseRunner::~VkBaseRunner()
     //VkLib::release(m_input);
     //VkLib::release(m_output);
     //VkLib::release(m_buffer);
-    //VkLib::release(m_queue);
+    //VkLib::release(m_device);
 }
 
 
@@ -101,24 +101,17 @@ void xmrig::VkBaseRunner::build()
 
 void xmrig::VkBaseRunner::init()
 {
- #if 1
-	// with tart, its just the device c:
-	m_queue = data().device.id();
-	// and this is the same. will clean this up later, but for now I just need it to work at the bare minimum
-	m_ctx = m_queue;
-	m_device = m_queue;
- #else
-    m_queue = VkLib::createCommandQueue(m_ctx, data().device.id());
-#endif
+	m_device = data().device.id();
+
     size_t size         = align(bufferSize());
     const size_t limit  = data().device.freeMemSize();
 
     if (size < oneGiB && data().device.vendorId() == OCL_VENDOR_AMD && limit >= oneGiB) {
-        m_buffer = VkSharedState::get(data().device.index()).createBuffer(m_ctx, size, m_offset, limit);
+        m_buffer = VkSharedState::get(data().device.index()).createBuffer(m_device, size, m_offset, limit);
     }
 
     if (!m_buffer) {
-		m_buffer = m_ctx->allocateBuffer(size);
+		m_buffer = m_device->allocateBuffer(size);
     }
 
     m_input  = createSubBuffer(0, Job::kMaxBlobSize);

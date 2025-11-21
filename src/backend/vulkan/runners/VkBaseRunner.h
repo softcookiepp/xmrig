@@ -71,31 +71,20 @@ protected:
     tart::buffer_ptr createSubBuffer(uint64_t flags, size_t size);
 
     size_t align(size_t size) const;
-#if 1
+
 	void enqueueReadBuffer(tart::buffer_ptr buffer, bool blocking_read, size_t offset, size_t size, void *ptr);
     void enqueueWriteBuffer(tart::buffer_ptr buffer, bool blocking_write, size_t offset, size_t size, const void *ptr);
-#else
-    void enqueueReadBuffer(tart::buffer_ptr buffer, bool blocking_read, size_t offset, size_t size, void *ptr);
-    void enqueueWriteBuffer(tart::buffer_ptr buffer, bool blocking_write, size_t offset, size_t size, const void *ptr);
-#endif
+
     void finalize(uint32_t *hashOutput);
 
-#if 1
-	tart::device_ptr m_queue = nullptr;
-    tart::device_ptr m_ctx = nullptr;
+	//tart::device_ptr m_queue = nullptr;
+    //tart::device_ptr m_ctx = nullptr;
 	tart::device_ptr m_device = nullptr;
 	tart::buffer_ptr m_buffer = nullptr;
 	tart::buffer_ptr m_input = nullptr;
 	tart::buffer_ptr m_output = nullptr;
 	tart::cl_program_ptr m_program = nullptr;
-#else
-    tart::device_ptr m_queue    = nullptr;
-    tart::device_ptr m_ctx = nullptr;
-    tart::buffer_ptr m_buffer             = nullptr;
-    tart::buffer_ptr m_input              = nullptr;
-    tart::buffer_ptr m_output             = nullptr;
-    tart::cl_program_ptr m_program        = nullptr;
-#endif
+
     const Algorithm m_algorithm;
     const char *m_source;
     const VkLaunchData &m_data;

@@ -140,6 +140,7 @@ xmrig::VkDevice::VkDevice(uint32_t index, tart::device_ptr id, size_t platform) 
     m_platformVendorId = getPlatformVendorId(m_platformVendor, m_extensions);
     m_type      = getType(m_name);
 #if 1
+	// the below stuff might be important later. but for now I don't know.
 #else
     if (m_extensions.contains("cl_amd_device_attribute_query")) {
         topology_amd topology{};

@@ -48,11 +48,7 @@ tart::buffer_ptr xmrig::VkSharedData::createBuffer(tart::device_ptr context, siz
     ++m_offset;
 
     if (!m_buffer) {
-#if 1
 		m_buffer = context->allocateBuffer(size);
-#else
-        m_buffer = VkLib::createBuffer(context, 1, size);
-#endif
     }
 
     //return VkLib::retain(m_buffer);

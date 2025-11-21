@@ -62,13 +62,9 @@ xmrig::VkCnRunner::~VkCnRunner()
     delete m_cn0;
     delete m_cn1;
     delete m_cn2;
-#if 1
+
 	m_device->deallocateBuffer(m_scratchpads);
 	m_device->deallocateBuffer(m_states);
-#else
-    VkLib::release(m_scratchpads);
-    VkLib::release(m_states);
-#endif
 
     for (size_t i = 0; i < BRANCH_MAX; ++i)
     {
@@ -115,12 +111,12 @@ void xmrig::VkCnRunner::run(uint32_t nonce, uint32_t /*nonce_offset*/, uint32_t 
 
     enqueueWriteBuffer(m_output, false, sizeof(uint32_t) * 0xFF, sizeof(uint32_t), &zero);
 
-    m_cn0->enqueue(m_queue, nonce, g_thd);
-    m_cn1->enqueue(m_queue, nonce, g_thd, w_size);
-    m_cn2->enqueue(m_queue, nonce, g_thd);
+    m_cn0->enqueue(m_device, nonce, g_thd);
+    m_cn1->enqueue(m_device, nonce, g_thd, w_size);
+    m_cn2->enqueue(m_device, nonce, g_thd);
 
     for (auto kernel : m_branchKernels) {
-        kernel->enqueue(m_queue, nonce, g_thd, w_size);
+        kernel->enqueue(m_device, nonce, g_thd, w_size);
     }
 
     finalize(hashOutput);

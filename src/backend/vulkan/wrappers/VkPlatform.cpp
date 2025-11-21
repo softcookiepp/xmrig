@@ -30,25 +30,9 @@
 
 std::vector<xmrig::VkPlatform> xmrig::VkPlatform::get()
 {
-#if 1
 	std::vector<VkPlatform> out;
 	out.emplace_back(0, 0);
 	return out;
-#else
-    const std::vector<size_t> platforms = VkLib::getPlatformIDs();
-    std::vector<VkPlatform> out;
-    if (platforms.empty()) {
-        return out;
-    }
-
-    out.reserve(platforms.size());
-
-    for (size_t i = 0; i < platforms.size(); i++) {
-        out.emplace_back(i, platforms[i]);
-    }
-
-    return out;
-#endif
 }
 
 
@@ -92,35 +76,12 @@ rapidjson::Value xmrig::VkPlatform::toJSON(rapidjson::Document &doc) const
 
 std::vector<xmrig::VkDevice> xmrig::VkPlatform::devices() const
 {
-#if 1
 	std::vector<VkDevice> out;
 	for (size_t i = 0; i < gTartInstance.getNumDevices(); i += 1)
 	{
 		out.emplace_back(i, gTartInstance.createDevice(i), id() );
 	}
 	return out;
-#else
-    std::vector<VkDevice> out;
-    if (!isValid()) {
-        return out;
-    }
-
-    uint32_t num_devices = 0;
-    VkLib::getDeviceIDs(id(), CL_DEVICE_TYPE_GPU, 0, nullptr, &num_devices);
-    if (num_devices == 0) {
-        return out;
-    }
-
-    out.reserve(num_devices);
-    std::vector<tart::device_ptr> devices(num_devices);
-    VkLib::getDeviceIDs(id(), CL_DEVICE_TYPE_GPU, num_devices, devices.data(), nullptr);
-
-    for (size_t i = 0; i < devices.size(); ++i) {
-        out.emplace_back(i, devices[i], id());
-    }
-
-    return out;
-#endif
 }
 
 
