@@ -66,8 +66,8 @@ extern template class Threads<VkThreads>;
 
 
 constexpr const size_t oneMiB   = 1024U * 1024U;
-static const char *kLabel       = "OPENCL";
-static const String kType       = "opencl";
+static const char *kLabel       = "VULKAN";
+static const String kType       = "vulkan";
 static std::mutex mutex;
 
 
