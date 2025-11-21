@@ -19,7 +19,7 @@
 #include <algorithm>
 #include <mutex>
 #include <thread>
-
+#include <iostream>
 
 #include "core/Miner.h"
 #include "core/Taskbar.h"
@@ -419,7 +419,7 @@ xmrig::Miner::Miner(Controller *controller)
 
     d_ptr->timer = new Timer(this);
 
-    d_ptr->backends.reserve(3);
+    d_ptr->backends.reserve(4);
     d_ptr->backends.push_back(new CpuBackend(controller));
 
 #   ifdef XMRIG_FEATURE_OPENCL

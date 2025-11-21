@@ -54,7 +54,7 @@ public:
     static const char *lastError();
     static void close();
 
-    static inline bool isInitialized()   { return m_initialized; }
+    static inline bool isInitialized()   { return true; }//{ return m_initialized; }
     static inline const String &loader() { return m_loader; }
 
 private:

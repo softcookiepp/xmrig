@@ -41,16 +41,18 @@ namespace xmrig {
 
 class VkPlatform
 {
+	std::vector<VkDevice> m_devices;
 public:
+
     VkPlatform() = default;
     VkPlatform(size_t index, size_t id) : m_id(id), m_index(index) {}
 
     static std::vector<VkPlatform> get();
     static void print();
 
-    inline bool isValid() const      { return true; }
+    inline bool isValid() const      { return true; }//{ return m_devices.size() > 0; }
     inline size_t id() const { return m_id; }
-    inline size_t index() const      { return m_index; }
+    inline size_t index() const      { return m_index > -1; }
 
     rapidjson::Value toJSON(rapidjson::Document &doc) const;
     std::vector<VkDevice> devices() const;
@@ -62,7 +64,7 @@ public:
 
 private:
     size_t m_id = 0;
-    size_t m_index      = 0;
+    int64_t m_index      = -1;
 };
 
 

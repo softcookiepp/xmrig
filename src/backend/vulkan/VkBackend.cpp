@@ -142,17 +142,18 @@ public:
         if (!VkLib::init(cl.loader())) {
             return printDisabled(kLabel, RED_S " (failed to load OpenCL runtime)");
         }
-
+#if 0
         if (platform.isValid()) {
             return;
         }
-
+#endif
         platform = cl.platform();
         if (!platform.isValid()) {
             return printDisabled(kLabel, RED_S " (selected OpenCL platform NOT found)");
         }
 
         devices = platform.devices();
+        std::cout << "heres the devices we have: " << devices.size() << std::endl;
         if (devices.empty()) {
             return printDisabled(kLabel, RED_S " (no devices)");
         }
@@ -301,6 +302,18 @@ xmrig::VkBackend::~VkBackend()
 
 bool xmrig::VkBackend::isEnabled() const
 {
+	// lets check the conditions...
+	if (d_ptr->controller->config()->vulkan().isEnabled())
+	{
+		std::cout << "first condition met" << std::endl; 
+	}
+	if ( VkLib::isInitialized() )
+		std::cout << "second condition met" << std::endl;
+	if ( d_ptr->platform.isValid() )
+		std::cout << "third condition met" << std::endl;
+	if (!d_ptr->devices.empty())
+		std::cout << "fourth condition met" << std::endl;
+	
     return d_ptr->controller->config()->vulkan().isEnabled() && VkLib::isInitialized() && d_ptr->platform.isValid() && !d_ptr->devices.empty();
 }
 

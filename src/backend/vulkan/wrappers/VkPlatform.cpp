@@ -73,7 +73,6 @@ rapidjson::Value xmrig::VkPlatform::toJSON(rapidjson::Document &doc) const
     return out;
 }
 
-
 std::vector<xmrig::VkDevice> xmrig::VkPlatform::devices() const
 {
 	std::vector<VkDevice> out;
